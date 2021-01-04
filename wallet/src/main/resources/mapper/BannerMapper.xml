@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.dao.BannerMapper">
+    <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Banner">
+        <!--@mbg.generated generated on Mon Aug 26 11:00:20 CST 2019.-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="language" jdbcType="INTEGER" property="language"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="click_url" jdbcType="VARCHAR" property="clickUrl"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated generated on Mon Aug 26 11:00:20 CST 2019.-->
+        id, url, `language`, `type`, `status`,click_url, create_time
+    </sql>
+
+    <insert id="insertSelective2" parameterType="com.lanjing.wallet.model.Banner">
+        insert into banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="url != null">
+                url,
+            </if>
+            <if test="language != null">
+                language,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+            <if test="clickUrl != null">
+                click_url
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null">
+                #{language,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="clickUrl != null">
+                #{clickUrl,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+    
+    <update id="updateByPrimaryKeySelective2" parameterType="com.lanjing.wallet.model.Banner">
+        update banner
+        <set>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="language != null">
+                language = #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="clickUrl != null">
+                click_url = #{clickUrl,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateStatusById">
+        update banner
+        set `status`=#{updatedStatus,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllList" resultMap="BaseResultMap">
+        select * from banner where banner.status != -1
+    </select>
+</mapper>

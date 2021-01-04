@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.AutolistMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Autolist" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="createuser" property="createuser" jdbcType="VARCHAR" />
+    <result column="takt_time" property="taktTime" jdbcType="INTEGER" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="sum" property="sum" jdbcType="DOUBLE" />
+    <result column="coin_min" property="coinMin" jdbcType="DOUBLE" />
+    <result column="coin_max" property="coinMax" jdbcType="DOUBLE" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="Admin_name" property="adminName" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Isstart" property="Isstart" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, createuser, takt_time, begin_time, sum, coin_min, coin_max, type, Admin_name, 
+    createtime,Isstart
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Auto_list
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <update id="updatestate" parameterType="java.lang.Integer">
+    UPDATE Auto_list set Isstart = 1 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updatestate2" parameterType="java.lang.Integer">
+    UPDATE Auto_list set Isstart = 2 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectByNostart" resultType="Map">
+    select
+     *
+    from Auto_list where Isstart = 0  and begin_time <![CDATA[ < ]]> NOW()
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from Auto_list order by fId desc
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllCount" resultType="java.lang.Integer" >
+    select
+    count(*)
+    from Auto_list
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Auto_list
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Autolist" >
+    insert into Auto_list (fId, createuser, takt_time, 
+      begin_time, sum, coin_min, 
+      coin_max, type, Admin_name, 
+      createtime)
+    values (#{fid,jdbcType=INTEGER}, #{createuser,jdbcType=VARCHAR}, #{taktTime,jdbcType=TIMESTAMP}, 
+      #{beginTime,jdbcType=TIMESTAMP}, #{sum,jdbcType=DOUBLE}, #{coinMin,jdbcType=DOUBLE}, 
+      #{coinMax,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Autolist" >
+    insert into Auto_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="createuser != null" >
+        createuser,
+      </if>
+      <if test="taktTime != null" >
+        takt_time,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="sum != null" >
+        sum,
+      </if>
+      <if test="coinMin != null" >
+        coin_min,
+      </if>
+      <if test="coinMax != null" >
+        coin_max,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="adminName != null" >
+        Admin_name,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="taktTime != null" >
+        #{taktTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sum != null" >
+        #{sum,jdbcType=DOUBLE},
+      </if>
+      <if test="coinMin != null" >
+        #{coinMin,jdbcType=DOUBLE},
+      </if>
+      <if test="coinMax != null" >
+        #{coinMax,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="adminName != null" >
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Autolist" >
+    update Auto_list
+    <set >
+      <if test="createuser != null" >
+        createuser = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="taktTime != null" >
+        takt_time = #{taktTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sum != null" >
+        sum = #{sum,jdbcType=DOUBLE},
+      </if>
+      <if test="coinMin != null" >
+        coin_min = #{coinMin,jdbcType=DOUBLE},
+      </if>
+      <if test="coinMax != null" >
+        coin_max = #{coinMax,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="adminName != null" >
+        Admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Autolist" >
+    update Auto_list
+    set createuser = #{createuser,jdbcType=VARCHAR},
+      takt_time = #{taktTime,jdbcType=TIMESTAMP},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      sum = #{sum,jdbcType=DOUBLE},
+      coin_min = #{coinMin,jdbcType=DOUBLE},
+      coin_max = #{coinMax,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      Admin_name = #{adminName,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

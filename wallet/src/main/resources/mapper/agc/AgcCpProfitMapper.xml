@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcCpProfitMapper">
+    
+    <resultMap type="AgcCpProfit" id="AgcCpProfitResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="fromId"    column="from_id"    />
+        <result property="cp"    column="cp"    />
+        <result property="era"    column="era"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap type="com.lanjing.wallet.agc.vo.MiningCpProfitVO" id="MiningCpProfitVOResult">
+        <result property="userId"    column="user_id"    />
+        <result property="cp"    column="cp"    />
+    </resultMap>
+
+    <sql id="selectAgcCpProfitVo">
+        select id, user_id, from_id, cp, era, status, create_time, update_time from agc_cp_profit
+    </sql>
+
+    <select id="selectAgcCpProfitList" parameterType="AgcCpProfit" resultMap="AgcCpProfitResult">
+        <include refid="selectAgcCpProfitVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="fromId != null  and fromId != ''"> and from_id = #{fromId}</if>
+            <if test="cp != null "> and cp = #{cp}</if>
+            <if test="era != null "> and era = #{era}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcCpProfitById" parameterType="Long" resultMap="AgcCpProfitResult">
+        <include refid="selectAgcCpProfitVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcCpProfit" parameterType="AgcCpProfit" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_cp_profit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="fromId != null">from_id,</if>
+            <if test="cp != null">cp,</if>
+            <if test="era != null">era,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="fromId != null">#{fromId},</if>
+            <if test="cp != null">#{cp},</if>
+            <if test="era != null">#{era},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcCpProfit" parameterType="AgcCpProfit">
+        update agc_cp_profit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="fromId != null">from_id = #{fromId},</if>
+            <if test="cp != null">cp = #{cp},</if>
+            <if test="era != null">era = #{era},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcCpProfitById" parameterType="Long">
+        delete from agc_cp_profit where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcCpProfitByIds" parameterType="String">
+        delete from agc_cp_profit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <update id="activationEra5AgcCpProfit">
+        update agc_cp_profit set status = 1,update_time = now()
+        where user_id = #{userId}
+    </update>
+    
+    <select id="selectMiningCpProfitVOs" resultMap="MiningCpProfitVOResult">
+		SELECT user_id,IFNULL(SUM(cp),0) cp FROM agc_cp_profit WHERE `status` = 1 GROUP BY user_id
+    </select>
+    
+    <select id="selectAllProfitCp" resultType="BigDecimal">
+		SELECT IFNULL(SUM(cp),0) cp FROM agc_cp_profit WHERE `status` = 1
+    </select>
+    
+    <!-- 我的消费算力(已激活的) -->
+    <select id="selectProfitCpByUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(cp),0) cp FROM agc_cp_profit
+        WHERE user_id = #{userId} and `status` = 1
+        ]]>
+    </select>
+    
+    <!-- 我的消费算力-直推(已激活的) -->
+    <select id="selectInviteCpByUserIdAndTime1" resultType="BigDecimal">
+        SELECT IFNULL(SUM(cp),0) cp FROM agc_cp_profit
+        WHERE user_id = #{userId} and `status` = 1 and era = 1
+        <!-- 开始时间检索 -->
+   	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+	    <!-- 结束时间检索 -->
+	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </select>
+    
+    <!-- 我的消费算力-间推(已激活的) -->
+    <select id="selectInviteCpByUserIdAndTime2" resultType="BigDecimal">
+        SELECT IFNULL(SUM(cp),0) cp FROM agc_cp_profit
+        WHERE user_id = #{userId} and `status` = 1 and era > 1
+        <!-- 开始时间检索 -->
+   	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+	    <!-- 结束时间检索 -->
+	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </select>
+    
+    
+    <!-- 我的消费算力分佣-直推 -->
+    <select id="getUserInviteCpProfitDirectList" resultMap="AgcCpProfitResult">
+        SELECT * FROM agc_cp_profit
+        WHERE user_id = #{userId} and `status` = 1 and era = 1
+        <if test="startTime != null and startTime != ''">
+            AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+    <!-- 我的消费算力分佣-间推 -->
+    <select id="getUserInviteCpProfitIndirectList" resultMap="AgcCpProfitResult">
+        SELECT * FROM agc_cp_profit
+        WHERE user_id = #{userId} and `status` = 1 and era > 1
+        <if test="startTime != null and startTime != ''">
+            AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+    
+</mapper>

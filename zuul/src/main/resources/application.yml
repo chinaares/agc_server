@@ -1,0 +1,55 @@
+logging:
+  file: zuul.log
+  level.*: info
+
+wallet:
+  url: http://127.0.0.1:8080/
+
+server:
+  port: 9000
+
+zuul:
+  prefix: /
+  routes:
+    api-1:
+      path: /wellet/**
+      url: http://127.0.0.1:8080/
+    api-2:
+      path: /shop/**
+      url: http://127.0.0.1:8081/
+    api-3:
+      path: /otc/**
+      url: http://127.0.0.1:8082/
+
+spring:
+  profiles:
+    active: master
+
+---
+spring:
+  profiles: dev
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m
+---
+spring:
+  profiles: master
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

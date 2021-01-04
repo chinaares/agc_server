@@ -1,0 +1,71 @@
+#secret:
+#  encrypt:
+#    enabled: true
+#  decrypt:
+#    enabled: true
+wallet:
+  url: http://127.0.0.1:8080/
+
+encrypt:
+  isopen: true
+
+logging:
+  file: otc.log
+  level.*: info
+  level.com.lanjing.otc.dao: debug
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.lanjing.otc.model
+pagehelper:
+  helper-dialect: mysql
+  params:
+    count: countSql
+  reasonable: false
+  support-methods-arguments: true
+
+server:
+  error:
+    path:
+  port: 8082
+
+push:
+  key: 3766b67cae9d3c377b1dd0da
+  secret: 3e98c5e34c7ec523796b4377
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  profiles:
+    active: master
+
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m
+---
+spring:
+  profiles: master
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m

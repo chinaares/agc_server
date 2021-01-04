@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.TrademappingMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Trademapping" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="tradecoin1" property="tradecoin1" jdbcType="INTEGER" />
+    <result column="coinprice1" property="coinprice1" jdbcType="DECIMAL" />
+    <result column="tradecoin2" property="tradecoin2" jdbcType="INTEGER" />
+    <result column="coinprice2" property="coinprice2" jdbcType="DECIMAL" />
+    <result column="proportion" property="proportion" jdbcType="DOUBLE" />
+    <result column="fee" property="fee" jdbcType="DOUBLE" />
+    <result column="IsStartup" property="isstartup" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, tradecoin1, coinprice1, tradecoin2, coinprice2, proportion, fee, IsStartup
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trademapping
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trademapping
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Trademapping" >
+    insert into trademapping (fId, tradecoin1, coinprice1, 
+      tradecoin2, coinprice2, proportion, 
+      fee, IsStartup)
+    values (#{fid,jdbcType=INTEGER}, #{tradecoin1,jdbcType=INTEGER}, #{coinprice1,jdbcType=DECIMAL}, 
+      #{tradecoin2,jdbcType=INTEGER}, #{coinprice2,jdbcType=DECIMAL}, #{proportion,jdbcType=DOUBLE}, 
+      #{fee,jdbcType=DOUBLE}, #{isstartup,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Trademapping" >
+    insert into trademapping
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="tradecoin1 != null" >
+        tradecoin1,
+      </if>
+      <if test="coinprice1 != null" >
+        coinprice1,
+      </if>
+      <if test="tradecoin2 != null" >
+        tradecoin2,
+      </if>
+      <if test="coinprice2 != null" >
+        coinprice2,
+      </if>
+      <if test="proportion != null" >
+        proportion,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+      <if test="isstartup != null" >
+        IsStartup,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="tradecoin1 != null" >
+        #{tradecoin1,jdbcType=INTEGER},
+      </if>
+      <if test="coinprice1 != null" >
+        #{coinprice1,jdbcType=DECIMAL},
+      </if>
+      <if test="tradecoin2 != null" >
+        #{tradecoin2,jdbcType=INTEGER},
+      </if>
+      <if test="coinprice2 != null" >
+        #{coinprice2,jdbcType=DECIMAL},
+      </if>
+      <if test="proportion != null" >
+        #{proportion,jdbcType=DOUBLE},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DOUBLE},
+      </if>
+      <if test="isstartup != null" >
+        #{isstartup,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Trademapping" >
+    update trademapping
+    <set >
+      <if test="tradecoin1 != null" >
+        tradecoin1 = #{tradecoin1,jdbcType=INTEGER},
+      </if>
+      <if test="coinprice1 != null" >
+        coinprice1 = #{coinprice1,jdbcType=DECIMAL},
+      </if>
+      <if test="tradecoin2 != null" >
+        tradecoin2 = #{tradecoin2,jdbcType=INTEGER},
+      </if>
+      <if test="coinprice2 != null" >
+        coinprice2 = #{coinprice2,jdbcType=DECIMAL},
+      </if>
+      <if test="proportion != null" >
+        proportion = #{proportion,jdbcType=DOUBLE},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DOUBLE},
+      </if>
+      <if test="isstartup != null" >
+        IsStartup = #{isstartup,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Trademapping" >
+    update trademapping
+    set tradecoin1 = #{tradecoin1,jdbcType=INTEGER},
+      coinprice1 = #{coinprice1,jdbcType=DECIMAL},
+      tradecoin2 = #{tradecoin2,jdbcType=INTEGER},
+      coinprice2 = #{coinprice2,jdbcType=DECIMAL},
+      proportion = #{proportion,jdbcType=DOUBLE},
+      fee = #{fee,jdbcType=DOUBLE},
+      IsStartup = #{isstartup,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

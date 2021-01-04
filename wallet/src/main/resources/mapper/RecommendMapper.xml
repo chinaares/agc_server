@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.RecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Recommend" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="lev_" property="lev" jdbcType="INTEGER" />
+    <result column="userkey_1" property="userkey1" jdbcType="VARCHAR" />
+    <result column="userkey_2" property="userkey2" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="IsNode" property="isnode" jdbcType="INTEGER" />
+    <result column="usergrede" property="usergrede" jdbcType="INTEGER" />
+    <result column="userlocknum" property="userlocknum" jdbcType="DOUBLE" />
+    <result column="yesterdayrelease" property="yesterdayrelease" jdbcType="DOUBLE" />
+    <result column="downlocknum" property="downlocknum" jdbcType="INTEGER" />
+    <result column="nodenum" property="nodenum" jdbcType="INTEGER" />
+    <result column="downrelease" property="downrelease" jdbcType="DOUBLE" />
+    <result column="ztdownrelease" property="ztdownrelease" jdbcType="DOUBLE" />
+    <result column="teamreward" property="teamreward" jdbcType="DOUBLE" />
+    <result column="ztreward" property="ztreward" jdbcType="DOUBLE" />
+    <result column="create_time" property="createTime"   />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lanjing.wallet.model.Recommend" extends="BaseResultMap" >
+    <result column="cover_code" property="coverCode" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, lev_, userkey_1, userkey_2, num, usergrede, IsNode, userlocknum, yesterdayrelease,
+    downlocknum, nodenum, downrelease, ztdownrelease, teamreward, ztreward, create_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    cover_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+  </select>
+  
+  <select id="selectListByTime" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    <!-- 开始时间检索 -->
+    date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+	<!-- 结束时间检索 -->
+	AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+  </select>
+  
+
+  <select id="selectByUserKey2" resultMap="ResultMapWithBLOBs" parameterType="Map" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userkey_2 = #{map.userkey2,jdbcType=VARCHAR} limit #{map.begin,jdbcType=INTEGER},#{map.end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userkey_2 = #{key,jdbcType=VARCHAR} and IsNode=1
+  </select>
+
+  <select id="selectByUserKey21" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserKey22" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    count(*)
+    from recommend
+    where userkey_2 = #{userkey,jdbcType=VARCHAR} and userlocknum >= 10000
+  </select>
+
+  <select id="selectByUserKey23" resultType="java.lang.Integer" >
+    select
+    count(*)
+    from recommend
+    where userkey_2 = #{userkey,jdbcType=VARCHAR} and usergrede <![CDATA[ >= ]]> #{usergrede,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByuserdouwnum" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT COUNT(*) from recommend WHERE userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByuserkey" resultType="Map" parameterType="java.lang.String">
+    SELECT IsNode,userkey_1,userkey_2 from recommend WHERE userkey_1 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+  <select id="sumLevelByKey" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(0) from recommend where cover_code like '${code}%'
+  </select>
+
+
+  <select id="selectMaxlev" resultType="java.lang.Integer">
+    select
+    max(lev_)
+    from recommend
+  </select>
+
+
+  <select id="selectByLev" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where lev_ = #{lev,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByLev1" resultType="Map" parameterType="java.lang.Integer" >
+    select
+    r.*,u.userName
+    from recommend r LEFT JOIN users u on u.keyes = r.userkey_1
+    where lev_ = #{lev,jdbcType=INTEGER}
+  </select>
+
+
+  <update id="setNode" parameterType="java.lang.String">
+    update recommend set IsNode = 1 where userkey_1 = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+  <update id="colseNode" parameterType="java.lang.String">
+    update recommend set IsNode = 2 where userkey_1 = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectupnode" resultType="Map">
+    SELECT * from recommend WHERE lev_ <![CDATA[ < ]]> #{levnum,jdbcType=INTEGER} and IsNode = 1 ORDER BY lev_ desc
+  </select>
+
+
+  <select id="selectBycover_code" resultMap="ResultMapWithBLOBs" parameterType="Map" >
+    select
+    count(*)
+    from recommend
+    where usergrede = #{map.usergrede,jdbcType=INTEGER} and lev_ <![CDATA[ >= ]]> #{map.beginLev,jdbcType=INTEGER} and lev_ <![CDATA[ <= ]]> #{map.endLev,jdbcType=INTEGER} and cover_code like #{map.cover_code,jdbcType=VARCHAR}"%"
+  </select>
+
+  <select id="queryBycode" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where lev_ <![CDATA[ > ]]> #{levs,jdbcType=INTEGER} and cover_code like '${covercode}%'
+  </select>
+
+  <select id="queryBycodeAndLev" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where lev_ = #{levs,jdbcType=INTEGER} and cover_code like '${covercode}%'
+  </select>
+
+  <select id="queryByNum" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where num <![CDATA[ >= ]]> #{num,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByLockNumAndDownLockNum" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userlocknum >=  #{currency,jdbcType=INTEGER} and downlocknum >= #{user,jdbcType=INTEGER}
+  </select>
+
+  <update id="updateClear">
+    update recommend set yesterdayrelease=0,downrelease=0
+  </update>
+
+  <update id="updateDownRelease">
+    update recommend set downrelease=#{release,jdbcType=DOUBLE} where fId = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectBycode" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select count(*) from recommend where cover_code like '${code}%'
+  </select>
+
+
+  <select id="queryBycodescnum" resultType="Map" >
+    select
+    IFNULL(sum(userlocknum),0) as locknum,IFNULL(sum(yesterdayrelease),0) releasenum
+    from recommend
+    where lev_ <![CDATA[ > ]]> #{levs,jdbcType=INTEGER} and cover_code like '${covercode}%'
+  </select>
+
+  <select id="sumLockNum" resultType="java.lang.Double" parameterType="java.lang.String">
+    select ifnull(sum(userlocknum) - max(userlocknum), 0) from recommend where userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="sumRelease" resultType="java.lang.Double">
+    select ifnull(sum(userlocknum), 0) from recommend where usergrede <![CDATA[ < ]]> #{level,jdbcType=INTEGER} and userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectUserAdvanced" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend where userkey_2 = #{userKey,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="levelRecommend" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend where usergrede >= #{level,jdbcType=INTEGER} and userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="smallRecommend" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend where usergrede = #{level,jdbcType=INTEGER} and userkey_2 = #{userkey,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectByLevDesc" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend where usergrede = #{level,jdbcType=INTEGER}  order by lev_ desc
+  </select>
+
+
+  <select id="selectBycover_code1" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where cover_code = #{cover_code,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserKey2Count" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    count(*)
+    from recommend
+    where userkey_2 = #{map.userkey2,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByUserKey2AndTimeCount" resultType="java.lang.Integer" >
+    select
+    count(*)
+    from recommend
+    where userkey_2 = #{userkey,jdbcType=VARCHAR}
+        <if test="startTime != null and startTime != ''">
+            AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+  </select>
+
+  <select id="selectByUserKey1" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userkey_1 = #{userkey1,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserKey2list" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from recommend
+    where userkey_2 = #{userkey2,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectByUserKey2list1" resultType="Map" parameterType="java.lang.String" >
+    select
+    r.*,u.userName
+    from recommend r LEFT JOIN users u on u.keyes = r.userkey_1
+    where userkey_2 = #{userkey2,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from recommend
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Recommend" >
+    insert into recommend (fId, lev_, userkey_1, 
+      userkey_2)
+    values (#{fid,jdbcType=INTEGER}, #{lev,jdbcType=INTEGER}, #{userkey1,jdbcType=VARCHAR}, 
+      #{userkey2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Recommend" >
+    insert into recommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="lev != null" >
+        lev_,
+      </if>
+      <if test="userkey1 != null" >
+        userkey_1,
+      </if>
+      <if test="userkey2 != null" >
+        userkey_2,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="usergrede != null" >
+        usergrede,
+      </if>
+      <if test="isnode != null" >
+        IsNode,
+      </if>
+      <if test="userlocknum != null" >
+        userlocknum,
+      </if>
+      <if test="yesterdayrelease != null" >
+        yesterdayrelease,
+      </if>
+      <if test="downlocknum != null" >
+        downlocknum,
+      </if>
+      <if test="nodenum != null" >
+        nodenum,
+      </if>
+      <if test="downrelease != null" >
+        downrelease,
+      </if>
+      <if test="coverCode != null" >
+        cover_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="lev != null" >
+        #{lev,jdbcType=INTEGER},
+      </if>
+      <if test="userkey1 != null" >
+        #{userkey1,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey2 != null" >
+        #{userkey2,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="usergrede != null" >
+        #{usergrede,jdbcType=INTEGER},
+      </if>
+      <if test="isnode != null" >
+        #{isnode,jdbcType=INTEGER},
+      </if>
+      <if test="userlocknum != null" >
+        #{userlocknum,jdbcType=DOUBLE},
+      </if>
+      <if test="yesterdayrelease != null" >
+        #{yesterdayrelease,jdbcType=DOUBLE},
+      </if>
+      <if test="downlocknum != null" >
+        #{downlocknum,jdbcType=INTEGER},
+      </if>
+      <if test="nodenum != null" >
+        #{nodenum,jdbcType=INTEGER},
+      </if>
+      <if test="downrelease != null" >
+        #{downrelease,jdbcType=DOUBLE},
+      </if>
+      <if test="coverCode != null" >
+        #{coverCode,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Recommend" >
+    update recommend
+    <set >
+      <if test="lev != null" >
+        lev_ = #{lev,jdbcType=INTEGER},
+      </if>
+      <if test="userkey1 != null" >
+        userkey_1 = #{userkey1,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey2 != null" >
+        userkey_2 = #{userkey2,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="usergrede != null" >
+        usergrede = #{usergrede,jdbcType=INTEGER},
+      </if>
+      <if test="isnode != null" >
+        IsNode = #{isnode,jdbcType=INTEGER},
+      </if>
+      <if test="userlocknum != null" >
+        userlocknum = #{userlocknum,jdbcType=DOUBLE},
+      </if>
+      <if test="yesterdayrelease != null" >
+        yesterdayrelease = #{yesterdayrelease,jdbcType=DOUBLE},
+      </if>
+      <if test="downlocknum != null" >
+        downlocknum = #{downlocknum,jdbcType=INTEGER},
+      </if>
+      <if test="nodenum != null" >
+        nodenum = #{nodenum,jdbcType=INTEGER},
+      </if>
+      <if test="downrelease != null" >
+        downrelease = #{downrelease,jdbcType=DOUBLE},
+      </if>
+      <if test="coverCode != null" >
+        cover_code = #{coverCode,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="ztdownrelease != null" >
+        ztdownrelease = #{ztdownrelease,jdbcType=DOUBLE},
+      </if>
+      <if test="teamreward != null" >
+        teamreward = #{teamreward,jdbcType=DOUBLE},
+      </if>
+      <if test="ztreward != null" >
+        ztreward = #{ztreward,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Recommend" >
+    update recommend
+    set lev_ = #{lev,jdbcType=INTEGER},
+      userkey_1 = #{userkey1,jdbcType=VARCHAR},
+      userkey_2 = #{userkey2,jdbcType=VARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.DaySettlementMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.DaySettlement" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="lev_" property="lev" jdbcType="INTEGER" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="grede" property="grede" jdbcType="INTEGER" />
+    <result column="dayAirdrop" property="dayairdrop" jdbcType="DOUBLE" />
+    <result column="daytrade" property="daytrade" jdbcType="DOUBLE" />
+    <result column="dayteamAirdrop" property="dayteamairdrop" jdbcType="DOUBLE" />
+    <result column="dayteamtrade" property="dayteamtrade" jdbcType="DOUBLE" />
+    <result column="WeightAirdrop" property="weightairdrop" jdbcType="DOUBLE" />
+    <result column="WeightTrade" property="weighttrade" jdbcType="DOUBLE" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lanjing.wallet.model.DaySettlement" extends="BaseResultMap" >
+    <result column="cover_code" property="coverCode" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, lev_, userkey, grede, dayAirdrop, daytrade, dayteamAirdrop, dayteamtrade, WeightAirdrop, 
+    WeightTrade, createtime
+  </sql>
+  <sql id="Blob_Column_List" >
+    cover_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from daySettlement
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByLevCode" resultType="java.util.Map" >
+    select
+    IFNULL(SUM(dayteamAirdrop),0) as "dayteamAirdropsum" , IFNULL(SUM(WeightAirdrop),0) as "WeightAirdropsum" , IFNULL(SUM(dayteamtrade),0) as "dayteamtradesum" , IFNULL(SUM(WeightTrade),0) as "WeightTradesum" ,IFNULL(SUM(dayAirdrop),0) as "dayAirdropsum" ,IFNULL(SUM(daytrade),0) as "daytradesum"
+    from daySettlement
+    where lev_ = #{lev,jdbcType=INTEGER} and TO_DAYS( NOW()) - TO_DAYS(createtime) = 0 and cover_code like '${cover_code}%'
+  </select>
+
+
+  <select id="selectByLevCode1" resultType="com.lanjing.wallet.model.DaySettlement" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from daySettlement
+    where lev_ = #{lev,jdbcType=INTEGER} and TO_DAYS( NOW()) - TO_DAYS(craetetime) = 0 and cover_code like '${cover_code}%' and grede = 7
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from daySettlement
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.DaySettlement" >
+    insert into daySettlement (fId, lev_, userkey, 
+      grede, dayAirdrop, daytrade, 
+      dayteamAirdrop, dayteamtrade, WeightAirdrop, 
+      WeightTrade, createtime, cover_code
+      )
+    values (#{fid,jdbcType=INTEGER}, #{lev,jdbcType=INTEGER}, #{userkey,jdbcType=VARCHAR}, 
+      #{grede,jdbcType=INTEGER}, #{dayairdrop,jdbcType=DOUBLE}, #{daytrade,jdbcType=DOUBLE}, 
+      #{dayteamairdrop,jdbcType=DOUBLE}, #{dayteamtrade,jdbcType=DOUBLE}, #{weightairdrop,jdbcType=DOUBLE}, 
+      #{weighttrade,jdbcType=DOUBLE}, #{createtime,jdbcType=TIMESTAMP}, #{coverCode,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.DaySettlement" >
+    insert into daySettlement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="lev != null" >
+        lev_,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="grede != null" >
+        grede,
+      </if>
+      <if test="dayairdrop != null" >
+        dayAirdrop,
+      </if>
+      <if test="daytrade != null" >
+        daytrade,
+      </if>
+      <if test="dayteamairdrop != null" >
+        dayteamAirdrop,
+      </if>
+      <if test="dayteamtrade != null" >
+        dayteamtrade,
+      </if>
+      <if test="weightairdrop != null" >
+        WeightAirdrop,
+      </if>
+      <if test="weighttrade != null" >
+        WeightTrade,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="coverCode != null" >
+        cover_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="lev != null" >
+        #{lev,jdbcType=INTEGER},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="grede != null" >
+        #{grede,jdbcType=INTEGER},
+      </if>
+      <if test="dayairdrop != null" >
+        #{dayairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="daytrade != null" >
+        #{daytrade,jdbcType=DOUBLE},
+      </if>
+      <if test="dayteamairdrop != null" >
+        #{dayteamairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="dayteamtrade != null" >
+        #{dayteamtrade,jdbcType=DOUBLE},
+      </if>
+      <if test="weightairdrop != null" >
+        #{weightairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="weighttrade != null" >
+        #{weighttrade,jdbcType=DOUBLE},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="coverCode != null" >
+        #{coverCode,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.DaySettlement" >
+    update daySettlement
+    <set >
+      <if test="lev != null" >
+        lev_ = #{lev,jdbcType=INTEGER},
+      </if>
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="grede != null" >
+        grede = #{grede,jdbcType=INTEGER},
+      </if>
+      <if test="dayairdrop != null" >
+        dayAirdrop = #{dayairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="daytrade != null" >
+        daytrade = #{daytrade,jdbcType=DOUBLE},
+      </if>
+      <if test="dayteamairdrop != null" >
+        dayteamAirdrop = #{dayteamairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="dayteamtrade != null" >
+        dayteamtrade = #{dayteamtrade,jdbcType=DOUBLE},
+      </if>
+      <if test="weightairdrop != null" >
+        WeightAirdrop = #{weightairdrop,jdbcType=DOUBLE},
+      </if>
+      <if test="weighttrade != null" >
+        WeightTrade = #{weighttrade,jdbcType=DOUBLE},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="coverCode != null" >
+        cover_code = #{coverCode,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lanjing.wallet.model.DaySettlement" >
+    update daySettlement
+    set lev_ = #{lev,jdbcType=INTEGER},
+      userkey = #{userkey,jdbcType=VARCHAR},
+      grede = #{grede,jdbcType=INTEGER},
+      dayAirdrop = #{dayairdrop,jdbcType=DOUBLE},
+      daytrade = #{daytrade,jdbcType=DOUBLE},
+      dayteamAirdrop = #{dayteamairdrop,jdbcType=DOUBLE},
+      dayteamtrade = #{dayteamtrade,jdbcType=DOUBLE},
+      WeightAirdrop = #{weightairdrop,jdbcType=DOUBLE},
+      WeightTrade = #{weighttrade,jdbcType=DOUBLE},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      cover_code = #{coverCode,jdbcType=LONGVARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.DaySettlement" >
+    update daySettlement
+    set lev_ = #{lev,jdbcType=INTEGER},
+      userkey = #{userkey,jdbcType=VARCHAR},
+      grede = #{grede,jdbcType=INTEGER},
+      dayAirdrop = #{dayairdrop,jdbcType=DOUBLE},
+      daytrade = #{daytrade,jdbcType=DOUBLE},
+      dayteamAirdrop = #{dayteamairdrop,jdbcType=DOUBLE},
+      dayteamtrade = #{dayteamtrade,jdbcType=DOUBLE},
+      WeightAirdrop = #{weightairdrop,jdbcType=DOUBLE},
+      WeightTrade = #{weighttrade,jdbcType=DOUBLE},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

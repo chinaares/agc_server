@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.dao.BtctrasferlistMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Btctrasferlist">
+    <!--@mbg.generated-->
+    <id column="fId" jdbcType="INTEGER" property="fid" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="txId" jdbcType="VARCHAR" property="txid" />
+    <result column="tradenum" jdbcType="DOUBLE" property="tradenum" />
+    <result column="feenum" jdbcType="DOUBLE" property="feenum" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    fId, memo, txId, tradenum, feenum, `type`, description, `state`
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from btctrasferlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from btctrasferlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.wallet.model.Btctrasferlist" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into btctrasferlist (memo, txId, tradenum, 
+      feenum, `type`, description, 
+      `state`)
+    values (#{memo,jdbcType=VARCHAR}, #{txid,jdbcType=VARCHAR}, #{tradenum,jdbcType=DOUBLE}, 
+      #{feenum,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.wallet.model.Btctrasferlist" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into btctrasferlist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="txid != null">
+        txId,
+      </if>
+      <if test="tradenum != null">
+        tradenum,
+      </if>
+      <if test="feenum != null">
+        feenum,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="txid != null">
+        #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null">
+        #{tradenum,jdbcType=DOUBLE},
+      </if>
+      <if test="feenum != null">
+        #{feenum,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Btctrasferlist">
+    <!--@mbg.generated-->
+    update btctrasferlist
+    <set>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="txid != null">
+        txId = #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null">
+        tradenum = #{tradenum,jdbcType=DOUBLE},
+      </if>
+      <if test="feenum != null">
+        feenum = #{feenum,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Btctrasferlist">
+    <!--@mbg.generated-->
+    update btctrasferlist
+    set memo = #{memo,jdbcType=VARCHAR},
+      txId = #{txid,jdbcType=VARCHAR},
+      tradenum = #{tradenum,jdbcType=DOUBLE},
+      feenum = #{feenum,jdbcType=DOUBLE},
+      `type` = #{type,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <select id="selectBymaxId" resultType="java.lang.Integer"  >
+    select
+    IFNULL(Max(fId),0)
+    from btctrasferlist
+  </select>
+  <select id="selectBystate" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from btctrasferlist
+    where state = #{state,jdbcType=INTEGER} and type = 1
+  </select>
+  <update id="updateByfId3" parameterType="java.lang.Integer">
+    update btctrasferlist set state = 2 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByfId" parameterType="java.lang.Integer">
+    update btctrasferlist set state = 1 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

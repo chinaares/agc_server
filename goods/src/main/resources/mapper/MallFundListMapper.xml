@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.MallFundListMapper">
+    <resultMap id="BaseResultMap" type="com.lanjing.goods.model.MallFundList">
+        <!--@mbg.generated-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="BIGINT" property="code"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="coin_id" jdbcType="INTEGER" property="coinId"/>
+        <result column="coin_name" jdbcType="VARCHAR" property="coinName"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <!--@mbg.generated-->
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <!--@mbg.generated-->
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, code, order_id, user_id, coin_id, coin_name, `type`, amount, create_time
+    </sql>
+    <select id="selectByExample" parameterType="com.lanjing.goods.model.MallFundListExample" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from mall_fund_list
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from mall_fund_list
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete from mall_fund_list
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.lanjing.goods.model.MallFundListExample">
+        <!--@mbg.generated-->
+        delete from mall_fund_list
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.goods.model.MallFundList"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into mall_fund_list (code, order_id, user_id,
+        coin_id, coin_name, `type`,
+        amount, create_time)
+        values (#{code,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{userId,jdbcType=INTEGER},
+        #{coinId,jdbcType=INTEGER}, #{coinName,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+        #{amount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.goods.model.MallFundList"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into mall_fund_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                code,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="coinId != null">
+                coin_id,
+            </if>
+            <if test="coinName != null">
+                coin_name,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">
+                #{code,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="coinId != null">
+                #{coinId,jdbcType=INTEGER},
+            </if>
+            <if test="coinName != null">
+                #{coinName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.lanjing.goods.model.MallFundListExample" resultType="java.lang.Long">
+        <!--@mbg.generated-->
+        select count(*) from mall_fund_list
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        <!--@mbg.generated-->
+        update mall_fund_list
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.code != null">
+                code = #{record.code,jdbcType=BIGINT},
+            </if>
+            <if test="record.orderId != null">
+                order_id = #{record.orderId,jdbcType=BIGINT},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.coinId != null">
+                coin_id = #{record.coinId,jdbcType=INTEGER},
+            </if>
+            <if test="record.coinName != null">
+                coin_name = #{record.coinName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null">
+                `type` = #{record.type,jdbcType=INTEGER},
+            </if>
+            <if test="record.amount != null">
+                amount = #{record.amount,jdbcType=DECIMAL},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        <!--@mbg.generated-->
+        update mall_fund_list
+        set id = #{record.id,jdbcType=INTEGER},
+        code = #{record.code,jdbcType=BIGINT},
+        order_id = #{record.orderId,jdbcType=BIGINT},
+        user_id = #{record.userId,jdbcType=INTEGER},
+        coin_id = #{record.coinId,jdbcType=INTEGER},
+        coin_name = #{record.coinName,jdbcType=VARCHAR},
+        `type` = #{record.type,jdbcType=INTEGER},
+        amount = #{record.amount,jdbcType=DECIMAL},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.MallFundList">
+        <!--@mbg.generated-->
+        update mall_fund_list
+        <set>
+            <if test="code != null">
+                code = #{code,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="coinId != null">
+                coin_id = #{coinId,jdbcType=INTEGER},
+            </if>
+            <if test="coinName != null">
+                coin_name = #{coinName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.MallFundList">
+        <!--@mbg.generated-->
+        update mall_fund_list
+        set code = #{code,jdbcType=BIGINT},
+        order_id = #{orderId,jdbcType=BIGINT},
+        user_id = #{userId,jdbcType=INTEGER},
+        coin_id = #{coinId,jdbcType=INTEGER},
+        coin_name = #{coinName,jdbcType=VARCHAR},
+        `type` = #{type,jdbcType=INTEGER},
+        amount = #{amount,jdbcType=DECIMAL},
+        create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <select id="findByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_fund_list
+        where code=#{code,jdbcType=BIGINT} and coin_id != 3 order by id desc
+    </select>
+</mapper>

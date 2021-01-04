@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.AddUserMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.AddUser" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="loginpassword" property="loginpassword" jdbcType="VARCHAR" />
+    <result column="tradepassword" property="tradepassword" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="Ishasrecommend" property="ishasrecommend" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, username, userkey, loginpassword, tradepassword, state, Ishasrecommend, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from adduserlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from adduserlist
+    where 1 = 1
+    <if test="likes !=null ">
+      and (username like '%${likes}%' or userkey like '%${likes}%')
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+    order by createtime desc
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllCount" resultType="java.lang.Integer" >
+    select
+    count(*)
+    from adduserlist
+    where 1 = 1
+    <if test="likes !=null ">
+      and (username like '%${likes}%' or userkey like '%${likes}%')
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from adduserlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.AddUser" >
+    insert into adduserlist (fId, username, userkey, 
+      loginpassword, tradepassword, state, 
+      Ishasrecommend, createtime)
+    values (#{fid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{userkey,jdbcType=VARCHAR}, 
+      #{loginpassword,jdbcType=VARCHAR}, #{tradepassword,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{ishasrecommend,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.AddUser" >
+    insert into adduserlist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="loginpassword != null" >
+        loginpassword,
+      </if>
+      <if test="tradepassword != null" >
+        tradepassword,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="ishasrecommend != null" >
+        Ishasrecommend,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpassword != null" >
+        #{loginpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tradepassword != null" >
+        #{tradepassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="ishasrecommend != null" >
+        #{ishasrecommend,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.AddUser" >
+    update adduserlist
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpassword != null" >
+        loginpassword = #{loginpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tradepassword != null" >
+        tradepassword = #{tradepassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="ishasrecommend != null" >
+        Ishasrecommend = #{ishasrecommend,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.AddUser" >
+    update adduserlist
+    set username = #{username,jdbcType=VARCHAR},
+      userkey = #{userkey,jdbcType=VARCHAR},
+      loginpassword = #{loginpassword,jdbcType=VARCHAR},
+      tradepassword = #{tradepassword,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      Ishasrecommend = #{ishasrecommend,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByfids" >
+    update adduserlist set state = #{state,jdbcType=INTEGER} where fId in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <update id="updateByUserKey" parameterType="java.lang.String" >
+    update adduserlist
+    set  Ishasrecommend = 1
+    where userkey = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

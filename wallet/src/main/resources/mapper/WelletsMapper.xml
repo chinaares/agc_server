@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.WelletsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Wellets" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="coinId" property="coinid" jdbcType="INTEGER" />
+    <result column="cointype" property="cointype" jdbcType="VARCHAR" />
+    <result column="coinNum" property="coinnum" jdbcType="DOUBLE" />
+    <result column="frozenNum" property="frozennum" jdbcType="DOUBLE" />
+    <result column="lockNum" property="locknum" jdbcType="DOUBLE" />
+    <result column="shiftNum" property="shiftnum" jdbcType="DOUBLE" />
+    <result column="releaseNum" property="releasenum" jdbcType="DOUBLE" />
+    <result column="quotaNum" property="quotanum" jdbcType="DOUBLE" />
+    <result column="lockfinances" property="lockfinances" jdbcType="DOUBLE" />
+    <result column="releasefinances" property="releasefinances" jdbcType="DOUBLE" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    fId, userkey, address, coinId, cointype, coinNum, frozenNum, lockNum, shiftNum, releaseNum,
+    quotaNum, lockfinances, releasefinances, version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wellets
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where userkey = #{userkey,jdbcType=VARCHAR} AND  wellets.`coinId` != 3
+  </select>
+
+  <select id="selectByAddressAndCoin" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where address = #{address,jdbcType=VARCHAR} and coinId = #{coinId,jdbcType=INTEGER}
+    limit 1
+  </select>
+
+
+  <select id="selectByUserandcoin" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where userkey = #{userkey,jdbcType=VARCHAR} and coinId = #{coinid,jdbcType=INTEGER}
+    limit 1
+  </select>
+
+
+  <select id="selectByUsersandcoin" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where userkey in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+     and coinId = #{coinid,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByCointype" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where coinId = #{coinid,jdbcType=INTEGER} and coinNum > 0
+  </select>
+
+  <select id="selectByCointype2" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where coinId = #{coinid,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="Adminwelletlist" resultType="Map">
+    SELECT u.userName,u.keyes,w.coinNum as titan,w.shiftNum as titanshift,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 2) as titanc,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 3) as usd1,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 4) as usd2
+    from wellets w LEFT JOIN users u on w.userkey = u.keyes where u.userName like '%${likes}%' or u.keyes like '%${likes}%' GROUP BY userkey limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="AdminwelletlistCount" resultType="java.lang.Integer">
+    SELECT count(*)
+    from wellets w LEFT JOIN users u on w.userkey = u.keyes where u.userName like '%${likes}%' or u.keyes like '%${likes}%'
+  </select>
+
+  <select id="AdminwelletByuser" resultType="Map" parameterType="java.lang.String" >
+    SELECT u.userName,u.keyes,w.coinNum as titan,w.shiftNum as titanshift,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 2) as titanc,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 3) as usd1,
+    (select coinNum from wellets where userkey = w.userkey and coinId = 4) as usd2
+    from wellets w LEFT JOIN users u on w.userkey = u.keyes where u.keyes = #{userkey,jdbcType=VARCHAR}  GROUP BY userkey
+  </select>
+
+
+  <select id="queryWelletByAdress" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where address = #{address,jdbcType=VARCHAR}
+  </select>
+
+  <update id="uptWelletByuserandcoin" >
+    UPDATE wellets SET coinNum = #{num} WHERE coinId = #{coinId,jdbcType=INTEGER} and userkey = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+  <update id="uptWelletRelease" >
+    UPDATE wellets SET releaseNum = #{num} WHERE coinId = #{coinId,jdbcType=INTEGER} and userkey = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+  <update id="uptWelletLockNum" >
+    UPDATE wellets SET lockNum = #{num} WHERE coinId = #{coinId,jdbcType=INTEGER} and userkey = #{userkey,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateRewardRelease" >
+    UPDATE wellets SET lockNum = #{lockNum},releaseNum = #{releaseNum} WHERE coinId = #{coinId,jdbcType=INTEGER} and userkey = #{keyes,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateCoinNumByVersion" >
+    UPDATE wellets SET coinNum = coinNum + #{release}, version=version+1 WHERE coinId = #{coinId,jdbcType=INTEGER} and userkey = #{keyes,jdbcType=VARCHAR} and version=  #{version,jdbcType=INTEGER}
+  </update>
+
+  <update id="upLockFinances" >
+    UPDATE wellets SET coinNum = coinNum - #{principal},lockfinances=lockfinances+  #{principal},version=version+1 WHERE version=  #{version,jdbcType=INTEGER} and coinId = #{coinId,jdbcType=INTEGER} and userkey = #{keyes,jdbcType=VARCHAR}
+  </update>
+
+
+  <update id="incomeInterest" >
+    UPDATE wellets SET coinNum = coinNum + #{release},lockfinances=lockfinances -  #{release},version=version+1 WHERE version=  #{version,jdbcType=INTEGER} and coinId = #{coinId,jdbcType=INTEGER} and userkey = #{keyes,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wellets
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Wellets" >
+    insert into wellets (fId, userkey, address,
+      coinId, cointype, coinNum,
+      frozenNum, lockNum, shiftNum
+      )
+    values (#{fid,jdbcType=INTEGER}, #{userkey,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{coinid,jdbcType=INTEGER}, #{cointype,jdbcType=VARCHAR}, #{coinnum,jdbcType=DECIMAL},
+      #{frozennum,jdbcType=DECIMAL}, #{locknum,jdbcType=DECIMAL}, #{shiftnum,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Wellets" >
+    insert into wellets
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="coinid != null" >
+        coinId,
+      </if>
+      <if test="cointype != null" >
+        cointype,
+      </if>
+      <if test="coinnum != null" >
+        coinNum,
+      </if>
+      <if test="frozennum != null" >
+        frozenNum,
+      </if>
+      <if test="locknum != null" >
+        lockNum,
+      </if>
+      <if test="shiftnum != null" >
+        shiftNum,
+      </if>
+      <if test="releasenum != null" >
+        releaseNum,
+      </if>
+      <if test="quotanum != null" >
+        quotaNum,
+      </if>
+      <if test="lockfinances != null" >
+        lockfinances,
+      </if>
+      <if test="releasefinances != null" >
+        releasefinances,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinid != null" >
+        #{coinid,jdbcType=INTEGER},
+      </if>
+      <if test="cointype != null" >
+        #{cointype,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum != null" >
+        #{coinnum,jdbcType=DOUBLE},
+      </if>
+      <if test="frozennum != null" >
+        #{frozennum,jdbcType=DOUBLE},
+      </if>
+      <if test="locknum != null" >
+        #{locknum,jdbcType=DOUBLE},
+      </if>
+      <if test="shiftnum != null" >
+        #{shiftnum,jdbcType=DOUBLE},
+      </if>
+      <if test="releasenum != null" >
+        #{releasenum,jdbcType=DOUBLE},
+      </if>
+      <if test="quotanum != null" >
+        #{quotanum,jdbcType=DOUBLE},
+      </if>
+      <if test="lockfinances != null" >
+        #{lockfinances,jdbcType=DOUBLE},
+      </if>
+      <if test="releasefinances != null" >
+        #{releasefinances,jdbcType=DOUBLE},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Wellets" >
+    update wellets
+    <set >
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinid != null" >
+        coinId = #{coinid,jdbcType=INTEGER},
+      </if>
+      <if test="cointype != null" >
+        cointype = #{cointype,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum != null" >
+        coinNum = #{coinnum,jdbcType=DOUBLE},
+      </if>
+      <if test="frozennum != null" >
+        frozenNum = #{frozennum,jdbcType=DOUBLE},
+      </if>
+      <if test="locknum != null" >
+        lockNum = #{locknum,jdbcType=DOUBLE},
+      </if>
+      <if test="shiftnum != null" >
+        shiftNum = #{shiftnum,jdbcType=DOUBLE},
+      </if>
+      <if test="releasenum != null" >
+        releaseNum = #{releasenum,jdbcType=DOUBLE},
+      </if>
+      <if test="quotanum != null" >
+        quotaNum = #{quotanum,jdbcType=DOUBLE},
+      </if>
+      <if test="lockfinances != null" >
+        lockfinances = #{lockfinances,jdbcType=DOUBLE},
+      </if>
+      <if test="releasefinances != null" >
+        releasefinances = #{releasefinances,jdbcType=DOUBLE},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=INTEGER}+1,
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER} and version = #{version,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Wellets" >
+    update wellets
+    set userkey = #{userkey,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      coinId = #{coinid,jdbcType=INTEGER},
+      cointype = #{cointype,jdbcType=VARCHAR},
+      coinNum = #{coinnum,jdbcType=DOUBLE},
+      frozenNum = #{frozennum,jdbcType=DOUBLE},
+      lockNum = #{locknum,jdbcType=DOUBLE},
+      shiftNum = #{shiftnum,jdbcType=DOUBLE},
+      releaseNum = #{releasenum,jdbcType=DOUBLE},
+      quotaNum = #{quotanum,jdbcType=DOUBLE},
+      lockfinances = #{lockfinances,jdbcType=DOUBLE},
+      releasefinances = #{releasefinances,jdbcType=DOUBLE},
+      version = #{version,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="transfer">
+    update wellets
+    set coinNum=coinNum + #{num,jdbcType=DOUBLE},
+        releasefinances=releasefinances - #{amount,jdbcType=DOUBLE},
+        version = #{version,jdbcType=INTEGER}+1
+    where coinId = #{id,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+      and userkey = #{userKey,jdbcType=VARCHAR}
+  </update>
+  <update id="invest">
+    update wellets
+    set coinNum=coinNum - #{num,jdbcType=DOUBLE},
+        releasefinances=releasefinances + #{freeBtc},
+        lockfinances=lockfinances+#{freezeBtc},
+        version = #{version,jdbcType=INTEGER}+1
+    where coinId = #{coinId,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+      and userkey = #{userKey,jdbcType=VARCHAR}
+  </update>
+  <update id="financialRelease">
+    update wellets
+    set releasefinances=releasefinances + #{num},
+        version = #{version,jdbcType=INTEGER}+1
+    where coinId = #{coinId,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+      and userkey = #{userKey,jdbcType=VARCHAR}
+  </update>
+  <update id="lockFinances">
+    update wellets
+    set lockfinances=lockfinances - #{num},
+        version = #{version,jdbcType=INTEGER}+1
+    where coinId = #{coinId,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+      and userkey = #{userKey,jdbcType=VARCHAR}
+  </update>
+</mapper>

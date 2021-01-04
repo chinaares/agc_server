@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.otc.dao.OtcAdsMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.otc.model.OtcAds">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="user_key" jdbcType="INTEGER" property="userKey" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="num" jdbcType="DECIMAL" property="num" />
+    <result column="num_balance" jdbcType="DECIMAL" property="numBalance" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="coin_id" jdbcType="INTEGER" property="coinId" />
+    <result column="coin" jdbcType="VARCHAR" property="coin" />
+    <result column="min_num" jdbcType="DECIMAL" property="minNum" />
+    <result column="max_num" jdbcType="DECIMAL" property="maxNum" />
+    <result column="message" jdbcType="LONGVARCHAR" property="message" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="review_status" jdbcType="INTEGER" property="reviewStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap id="BaseResultMapAdminAds" type="com.lanjing.otc.model.po.AdminAds">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="num" jdbcType="DECIMAL" property="num" />
+    <result column="num_balance" jdbcType="DECIMAL" property="numBalance" />
+    <result column="coin_id" jdbcType="INTEGER" property="coinId" />
+    <result column="coin" jdbcType="VARCHAR" property="coin" />
+    <result column="phoneNum" jdbcType="VARCHAR" property="phone" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="review_status" jdbcType="INTEGER" property="reviewStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap id="BaseResultMapAds" type="com.lanjing.otc.model.po.Ads" extends="BaseResultMap">
+    <result column="count" jdbcType="INTEGER" property="count" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `type`, user_key, user_name, num, num_balance, price, coin_id, coin, min_num, 
+    max_num, message, `status`, review_status, update_time, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.otc.model.OtcAdsExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from otc_ads
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from otc_ads
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from otc_ads
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.otc.model.OtcAdsExample">
+    <!--@mbg.generated-->
+    delete from otc_ads
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.otc.model.OtcAds" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into otc_ads (`type`, user_key, user_name, 
+      num, num_balance, price, 
+      coin_id, coin, min_num, 
+      max_num, message, `status`, 
+      review_status, update_time, create_time
+      )
+    values (#{type,jdbcType=INTEGER}, #{userKey,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{num,jdbcType=DECIMAL}, #{numBalance,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+      #{coinId,jdbcType=INTEGER}, #{coin,jdbcType=VARCHAR}, #{minNum,jdbcType=DECIMAL}, 
+      #{maxNum,jdbcType=DECIMAL}, #{message,jdbcType=LONGVARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{reviewStatus,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.otc.model.OtcAds" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into otc_ads
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="userKey != null">
+        user_key,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="num != null">
+        num,
+      </if>
+      <if test="numBalance != null">
+        num_balance,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="coinId != null">
+        coin_id,
+      </if>
+      <if test="coin != null">
+        coin,
+      </if>
+      <if test="minNum != null">
+        min_num,
+      </if>
+      <if test="maxNum != null">
+        max_num,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="reviewStatus != null">
+        review_status,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userKey != null">
+        #{userKey,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        #{num,jdbcType=DECIMAL},
+      </if>
+      <if test="numBalance != null">
+        #{numBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="coinId != null">
+        #{coinId,jdbcType=INTEGER},
+      </if>
+      <if test="coin != null">
+        #{coin,jdbcType=VARCHAR},
+      </if>
+      <if test="minNum != null">
+        #{minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="maxNum != null">
+        #{maxNum,jdbcType=DECIMAL},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="reviewStatus != null">
+        #{reviewStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.otc.model.OtcAdsExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from otc_ads
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update otc_ads
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.userKey != null">
+        user_key = #{record.userKey,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.num != null">
+        num = #{record.num,jdbcType=DECIMAL},
+      </if>
+      <if test="record.numBalance != null">
+        num_balance = #{record.numBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.coinId != null">
+        coin_id = #{record.coinId,jdbcType=INTEGER},
+      </if>
+      <if test="record.coin != null">
+        coin = #{record.coin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minNum != null">
+        min_num = #{record.minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.maxNum != null">
+        max_num = #{record.maxNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.message != null">
+        message = #{record.message,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.reviewStatus != null">
+        review_status = #{record.reviewStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update otc_ads
+    set id = #{record.id,jdbcType=INTEGER},
+      `type` = #{record.type,jdbcType=INTEGER},
+      user_key = #{record.userKey,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      num = #{record.num,jdbcType=DECIMAL},
+      num_balance = #{record.numBalance,jdbcType=DECIMAL},
+      price = #{record.price,jdbcType=DECIMAL},
+      coin_id = #{record.coinId,jdbcType=INTEGER},
+      coin = #{record.coin,jdbcType=VARCHAR},
+      min_num = #{record.minNum,jdbcType=DECIMAL},
+      max_num = #{record.maxNum,jdbcType=DECIMAL},
+      message = #{record.message,jdbcType=LONGVARCHAR},
+      `status` = #{record.status,jdbcType=INTEGER},
+      review_status = #{record.reviewStatus,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.otc.model.OtcAds">
+    <!--@mbg.generated-->
+    update otc_ads
+    <set>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="userKey != null">
+        user_key = #{userKey,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null">
+        num = #{num,jdbcType=DECIMAL},
+      </if>
+      <if test="numBalance != null">
+        num_balance = #{numBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="coinId != null">
+        coin_id = #{coinId,jdbcType=INTEGER},
+      </if>
+      <if test="coin != null">
+        coin = #{coin,jdbcType=VARCHAR},
+      </if>
+      <if test="minNum != null">
+        min_num = #{minNum,jdbcType=DECIMAL},
+      </if>
+      <if test="maxNum != null">
+        max_num = #{maxNum,jdbcType=DECIMAL},
+      </if>
+      <if test="message != null">
+        message = #{message,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="reviewStatus != null">
+        review_status = #{reviewStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.otc.model.OtcAds">
+    <!--@mbg.generated-->
+    update otc_ads
+    set `type` = #{type,jdbcType=INTEGER},
+      user_key = #{userKey,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      num = #{num,jdbcType=DECIMAL},
+      num_balance = #{numBalance,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      coin_id = #{coinId,jdbcType=INTEGER},
+      coin = #{coin,jdbcType=VARCHAR},
+      min_num = #{minNum,jdbcType=DECIMAL},
+      max_num = #{maxNum,jdbcType=DECIMAL},
+      message = #{message,jdbcType=LONGVARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      review_status = #{reviewStatus,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from otc_ads
+    where status = 1
+    <if test="userId != null">
+      and user_key = #{userId,jdbcType=INTEGER}
+    </if>
+    <if test="id != null">
+      and coin_id = #{id,jdbcType=INTEGER}
+    </if>
+    order by id desc
+  </select>
+  <select id="selectAdsBuyOrSell" resultMap="BaseResultMapAds">
+    select a.*,(select count(0) from otc_order o where o.ads_user=a.user_key) count
+    from otc_ads a
+    where status =1 and review_status = 1
+    and type = ${type}
+    <if test="coinId != null">
+      and coin_id=#{coinId}
+    </if>
+    order by id desc
+  </select>
+  <update id="updateByIdAndUseId">
+    update otc_ads set status= 0
+    where id = #{id,jdbcType=INTEGER} and user_key= #{userId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findAll" resultMap="BaseResultMapAdminAds">
+    select a.id,a.type,a.review_status,a.coin_id,a.coin,a.status,a.num,a.num_balance,u.phoneNum,a.create_time
+    from otc_ads a left join users u on a.user_key=u.keyes where 1=1
+    <if test="coinId != null">
+      and a.coin_id=#{coinId,jdbcType=INTEGER}
+    </if>
+    <if test="type != null">
+      and a.type=#{type,jdbcType=INTEGER}
+    </if>
+    <if test="status != null">
+      and a.status=#{status,jdbcType=INTEGER}
+    </if>
+    <if test="reviewStatus != null">
+      and a.review_status=#{status,jdbcType=INTEGER}
+    </if>
+
+    <if test="key != null and key != ''">
+      and (u.phoneNum like concat("%",#{key} ,"%") or u.keyes like concat("%",#{key} ,"%"))
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.ChangelogMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Changelog" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="usergrede" property="usergrede" jdbcType="INTEGER" />
+    <result column="cointype1" property="cointype1" jdbcType="INTEGER" />
+    <result column="coinnumago" property="coinnumago" jdbcType="DECIMAL" />
+    <result column="coinnumafter" property="coinnumafter" jdbcType="DECIMAL" />
+    <result column="buynum" property="buynum" jdbcType="DECIMAL" />
+    <result column="coinnum1" property="coinnum1" jdbcType="DECIMAL" />
+    <result column="cointype2" property="cointype2" jdbcType="INTEGER" />
+    <result column="coinnum2" property="coinnum2" jdbcType="DECIMAL" />
+    <result column="craetetime" property="craetetime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, userkey, usergrede, cointype1, coinnumago, coinnumafter, buynum, coinnum1, cointype2,
+    coinnum2, craetetime, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from changelog
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByreward" resultType="java.lang.Double" parameterType="java.lang.String">
+    SELECT IFNULL(SUM(coinnum2),0) from changelog WHERE userkey = #{userkey,jdbcType=VARCHAR} and type in (2,5,6)
+  </select>
+
+
+  <select id="userUSDKT" resultType="java.lang.Double" parameterType="java.lang.String">
+    SELECT IFNULL(sum(coinnum2),0) from changelog WHERE userkey = #{userkey,jdbcType=VARCHAR} and cointype1 = 4 and type = 1 and TO_DAYS( NOW( ) ) - TO_DAYS(craetetime) = 1
+  </select>
+
+  <select id="userTitanKT" resultType="java.lang.Double" parameterType="java.lang.String">
+    SELECT IFNULL(sum(coinnum2),0) from changelog WHERE userkey = #{userkey,jdbcType=VARCHAR} and cointype1 = 2 and type = 2 and TO_DAYS( NOW( ) ) - TO_DAYS(craetetime) = 1
+  </select>
+
+  <select id="userTitanKT1" resultType="java.lang.Double" parameterType="java.lang.String">
+    SELECT IFNULL(sum(coinnum2),0) from changelog WHERE userkey = #{userkey,jdbcType=VARCHAR} and cointype1 = 2 and type = 2 and TO_DAYS( NOW( ) ) - TO_DAYS(craetetime) = 0
+  </select>
+
+
+  <select id="selectByUser" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from changelog
+    where userkey = #{userkey,jdbcType=VARCHAR} limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectAirdropByUserOrId1" resultType="java.util.Map">
+    SELECT loges.*,u.userName FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE loges.type = 1
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAirdropByUserOrId2" resultType="java.util.Map">
+    SELECT loges.*,u.userName FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE (loges.type = 3 or loges.type = 4)
+    <if test="type != 0 and type !=null" >
+      and loges.type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectTradeByUserOrId1" resultType="java.util.Map">
+    SELECT loges.*,u.userName FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE loges.type = 2
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+    and (u.fId like '%${username}%' or u.userName like '%${username}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectTradeByUserOrId2" resultType="java.util.Map">
+    SELECT loges.*,u.userName FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE (loges.type = 5 or loges.type = 6)
+    <if test="type != 0 and type !=null" >
+      and loges.type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAirdropCount1" resultType="java.lang.Integer">
+    SELECT count(*) FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE loges.type = 1
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%')
+  </select>
+
+  <select id="selectAirdropCount11" resultType="java.lang.Integer">
+    SELECT IFNULL(sum(coinnumago),0) as 'coinnumago',IFNULL(sum(coinnum1),0),IFNULL(sum(coinnum2),0) FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE loges.type = 1
+  </select>
+
+  <select id="selectAirdropCount2" resultType="java.lang.Integer">
+    SELECT count(*) FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE (loges.type = 3 or loges.type = 4)
+    <if test="type != 0 and type !=null" >
+      and loges.type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+    and (u.fId like '%${username}%' or u.userName like '%${username}%')
+</select>
+
+  <select id="selectTradeCount1" resultType="java.lang.Integer">
+    SELECT count(*) FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE loges.type = 2
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%')
+  </select>
+
+  <select id="selectTradeCount2" resultType="java.lang.Integer">
+    SELECT count(*) FROM changelog loges LEFT JOIN users u on loges.userkey = u.keyes WHERE (loges.type = 5 or loges.type = 6)
+    <if test="type != 0 and type !=null" >
+      and loges.type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="begintime != null" >
+      and loges.craetetime <![CDATA[ >= ]]> #{begintime}
+    </if>
+    <if test="endtime != null" >
+      and loges.craetetime <![CDATA[ <= ]]>  #{endtime}
+    </if>
+     and (u.fId like '%${username}%' or u.userName like '%${username}%')
+  </select>
+
+
+  <select id="selectByUserYesterday" resultType="java.lang.Double" >
+    select
+    IFNULL(SUM(coinnum2),0)
+    from changelog
+    where userkey = #{userkey,jdbcType=VARCHAR} and type = #{type,jdbcType=INTEGER} and TO_DAYS( NOW( ) ) - TO_DAYS(craetetime) <![CDATA[ = ]]> 1
+  </select>
+
+  <select id="selectBy" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from changelog
+    where 1 = 1
+    <if test="record.userkey != null" >
+      and userkey = #{record.userkey,jdbcType=VARCHAR}
+    </if>
+    <if test="record.cointype1 != null" >
+      and cointype1 = #{record.cointype1,jdbcType=INTEGER}
+    </if>
+    <if test="record.coinnum1 != null" >
+      and coinnum1 = #{record.coinnum1,jdbcType=DECIMAL}
+    </if>
+    <if test="record.cointype2 != null" >
+      and cointype2 = #{record.cointype2,jdbcType=INTEGER}
+    </if>
+    <if test="record.coinnum2 != null" >
+      and coinnum2 = #{record.coinnum2,jdbcType=DECIMAL}
+    </if>
+    <if test="record.craetetime != null" >
+      and craetetime = #{record.craetetime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.type != null" >
+      and type = #{record.type,jdbcType=INTEGER}
+    </if>
+      order by craetetime desc
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from changelog
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Changelog" >
+    insert into changelog (fId, userkey, cointype1, 
+      coinnum1, cointype2, coinnum2, 
+      craetetime, type)
+    values (#{fid,jdbcType=INTEGER}, #{userkey,jdbcType=VARCHAR}, #{cointype1,jdbcType=INTEGER}, 
+      #{coinnum1,jdbcType=DECIMAL}, #{cointype2,jdbcType=INTEGER}, #{coinnum2,jdbcType=DECIMAL}, 
+      #{craetetime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Changelog" >
+    insert into changelog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="usergrede != null" >
+        usergrede,
+      </if>
+      <if test="cointype1 != null" >
+        cointype1,
+      </if>
+      <if test="coinnumago != null" >
+        coinnumago,
+      </if>
+      <if test="coinnumafter != null" >
+        coinnumafter,
+      </if>
+      <if test="buynum != null" >
+        buynum,
+      </if>
+      <if test="coinnum1 != null" >
+        coinnum1,
+      </if>
+      <if test="cointype2 != null" >
+        cointype2,
+      </if>
+      <if test="coinnum2 != null" >
+        coinnum2,
+      </if>
+      <if test="craetetime != null" >
+        craetetime,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="usergrede != null" >
+        #{usergrede,jdbcType=INTEGER},
+      </if>
+      <if test="cointype1 != null" >
+        #{cointype1,jdbcType=INTEGER},
+      </if>
+      <if test="coinnumago != null" >
+        #{coinnumago,jdbcType=DECIMAL},
+      </if>
+      <if test="coinnumafter != null" >
+        #{coinnumafter,jdbcType=DECIMAL},
+      </if>
+      <if test="buynum != null" >
+        #{buynum,jdbcType=DECIMAL},
+      </if>
+      <if test="coinnum1 != null" >
+        #{coinnum1,jdbcType=DECIMAL},
+      </if>
+      <if test="cointype2 != null" >
+        #{cointype2,jdbcType=INTEGER},
+      </if>
+      <if test="coinnum2 != null" >
+        #{coinnum2,jdbcType=DECIMAL},
+      </if>
+      <if test="craetetime != null" >
+        #{craetetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Changelog" >
+    update changelog
+    <set >
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="usergrede != null" >
+        usergrede = #{usergrede,jdbcType=INTEGER},
+      </if>
+      <if test="cointype1 != null" >
+        cointype1 = #{cointype1,jdbcType=INTEGER},
+      </if>
+      <if test="coinnumago != null" >
+        coinnumago = #{coinnumago,jdbcType=DECIMAL},
+      </if>
+      <if test="coinnumafter != null" >
+        coinnumafter = #{coinnumafter,jdbcType=DECIMAL},
+      </if>
+      <if test="buynum != null" >
+        buynum = #{buynum,jdbcType=DECIMAL},
+      </if>
+      <if test="coinnum1 != null" >
+        coinnum1 = #{coinnum1,jdbcType=DECIMAL},
+      </if>
+      <if test="cointype2 != null" >
+        cointype2 = #{cointype2,jdbcType=INTEGER},
+      </if>
+      <if test="coinnum2 != null" >
+        coinnum2 = #{coinnum2,jdbcType=DECIMAL},
+      </if>
+      <if test="craetetime != null" >
+        craetetime = #{craetetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Changelog" >
+    update changelog
+    set userkey = #{userkey,jdbcType=VARCHAR},
+      cointype1 = #{cointype1,jdbcType=INTEGER},
+      coinnum1 = #{coinnum1,jdbcType=DECIMAL},
+      cointype2 = #{cointype2,jdbcType=INTEGER},
+      coinnum2 = #{coinnum2,jdbcType=DECIMAL},
+      craetetime = #{craetetime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.dao.MallShopMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.MallShop">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="code" jdbcType="BIGINT" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="synopsis" jdbcType="VARCHAR" property="synopsis" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
+    <result column="contact" jdbcType="VARCHAR" property="contact" />
+    <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
+    <result column="consumer_hotline" jdbcType="VARCHAR" property="consumerHotline" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="logistics" jdbcType="VARCHAR" property="logistics" />
+    <result column="popular" jdbcType="INTEGER" property="popular" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="praise" jdbcType="DOUBLE" property="praise" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, code, `name`, synopsis, thumbnail, contact, contact_number, consumer_hotline, 
+    city, logistics, popular, `type`, sort, praise, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.wallet.model.MallShopExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from mall_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from mall_shop
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from mall_shop
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.wallet.model.MallShopExample">
+    <!--@mbg.generated-->
+    delete from mall_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.wallet.model.MallShop" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mall_shop (code, `name`, synopsis, 
+      thumbnail, contact, contact_number, 
+      consumer_hotline, city, logistics, 
+      popular, `type`, sort, 
+      praise, create_time, update_time
+      )
+    values (#{code,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{synopsis,jdbcType=VARCHAR}, 
+      #{thumbnail,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{contactNumber,jdbcType=VARCHAR}, 
+      #{consumerHotline,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{logistics,jdbcType=VARCHAR}, 
+      #{popular,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
+      #{praise,jdbcType=DOUBLE}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.wallet.model.MallShop" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mall_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="synopsis != null">
+        synopsis,
+      </if>
+      <if test="thumbnail != null">
+        thumbnail,
+      </if>
+      <if test="contact != null">
+        contact,
+      </if>
+      <if test="contactNumber != null">
+        contact_number,
+      </if>
+      <if test="consumerHotline != null">
+        consumer_hotline,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="logistics != null">
+        logistics,
+      </if>
+      <if test="popular != null">
+        popular,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="praise != null">
+        praise,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="synopsis != null">
+        #{synopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null">
+        #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerHotline != null">
+        #{consumerHotline,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="logistics != null">
+        #{logistics,jdbcType=VARCHAR},
+      </if>
+      <if test="popular != null">
+        #{popular,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="praise != null">
+        #{praise,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.wallet.model.MallShopExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from mall_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update mall_shop
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.synopsis != null">
+        synopsis = #{record.synopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thumbnail != null">
+        thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null">
+        contact = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactNumber != null">
+        contact_number = #{record.contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.consumerHotline != null">
+        consumer_hotline = #{record.consumerHotline,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logistics != null">
+        logistics = #{record.logistics,jdbcType=VARCHAR},
+      </if>
+      <if test="record.popular != null">
+        popular = #{record.popular,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.praise != null">
+        praise = #{record.praise,jdbcType=DOUBLE},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update mall_shop
+    set id = #{record.id,jdbcType=INTEGER},
+      code = #{record.code,jdbcType=BIGINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      synopsis = #{record.synopsis,jdbcType=VARCHAR},
+      thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+      contact = #{record.contact,jdbcType=VARCHAR},
+      contact_number = #{record.contactNumber,jdbcType=VARCHAR},
+      consumer_hotline = #{record.consumerHotline,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      logistics = #{record.logistics,jdbcType=VARCHAR},
+      popular = #{record.popular,jdbcType=INTEGER},
+      `type` = #{record.type,jdbcType=INTEGER},
+      sort = #{record.sort,jdbcType=INTEGER},
+      praise = #{record.praise,jdbcType=DOUBLE},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.MallShop">
+    <!--@mbg.generated-->
+    update mall_shop
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="synopsis != null">
+        synopsis = #{synopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnail != null">
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        contact_number = #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="consumerHotline != null">
+        consumer_hotline = #{consumerHotline,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="logistics != null">
+        logistics = #{logistics,jdbcType=VARCHAR},
+      </if>
+      <if test="popular != null">
+        popular = #{popular,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="praise != null">
+        praise = #{praise,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.MallShop">
+    <!--@mbg.generated-->
+    update mall_shop
+    set code = #{code,jdbcType=BIGINT},
+      `name` = #{name,jdbcType=VARCHAR},
+      synopsis = #{synopsis,jdbcType=VARCHAR},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      contact_number = #{contactNumber,jdbcType=VARCHAR},
+      consumer_hotline = #{consumerHotline,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      logistics = #{logistics,jdbcType=VARCHAR},
+      popular = #{popular,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
+      praise = #{praise,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_shop
+        where code=#{code,jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.WelletsuptLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.WelletsuptLog" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="titanago" property="titanago" jdbcType="DOUBLE" />
+    <result column="titanafter" property="titanafter" jdbcType="DOUBLE" />
+    <result column="titanshiftago" property="titanshiftago" jdbcType="DOUBLE" />
+    <result column="titanshiftafter" property="titanshiftafter" jdbcType="DOUBLE" />
+    <result column="titancago" property="titancago" jdbcType="DOUBLE" />
+    <result column="titancafter" property="titancafter" jdbcType="DOUBLE" />
+    <result column="usd1ago" property="usd1ago" jdbcType="DOUBLE" />
+    <result column="usd1after" property="usd1after" jdbcType="DOUBLE" />
+    <result column="usd2ago" property="usd2ago" jdbcType="DOUBLE" />
+    <result column="usd2after" property="usd2after" jdbcType="DOUBLE" />
+    <result column="auname" property="auname" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, userkey, username, titanago, titanafter, titanshiftago, titanshiftafter, titancago, 
+    titancafter, usd1ago, usd1after, usd2ago, usd2after, auname, createtime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from welletsuptLog
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllBypage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from welletsuptLog
+    where 1 = 1
+    <if test="likes != null">
+      and (userkey like '%${likes}%' or username like '%${likes}%')
+    </if>
+    <if test="times != null and times != ''">
+      and to_days(createtime) = to_days(#{times,jdbcType=VARCHAR})
+    </if>
+     limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from welletsuptLog
+    where 1 = 1
+    <if test="likes != null">
+      and (userkey like '%${likes}%' or username like '%${likes}%')
+    </if>
+    <if test="times != null and times != ''">
+      and to_days(createtime) = to_days(#{times,jdbcType=VARCHAR})
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from welletsuptLog
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.WelletsuptLog" >
+    insert into welletsuptLog (fId, userkey, username, 
+      titanago, titanafter, titanshiftago, 
+      titanshiftafter, titancago, titancafter, 
+      usd1ago, usd1after, usd2ago, 
+      usd2after, auname, createtime
+      )
+    values (#{fid,jdbcType=INTEGER}, #{userkey,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{titanago,jdbcType=DOUBLE}, #{titanafter,jdbcType=DOUBLE}, #{titanshiftago,jdbcType=DOUBLE}, 
+      #{titanshiftafter,jdbcType=DOUBLE}, #{titancago,jdbcType=DOUBLE}, #{titancafter,jdbcType=DOUBLE}, 
+      #{usd1ago,jdbcType=DOUBLE}, #{usd1after,jdbcType=DOUBLE}, #{usd2ago,jdbcType=DOUBLE}, 
+      #{usd2after,jdbcType=DOUBLE}, #{auname,jdbcType=VARCHAR}, #{createtime,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.WelletsuptLog" >
+    insert into welletsuptLog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="titanago != null" >
+        titanago,
+      </if>
+      <if test="titanafter != null" >
+        titanafter,
+      </if>
+      <if test="titanshiftago != null" >
+        titanshiftago,
+      </if>
+      <if test="titanshiftafter != null" >
+        titanshiftafter,
+      </if>
+      <if test="titancago != null" >
+        titancago,
+      </if>
+      <if test="titancafter != null" >
+        titancafter,
+      </if>
+      <if test="usd1ago != null" >
+        usd1ago,
+      </if>
+      <if test="usd1after != null" >
+        usd1after,
+      </if>
+      <if test="usd2ago != null" >
+        usd2ago,
+      </if>
+      <if test="usd2after != null" >
+        usd2after,
+      </if>
+      <if test="auname != null" >
+        auname,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="titanago != null" >
+        #{titanago,jdbcType=DOUBLE},
+      </if>
+      <if test="titanafter != null" >
+        #{titanafter,jdbcType=DOUBLE},
+      </if>
+      <if test="titanshiftago != null" >
+        #{titanshiftago,jdbcType=DOUBLE},
+      </if>
+      <if test="titanshiftafter != null" >
+        #{titanshiftafter,jdbcType=DOUBLE},
+      </if>
+      <if test="titancago != null" >
+        #{titancago,jdbcType=DOUBLE},
+      </if>
+      <if test="titancafter != null" >
+        #{titancafter,jdbcType=DOUBLE},
+      </if>
+      <if test="usd1ago != null" >
+        #{usd1ago,jdbcType=DOUBLE},
+      </if>
+      <if test="usd1after != null" >
+        #{usd1after,jdbcType=DOUBLE},
+      </if>
+      <if test="usd2ago != null" >
+        #{usd2ago,jdbcType=DOUBLE},
+      </if>
+      <if test="usd2after != null" >
+        #{usd2after,jdbcType=DOUBLE},
+      </if>
+      <if test="auname != null" >
+        #{auname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.WelletsuptLog" >
+    update welletsuptLog
+    <set >
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="titanago != null" >
+        titanago = #{titanago,jdbcType=DOUBLE},
+      </if>
+      <if test="titanafter != null" >
+        titanafter = #{titanafter,jdbcType=DOUBLE},
+      </if>
+      <if test="titanshiftago != null" >
+        titanshiftago = #{titanshiftago,jdbcType=DOUBLE},
+      </if>
+      <if test="titanshiftafter != null" >
+        titanshiftafter = #{titanshiftafter,jdbcType=DOUBLE},
+      </if>
+      <if test="titancago != null" >
+        titancago = #{titancago,jdbcType=DOUBLE},
+      </if>
+      <if test="titancafter != null" >
+        titancafter = #{titancafter,jdbcType=DOUBLE},
+      </if>
+      <if test="usd1ago != null" >
+        usd1ago = #{usd1ago,jdbcType=DOUBLE},
+      </if>
+      <if test="usd1after != null" >
+        usd1after = #{usd1after,jdbcType=DOUBLE},
+      </if>
+      <if test="usd2ago != null" >
+        usd2ago = #{usd2ago,jdbcType=DOUBLE},
+      </if>
+      <if test="usd2after != null" >
+        usd2after = #{usd2after,jdbcType=DOUBLE},
+      </if>
+      <if test="auname != null" >
+        auname = #{auname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.WelletsuptLog" >
+    update welletsuptLog
+    set userkey = #{userkey,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      titanago = #{titanago,jdbcType=DOUBLE},
+      titanafter = #{titanafter,jdbcType=DOUBLE},
+      titanshiftago = #{titanshiftago,jdbcType=DOUBLE},
+      titanshiftafter = #{titanshiftafter,jdbcType=DOUBLE},
+      titancago = #{titancago,jdbcType=DOUBLE},
+      titancafter = #{titancafter,jdbcType=DOUBLE},
+      usd1ago = #{usd1ago,jdbcType=DOUBLE},
+      usd1after = #{usd1after,jdbcType=DOUBLE},
+      usd2ago = #{usd2ago,jdbcType=DOUBLE},
+      usd2after = #{usd2after,jdbcType=DOUBLE},
+      auname = #{auname,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.RegistersMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Registers" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="todaytime" property="todaytime" jdbcType="TIMESTAMP" />
+    <result column="usernum" property="usernum" jdbcType="INTEGER" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="adminname" property="adminname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, todaytime, usernum, createtime, adminname
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from registerlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByTime" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from registerlist
+    where todaytime between '${time} 00:00:00' and '${time} 23:59:59'
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from registerlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Registers" >
+    insert into registerlist (fId, todaytime, usernum, 
+      createtime, adminname)
+    values (#{fid,jdbcType=INTEGER}, #{todaytime,jdbcType=TIMESTAMP}, #{usernum,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{adminname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Registers" >
+    insert into registerlist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="todaytime != null" >
+        todaytime,
+      </if>
+      <if test="usernum != null" >
+        usernum,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="adminname != null" >
+        adminname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="todaytime != null" >
+        #{todaytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usernum != null" >
+        #{usernum,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminname != null" >
+        #{adminname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Registers" >
+    update registerlist
+    <set >
+      <if test="todaytime != null" >
+        todaytime = #{todaytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usernum != null" >
+        usernum = #{usernum,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminname != null" >
+        adminname = #{adminname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Registers" >
+    update registerlist
+    set todaytime = #{todaytime,jdbcType=TIMESTAMP},
+      usernum = #{usernum,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      adminname = #{adminname,jdbcType=VARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

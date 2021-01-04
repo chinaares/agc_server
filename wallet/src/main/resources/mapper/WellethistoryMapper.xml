@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.WellethistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Wellethistory" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="welletId" property="welletid" jdbcType="INTEGER" />
+    <result column="changeNum" property="changenum" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create" property="create" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, welletId, changeNum, type, remark, create
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wellethistory
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wellethistory
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Wellethistory" >
+    insert into wellethistory (fId, welletId, changeNum, 
+      type, remark, create
+      )
+    values (#{fid,jdbcType=INTEGER}, #{welletid,jdbcType=INTEGER}, #{changenum,jdbcType=DECIMAL}, 
+      #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{create,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Wellethistory" >
+    insert into wellethistory
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="welletid != null" >
+        welletId,
+      </if>
+      <if test="changenum != null" >
+        changeNum,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="create != null" >
+        create,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="welletid != null" >
+        #{welletid,jdbcType=INTEGER},
+      </if>
+      <if test="changenum != null" >
+        #{changenum,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="create != null" >
+        #{create,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Wellethistory" >
+    update wellethistory
+    <set >
+      <if test="welletid != null" >
+        welletId = #{welletid,jdbcType=INTEGER},
+      </if>
+      <if test="changenum != null" >
+        changeNum = #{changenum,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="create != null" >
+        create = #{create,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Wellethistory" >
+    update wellethistory
+    set welletId = #{welletid,jdbcType=INTEGER},
+      changeNum = #{changenum,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create = #{create,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

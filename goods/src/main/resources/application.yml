@@ -1,0 +1,82 @@
+encrypt:
+  isopen: true
+
+wallet:
+  url: http://127.0.0.1:8080/
+
+
+logging:
+  file: goods.log
+  level.*: info
+  level.com.lanjing.goods.dao: debug
+
+mybatis:
+  mapperlocations: classpath:mapper/*.xml
+  typealiasespackage: com.lanjing.goods.model
+
+pagehelper:
+  helper-dialect: mysql
+  params:
+    count: countSql
+  reasonable: false
+  support-methods-arguments: true
+
+server:
+  error:
+    path:
+  port: 8081
+
+push:
+  key: 7ca6a76a97b829737f41f408
+  secret: 11db7fbcf613f7c069363671
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  profiles:
+    active: master
+
+---
+#spring:
+#  profiles: dev
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/btcyy?serverTimezone=GMT%2B8&characterEncoding=utf8
+#    username: root
+#    password: root
+#  redis:
+#    database: 0
+#    host: 127.0.0.1
+#    password:
+#    port: 6379
+#    timeout: 1000
+
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m
+---
+spring:
+  profiles: master
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m

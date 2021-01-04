@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.MallWalletMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.MallWallet">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="code" jdbcType="BIGINT" property="code" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="coin_id" jdbcType="INTEGER" property="coinId" />
+    <result column="coin_type" jdbcType="VARCHAR" property="coinType" />
+    <result column="coin_num" jdbcType="DECIMAL" property="coinNum" />
+    <result column="frozen_num" jdbcType="DECIMAL" property="frozenNum" />
+    <result column="lock_num" jdbcType="DECIMAL" property="lockNum" />
+    <result column="shift_num" jdbcType="DECIMAL" property="shiftNum" />
+    <result column="release_num" jdbcType="DECIMAL" property="releaseNum" />
+    <result column="quota_num" jdbcType="DECIMAL" property="quotaNum" />
+    <result column="lock_finances" jdbcType="DECIMAL" property="lockFinances" />
+    <result column="release_finances" jdbcType="DECIMAL" property="releaseFinances" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, code, address, coin_id, coin_type, coin_num, frozen_num, lock_num, shift_num, 
+    release_num, quota_num, lock_finances, release_finances, version
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.goods.model.MallWalletExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from mall_wallet
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from mall_wallet
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from mall_wallet
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.goods.model.MallWalletExample">
+    <!--@mbg.generated-->
+    delete from mall_wallet
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.goods.model.MallWallet" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mall_wallet (user_id, code, address, 
+      coin_id, coin_type, coin_num, 
+      frozen_num, lock_num, shift_num, 
+      release_num, quota_num, lock_finances, 
+      release_finances, version)
+    values (#{userId,jdbcType=INTEGER}, #{code,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, 
+      #{coinId,jdbcType=INTEGER}, #{coinType,jdbcType=VARCHAR}, #{coinNum,jdbcType=DECIMAL}, 
+      #{frozenNum,jdbcType=DECIMAL}, #{lockNum,jdbcType=DECIMAL}, #{shiftNum,jdbcType=DECIMAL}, 
+      #{releaseNum,jdbcType=DECIMAL}, #{quotaNum,jdbcType=DECIMAL}, #{lockFinances,jdbcType=DECIMAL}, 
+      #{releaseFinances,jdbcType=DECIMAL}, #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.goods.model.MallWallet" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into mall_wallet
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="coinId != null">
+        coin_id,
+      </if>
+      <if test="coinType != null">
+        coin_type,
+      </if>
+      <if test="coinNum != null">
+        coin_num,
+      </if>
+      <if test="frozenNum != null">
+        frozen_num,
+      </if>
+      <if test="lockNum != null">
+        lock_num,
+      </if>
+      <if test="shiftNum != null">
+        shift_num,
+      </if>
+      <if test="releaseNum != null">
+        release_num,
+      </if>
+      <if test="quotaNum != null">
+        quota_num,
+      </if>
+      <if test="lockFinances != null">
+        lock_finances,
+      </if>
+      <if test="releaseFinances != null">
+        release_finances,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null">
+        #{coinId,jdbcType=INTEGER},
+      </if>
+      <if test="coinType != null">
+        #{coinType,jdbcType=VARCHAR},
+      </if>
+      <if test="coinNum != null">
+        #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenNum != null">
+        #{frozenNum,jdbcType=DECIMAL},
+      </if>
+      <if test="lockNum != null">
+        #{lockNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shiftNum != null">
+        #{shiftNum,jdbcType=DECIMAL},
+      </if>
+      <if test="releaseNum != null">
+        #{releaseNum,jdbcType=DECIMAL},
+      </if>
+      <if test="quotaNum != null">
+        #{quotaNum,jdbcType=DECIMAL},
+      </if>
+      <if test="lockFinances != null">
+        #{lockFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="releaseFinances != null">
+        #{releaseFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.goods.model.MallWalletExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from mall_wallet
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update mall_wallet
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=BIGINT},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinId != null">
+        coin_id = #{record.coinId,jdbcType=INTEGER},
+      </if>
+      <if test="record.coinType != null">
+        coin_type = #{record.coinType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinNum != null">
+        coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.frozenNum != null">
+        frozen_num = #{record.frozenNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lockNum != null">
+        lock_num = #{record.lockNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shiftNum != null">
+        shift_num = #{record.shiftNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.releaseNum != null">
+        release_num = #{record.releaseNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.quotaNum != null">
+        quota_num = #{record.quotaNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lockFinances != null">
+        lock_finances = #{record.lockFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="record.releaseFinances != null">
+        release_finances = #{record.releaseFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update mall_wallet
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      code = #{record.code,jdbcType=BIGINT},
+      address = #{record.address,jdbcType=VARCHAR},
+      coin_id = #{record.coinId,jdbcType=INTEGER},
+      coin_type = #{record.coinType,jdbcType=VARCHAR},
+      coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      frozen_num = #{record.frozenNum,jdbcType=DECIMAL},
+      lock_num = #{record.lockNum,jdbcType=DECIMAL},
+      shift_num = #{record.shiftNum,jdbcType=DECIMAL},
+      release_num = #{record.releaseNum,jdbcType=DECIMAL},
+      quota_num = #{record.quotaNum,jdbcType=DECIMAL},
+      lock_finances = #{record.lockFinances,jdbcType=DECIMAL},
+      release_finances = #{record.releaseFinances,jdbcType=DECIMAL},
+      version = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.MallWallet">
+    <!--@mbg.generated-->
+    update mall_wallet
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=BIGINT},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null">
+        coin_id = #{coinId,jdbcType=INTEGER},
+      </if>
+      <if test="coinType != null">
+        coin_type = #{coinType,jdbcType=VARCHAR},
+      </if>
+      <if test="coinNum != null">
+        coin_num = #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="frozenNum != null">
+        frozen_num = #{frozenNum,jdbcType=DECIMAL},
+      </if>
+      <if test="lockNum != null">
+        lock_num = #{lockNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shiftNum != null">
+        shift_num = #{shiftNum,jdbcType=DECIMAL},
+      </if>
+      <if test="releaseNum != null">
+        release_num = #{releaseNum,jdbcType=DECIMAL},
+      </if>
+      <if test="quotaNum != null">
+        quota_num = #{quotaNum,jdbcType=DECIMAL},
+      </if>
+      <if test="lockFinances != null">
+        lock_finances = #{lockFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="releaseFinances != null">
+        release_finances = #{releaseFinances,jdbcType=DECIMAL},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.MallWallet">
+    <!--@mbg.generated-->
+    update mall_wallet
+    set user_id = #{userId,jdbcType=INTEGER},
+      code = #{code,jdbcType=BIGINT},
+      address = #{address,jdbcType=VARCHAR},
+      coin_id = #{coinId,jdbcType=INTEGER},
+      coin_type = #{coinType,jdbcType=VARCHAR},
+      coin_num = #{coinNum,jdbcType=DECIMAL},
+      frozen_num = #{frozenNum,jdbcType=DECIMAL},
+      lock_num = #{lockNum,jdbcType=DECIMAL},
+      shift_num = #{shiftNum,jdbcType=DECIMAL},
+      release_num = #{releaseNum,jdbcType=DECIMAL},
+      quota_num = #{quotaNum,jdbcType=DECIMAL},
+      lock_finances = #{lockFinances,jdbcType=DECIMAL},
+      release_finances = #{releaseFinances,jdbcType=DECIMAL},
+      version = #{version,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findByCode" resultMap="BaseResultMap">
+    select id, code, coin_id, coin_type, coin_num, address
+    from mall_wallet
+    where code = #{code,jdbcType=BIGINT} and coin_id != 3
+  </select>
+
+
+  <select id="findByCodeAndCoinId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_wallet
+        where code=#{code,jdbcType=BIGINT} and coin_id=#{coinId,jdbcType=INTEGER}
+    </select>
+
+
+  <update id="updateByCodeAndCoinIdAndVersion">
+    update mall_wallet set coin_num=coin_num+#{amount}
+    where code=#{code,jdbcType=BIGINT} and coin_id=#{coinId,jdbcType=INTEGER} and version=#{version,jdbcType=INTEGER}
+  </update>
+
+
+  <update id="updateAddressByCodeAndCoinId">
+    update mall_wallet
+    set address=#{updatedAddress,jdbcType=VARCHAR}
+    where code=#{code,jdbcType=BIGINT} and coin_id=#{coinId,jdbcType=INTEGER}
+  </update>
+</mapper>

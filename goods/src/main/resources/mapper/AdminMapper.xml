@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.Admin">
+    <!--@mbg.generated-->
+    <id column="fId" jdbcType="INTEGER" property="fid" />
+    <result column="code" jdbcType="BIGINT" property="code" />
+    <result column="Aname" jdbcType="VARCHAR" property="aname" />
+    <result column="Anick" jdbcType="VARCHAR" property="anick" />
+    <result column="loginpassword" jdbcType="VARCHAR" property="loginpassword" />
+    <result column="ationpassword" jdbcType="VARCHAR" property="ationpassword" />
+    <result column="ARole" jdbcType="INTEGER" property="arole" />
+    <result column="purview" jdbcType="INTEGER" property="purview" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="logintime" jdbcType="TIMESTAMP" property="logintime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    fId, code, Aname, Anick, loginpassword, ationpassword, ARole, purview, remark, phone, 
+    `state`, token, logintime, createtime
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.goods.model.AdminExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from admin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from admin
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from admin
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.goods.model.AdminExample">
+    <!--@mbg.generated-->
+    delete from admin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.goods.model.Admin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into admin (code, Aname, Anick, 
+      loginpassword, ationpassword, ARole, 
+      purview, remark, phone, 
+      `state`, token, logintime, 
+      createtime)
+    values (#{code,jdbcType=BIGINT}, #{aname,jdbcType=VARCHAR}, #{anick,jdbcType=VARCHAR}, 
+      #{loginpassword,jdbcType=VARCHAR}, #{ationpassword,jdbcType=VARCHAR}, #{arole,jdbcType=INTEGER}, 
+      #{purview,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.goods.model.Admin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        code,
+      </if>
+      <if test="aname != null">
+        Aname,
+      </if>
+      <if test="anick != null">
+        Anick,
+      </if>
+      <if test="loginpassword != null">
+        loginpassword,
+      </if>
+      <if test="ationpassword != null">
+        ationpassword,
+      </if>
+      <if test="arole != null">
+        ARole,
+      </if>
+      <if test="purview != null">
+        purview,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="logintime != null">
+        logintime,
+      </if>
+      <if test="createtime != null">
+        createtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=BIGINT},
+      </if>
+      <if test="aname != null">
+        #{aname,jdbcType=VARCHAR},
+      </if>
+      <if test="anick != null">
+        #{anick,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpassword != null">
+        #{loginpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="ationpassword != null">
+        #{ationpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="arole != null">
+        #{arole,jdbcType=INTEGER},
+      </if>
+      <if test="purview != null">
+        #{purview,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null">
+        #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.goods.model.AdminExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from admin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update admin
+    <set>
+      <if test="record.fid != null">
+        fId = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.code != null">
+        code = #{record.code,jdbcType=BIGINT},
+      </if>
+      <if test="record.aname != null">
+        Aname = #{record.aname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.anick != null">
+        Anick = #{record.anick,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginpassword != null">
+        loginpassword = #{record.loginpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ationpassword != null">
+        ationpassword = #{record.ationpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.arole != null">
+        ARole = #{record.arole,jdbcType=INTEGER},
+      </if>
+      <if test="record.purview != null">
+        purview = #{record.purview,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.token != null">
+        token = #{record.token,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logintime != null">
+        logintime = #{record.logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update admin
+    set fId = #{record.fid,jdbcType=INTEGER},
+      code = #{record.code,jdbcType=BIGINT},
+      Aname = #{record.aname,jdbcType=VARCHAR},
+      Anick = #{record.anick,jdbcType=VARCHAR},
+      loginpassword = #{record.loginpassword,jdbcType=VARCHAR},
+      ationpassword = #{record.ationpassword,jdbcType=VARCHAR},
+      ARole = #{record.arole,jdbcType=INTEGER},
+      purview = #{record.purview,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      `state` = #{record.state,jdbcType=VARCHAR},
+      token = #{record.token,jdbcType=VARCHAR},
+      logintime = #{record.logintime,jdbcType=TIMESTAMP},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.Admin">
+    <!--@mbg.generated-->
+    update admin
+    <set>
+      <if test="code != null">
+        code = #{code,jdbcType=BIGINT},
+      </if>
+      <if test="aname != null">
+        Aname = #{aname,jdbcType=VARCHAR},
+      </if>
+      <if test="anick != null">
+        Anick = #{anick,jdbcType=VARCHAR},
+      </if>
+      <if test="loginpassword != null">
+        loginpassword = #{loginpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="ationpassword != null">
+        ationpassword = #{ationpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="arole != null">
+        ARole = #{arole,jdbcType=INTEGER},
+      </if>
+      <if test="purview != null">
+        purview = #{purview,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="logintime != null">
+        logintime = #{logintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.Admin">
+    <!--@mbg.generated-->
+    update admin
+    set code = #{code,jdbcType=BIGINT},
+      Aname = #{aname,jdbcType=VARCHAR},
+      Anick = #{anick,jdbcType=VARCHAR},
+      loginpassword = #{loginpassword,jdbcType=VARCHAR},
+      ationpassword = #{ationpassword,jdbcType=VARCHAR},
+      ARole = #{arole,jdbcType=INTEGER},
+      purview = #{purview,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      `state` = #{state,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      logintime = #{logintime,jdbcType=TIMESTAMP},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="findByAname" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from admin
+        where Aname=#{aname,jdbcType=VARCHAR}
+    </select>
+
+  <select id="findByCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from admin
+        where code=#{code,jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.MappingTradeOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.MappingTradeOrder" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="mappingId" property="mappingid" jdbcType="INTEGER" />
+    <result column="user1" property="user1" jdbcType="VARCHAR" />
+    <result column="coin1" property="coin1" jdbcType="VARCHAR" />
+    <result column="coinNum1" property="coinnum1" jdbcType="DECIMAL" />
+    <result column="user2" property="user2" jdbcType="VARCHAR" />
+    <result column="coin2" property="coin2" jdbcType="VARCHAR" />
+    <result column="coinNum2" property="coinnum2" jdbcType="DECIMAL" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, mappingId, user1, coin1, coinNum1, user2, coin2, coinNum2, createtime, updatetime, 
+    state
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from mtradelist
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserKey" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from mtradelist
+    where mappingId = #{symbol,jdbcType=INTEGER} and (user1 = #{user,jdbcType=VARCHAR} or user2 = #{user,jdbcType=VARCHAR}) limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBy" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from mtradelist
+    where 1 = 1
+    <if test="record.mappingid != null" >
+      and mappingId = #{record.mappingid,jdbcType=INTEGER}
+    </if>
+    <if test="record.user1 != null" >
+      and user1 = #{record.user1,jdbcType=VARCHAR}
+    </if>
+    <if test="record.coin1 != null" >
+      and coin1 = #{record.coin1,jdbcType=VARCHAR}
+    </if>
+    <if test="record.coinnum1 != null" >
+      and coinNum1 = #{record.coinnum1,jdbcType=DECIMAL}
+    </if>
+    <if test="record.user2 != null" >
+      and user2 = #{record.user2,jdbcType=VARCHAR}
+    </if>
+    <if test="record.coin2 != null" >
+      and coin2 = #{record.coin2,jdbcType=VARCHAR}
+    </if>
+    <if test="record.coinnum2 != null" >
+      and coinNum2 = #{record.coinnum2,jdbcType=DECIMAL}
+    </if>
+    <if test="record.createtime != null" >
+      and createtime = #{record.createtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.updatetime != null" >
+      and updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.state != null" >
+      and state = #{record.state,jdbcType=INTEGER}
+    </if> limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from mtradelist
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.MappingTradeOrder" >
+    insert into mtradelist (fId, mappingId, user1, 
+      coin1, coinNum1, user2, 
+      coin2, coinNum2, createtime, 
+      updatetime, state)
+    values (#{fid,jdbcType=INTEGER}, #{mappingid,jdbcType=INTEGER}, #{user1,jdbcType=VARCHAR}, 
+      #{coin1,jdbcType=VARCHAR}, #{coinnum1,jdbcType=DECIMAL}, #{user2,jdbcType=VARCHAR}, 
+      #{coin2,jdbcType=VARCHAR}, #{coinnum2,jdbcType=DECIMAL}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.MappingTradeOrder" >
+    insert into mtradelist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="mappingid != null" >
+        mappingId,
+      </if>
+      <if test="user1 != null" >
+        user1,
+      </if>
+      <if test="coin1 != null" >
+        coin1,
+      </if>
+      <if test="coinnum1 != null" >
+        coinNum1,
+      </if>
+      <if test="user2 != null" >
+        user2,
+      </if>
+      <if test="coin2 != null" >
+        coin2,
+      </if>
+      <if test="coinnum2 != null" >
+        coinNum2,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="mappingid != null" >
+        #{mappingid,jdbcType=INTEGER},
+      </if>
+      <if test="user1 != null" >
+        #{user1,jdbcType=VARCHAR},
+      </if>
+      <if test="coin1 != null" >
+        #{coin1,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum1 != null" >
+        #{coinnum1,jdbcType=DECIMAL},
+      </if>
+      <if test="user2 != null" >
+        #{user2,jdbcType=VARCHAR},
+      </if>
+      <if test="coin2 != null" >
+        #{coin2,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum2 != null" >
+        #{coinnum2,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.MappingTradeOrder" >
+    update mtradelist
+    <set >
+      <if test="mappingid != null" >
+        mappingId = #{mappingid,jdbcType=INTEGER},
+      </if>
+      <if test="user1 != null" >
+        user1 = #{user1,jdbcType=VARCHAR},
+      </if>
+      <if test="coin1 != null" >
+        coin1 = #{coin1,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum1 != null" >
+        coinNum1 = #{coinnum1,jdbcType=DECIMAL},
+      </if>
+      <if test="user2 != null" >
+        user2 = #{user2,jdbcType=VARCHAR},
+      </if>
+      <if test="coin2 != null" >
+        coin2 = #{coin2,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum2 != null" >
+        coinNum2 = #{coinnum2,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.MappingTradeOrder" >
+    update mtradelist
+    set mappingId = #{mappingid,jdbcType=INTEGER},
+      user1 = #{user1,jdbcType=VARCHAR},
+      coin1 = #{coin1,jdbcType=VARCHAR},
+      coinNum1 = #{coinnum1,jdbcType=DECIMAL},
+      user2 = #{user2,jdbcType=VARCHAR},
+      coin2 = #{coin2,jdbcType=VARCHAR},
+      coinNum2 = #{coinnum2,jdbcType=DECIMAL},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.dao.IncomeMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Income">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="invest_id" jdbcType="INTEGER" property="investId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap id="BaseResultMapEx" type="com.lanjing.wallet.model.po.RewardBonus">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <resultMap id="BaseResultMapEmptyRecord" type="com.lanjing.wallet.model.po.EmptyRecord">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="cycle" jdbcType="INTEGER" property="cycle" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="lock_balance" jdbcType="DOUBLE" property="lockBalance" />
+    <result column="total" jdbcType="DOUBLE" property="total" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, invest_id, user_id, type, amount, remark, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.wallet.model.IncomeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from income
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from income
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryBytodayAndUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from income
+    where user_id = #{userId,jdbcType=INTEGER} and type = #{type,jdbcType=INTEGER} and TO_DAYS(create_time) = TO_DAYS(NOW())-1
+  </select>
+
+  <select id="queryByUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from income
+    where user_id = #{userId,jdbcType=INTEGER} and type = #{type,jdbcType=INTEGER} limit #{begin,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from income
+    where user_id = #{userKey,jdbcType=VARCHAR}  and type = #{type,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectFinancialReward" resultMap="BaseResultMapEx">
+    select i.id,i.user_id,i.type,i.amount,i.create_time,u.phoneNum phone from income i left join users u on i.user_id=u.fId
+    where i.type in (2,3)
+    <if test="key != null and key != ''">
+      and (u.fId = #{key} or u.userName like concat("%",#{key} ,"%") or u.Nickname like concat("%",#{key} ,"%"))
+    </if>
+  </select>
+
+  <select id="selectPromotionReward" resultMap="BaseResultMapEx">
+    select i.id,i.user_id,i.type,i.amount,i.create_time,u.phoneNum phone from income i left join users u on i.user_id=u.fId
+    where i.type = 5
+    <if test="key != null and key != ''">
+      and (u.fId = #{key} or u.userName like concat("%",#{key} ,"%") or u.Nickname like concat("%",#{key} ,"%"))
+    </if>
+  </select>
+
+  <select id="selectEmptyRecord" resultMap="BaseResultMapEmptyRecord">
+    select t.id,t.type,t.user_id,t.amount,t.total,t.lock_balance,t.cycle,t.create_time,u.phoneNum phone,(select
+    count(0) from income i where i.invest_id=t.id and i.create_time between #{start,jdbcType=TIMESTAMP} and
+    #{end,jdbcType=TIMESTAMP} ) count from
+    trade_airdrop t left join users u on t.user_id=u.fId
+    where t.status!=3
+      <if test="count != null">
+        and (select count(0) from income i where i.invest_id=t.id and i.create_time between #{start,jdbcType=TIMESTAMP} and #{end,jdbcType=TIMESTAMP} ) = #{count,jdbcType=INTEGER}
+      </if>
+    <if test="type != null">
+      and type=#{type,jdbcType=INTEGER}
+    </if>
+    <if test="type == null">
+      and t.type in (1,2)
+    </if>
+    <if test="key != null and key != ''">
+      and (u.fId = #{key} or u.userName like concat("%",#{key} ,"%") or u.Nickname like concat("%",#{key} ,"%"))
+    </if>
+    order by t.id desc
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from income
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.wallet.model.IncomeExample">
+    delete from income
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Income">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into income (invest_id, user_id, type, 
+      amount, remark, create_time
+      )
+    values (#{investId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{amount,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Income">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into income
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="investId != null">
+        invest_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="investId != null">
+        #{investId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.wallet.model.IncomeExample" resultType="java.lang.Long">
+    select count(*) from income
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update income
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.investId != null">
+        invest_id = #{record.investId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=DOUBLE},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update income
+    set id = #{record.id,jdbcType=INTEGER},
+      invest_id = #{record.investId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=DOUBLE},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Income">
+    update income
+    <set>
+      <if test="investId != null">
+        invest_id = #{investId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Income">
+    update income
+    set invest_id = #{investId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DOUBLE},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="sumReward" parameterType="java.lang.Integer" resultType="java.lang.Double">
+    select ifnull(sum(amount),0) from income where type=#{type,jdbcType=INTEGER}
+  </select>
+</mapper>

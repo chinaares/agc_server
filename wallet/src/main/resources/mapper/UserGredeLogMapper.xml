@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.UserGredeLogMapper">
+
+	<sql id="Base_Column_List">
+		`id`, `userId` ,
+		`admin` ,
+		`beforeGrede` ,
+		`afterGrede` ,
+		`createTime` ,
+		`modifyTime`
+	</sql>
+
+	<insert id="insert" parameterType="com.lanjing.wallet.model.AddUser">
+		insert into userGredeLog
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				userId,
+			</if>
+			<if test="admin != null">
+				admin,
+			</if>
+			<if test="beforeGrede != null">
+				beforeGrede,
+			</if>
+			<if test="afterGrede != null">
+				afterGrede,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="modifyTime != null">
+				modifyTime,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="admin != null">
+				#{admin,jdbcType=VARCHAR},
+			</if>
+			<if test="beforeGrede != null">
+				#{beforeGrede,jdbcType=INTEGER},
+			</if>
+			<if test="afterGrede != null">
+				#{afterGrede,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DATETIME},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=DATETIME},
+			</if>
+
+		</trim>
+	</insert>
+
+
+	<select id="findUserGredeLogByPage"
+		resultType="com.lanjing.wallet.model.UserGredeLog">
+		select
+		<include refid="Base_Column_List" />
+		from
+		userGredeLog
+		where (userId in (select fId from users where (userName like
+		concat('',#{userName},'') or
+		phoneNum like concat('',#{userName},'')
+		)) or admin in(select Aname from `admin` where Aname like
+		concat('',#{admin},'')))
+		order by createTime desc limit #{page},#{pagesize}
+	</select>
+
+
+	<select id="findUserGredeLogByPageCount" resultType="int">
+		select
+		count(*)
+		from
+		userGredeLog
+		where (userId in (select fId from users where (userName like
+		concat('',#{userName},'') or
+		phoneNum like concat('',#{userName},'')
+		)) or admin in(select Aname from `admin` where Aname like
+		concat('',#{admin},'')))
+
+	</select>
+
+</mapper>

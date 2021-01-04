@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.CoinLogMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.CoinLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_key" property="userKey" jdbcType="VARCHAR" />
+    <result column="change_coin" property="changeCoin" jdbcType="INTEGER" />
+    <result column="change_amount" property="changeAmount" jdbcType="DOUBLE" />
+    <result column="change_type" property="changeType" jdbcType="INTEGER" />
+    <result column="change_time" property="changeTime" jdbcType="INTEGER" />
+    <result column="change_desc" property="changeDesc" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_key, change_coin, change_amount, change_type, change_time, change_desc, 
+    order_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from taitan_coin_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByUserpage" resultType="Map">
+    select * from taitan_coin_log where 1 = 1
+    <if test="coinId != null">
+      and change_coin = #{coinId,jdbcType=INTEGER}
+    </if>
+     and user_key = #{userkey,jdbcType=VARCHAR} order by change_time desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectByUserpage1" resultType="Map">
+    select * from taitan_coin_log where 1 = 1 and change_type in (40,1,3,4,2,5,6,7)
+    and user_key = #{userkey,jdbcType=VARCHAR} order by change_time desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from taitan_coin_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.CoinLog" >
+    insert into taitan_coin_log (id, user_key, change_coin, 
+      change_amount, change_type, change_time, 
+      change_desc, order_id)
+    values (#{id,jdbcType=BIGINT}, #{userKey,jdbcType=VARCHAR}, #{changeCoin,jdbcType=INTEGER}, 
+      #{changeAmount,jdbcType=DOUBLE}, #{changeType,jdbcType=INTEGER}, #{changeTime,jdbcType=INTEGER}, 
+      #{changeDesc,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.CoinLog" >
+    insert into taitan_coin_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userKey != null" >
+        user_key,
+      </if>
+      <if test="changeCoin != null" >
+        change_coin,
+      </if>
+      <if test="changeAmount != null" >
+        change_amount,
+      </if>
+      <if test="changeType != null" >
+        change_type,
+      </if>
+      <if test="changeTime != null" >
+        change_time,
+      </if>
+      <if test="changeDesc != null" >
+        change_desc,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userKey != null" >
+        #{userKey,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCoin != null" >
+        #{changeCoin,jdbcType=INTEGER},
+      </if>
+      <if test="changeAmount != null" >
+        #{changeAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="changeType != null" >
+        #{changeType,jdbcType=INTEGER},
+      </if>
+      <if test="changeTime != null" >
+        #{changeTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeDesc != null" >
+        #{changeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.CoinLog" >
+    update taitan_coin_log
+    <set >
+      <if test="userKey != null" >
+        user_key = #{userKey,jdbcType=VARCHAR},
+      </if>
+      <if test="changeCoin != null" >
+        change_coin = #{changeCoin,jdbcType=INTEGER},
+      </if>
+      <if test="changeAmount != null" >
+        change_amount = #{changeAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="changeType != null" >
+        change_type = #{changeType,jdbcType=INTEGER},
+      </if>
+      <if test="changeTime != null" >
+        change_time = #{changeTime,jdbcType=INTEGER},
+      </if>
+      <if test="changeDesc != null" >
+        change_desc = #{changeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.CoinLog" >
+    update taitan_coin_log
+    set user_key = #{userKey,jdbcType=VARCHAR},
+      change_coin = #{changeCoin,jdbcType=INTEGER},
+      change_amount = #{changeAmount,jdbcType=DOUBLE},
+      change_type = #{changeType,jdbcType=INTEGER},
+      change_time = #{changeTime,jdbcType=INTEGER},
+      change_desc = #{changeDesc,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

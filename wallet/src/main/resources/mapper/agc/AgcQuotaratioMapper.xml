@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcQuotaratioMapper">
+    
+    <resultMap type="AgcQuotaratio" id="AgcQuotaratioResult">
+        <result property="id"    column="id"    />
+        <result property="startQuota"    column="start_quota"    />
+        <result property="endQuota"    column="end_quota"    />
+        <result property="cpRatio"    column="cp_ratio"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAgcQuotaratioVo">
+        select id, start_quota, end_quota, cp_ratio, create_time, update_time from agc_quotaratio
+    </sql>
+
+    <select id="selectAgcQuotaratioList" parameterType="AgcQuotaratio" resultMap="AgcQuotaratioResult">
+        <include refid="selectAgcQuotaratioVo"/>
+        <where>  
+            <if test="startQuota != null "> and start_quota = #{startQuota}</if>
+            <if test="endQuota != null "> and end_quota = #{endQuota}</if>
+            <if test="cpRatio != null "> and cp_ratio = #{cpRatio}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcQuotaratioById" parameterType="Long" resultMap="AgcQuotaratioResult">
+        <include refid="selectAgcQuotaratioVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcQuotaratio" parameterType="AgcQuotaratio" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_quotaratio
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="startQuota != null">start_quota,</if>
+            <if test="endQuota != null">end_quota,</if>
+            <if test="cpRatio != null">cp_ratio,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="startQuota != null">#{startQuota},</if>
+            <if test="endQuota != null">#{endQuota},</if>
+            <if test="cpRatio != null">#{cpRatio},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcQuotaratio" parameterType="AgcQuotaratio">
+        update agc_quotaratio
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="startQuota != null">start_quota = #{startQuota},</if>
+            <if test="endQuota != null">end_quota = #{endQuota},</if>
+            <if test="cpRatio != null">cp_ratio = #{cpRatio},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcQuotaratioById" parameterType="Long">
+        delete from agc_quotaratio where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcQuotaratioByIds" parameterType="String">
+        delete from agc_quotaratio where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcMiningUserMapper">
+    
+    <resultMap type="AgcMiningUser" id="AgcMiningUserResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="totalCp"    column="total_cp"    />
+        <result property="amount"    column="amount"    />
+        <result property="number"    column="number"    />
+        <result property="consumeCp"    column="consume_cp"    />
+        <result property="profitCp"    column="profit_cp"    />
+        <result property="activityCp"    column="activity_cp"    />
+        <result property="getAgc"    column="get_agc"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAgcMiningUserVo">
+        select id, user_id, total_cp, amount, number, consume_cp, profit_cp, activity_cp, get_agc, create_time, update_time from agc_mining_user
+    </sql>
+
+    <select id="selectAgcMiningUserList" parameterType="AgcMiningUser" resultMap="AgcMiningUserResult">
+        <include refid="selectAgcMiningUserVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="totalCp != null "> and total_cp = #{totalCp}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="consumeCp != null "> and consume_cp = #{consumeCp}</if>
+            <if test="profitCp != null "> and profit_cp = #{profitCp}</if>
+            <if test="activityCp != null "> and activity_cp = #{activityCp}</if>
+            <if test="getAgc != null "> and get_agc = #{getAgc}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcMiningUserById" parameterType="Long" resultMap="AgcMiningUserResult">
+        <include refid="selectAgcMiningUserVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcMiningUser" parameterType="AgcMiningUser" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_mining_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="totalCp != null">total_cp,</if>
+            <if test="amount != null">amount,</if>
+            <if test="number != null">number,</if>
+            <if test="consumeCp != null">consume_cp,</if>
+            <if test="profitCp != null">profit_cp,</if>
+            <if test="activityCp != null">activity_cp,</if>
+            <if test="getAgc != null">get_agc,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="totalCp != null">#{totalCp},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="number != null">#{number},</if>
+            <if test="consumeCp != null">#{consumeCp},</if>
+            <if test="profitCp != null">#{profitCp},</if>
+            <if test="activityCp != null">#{activityCp},</if>
+            <if test="getAgc != null">#{getAgc},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+    
+    <insert id="insertAgcMiningUserList" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_mining_user
+        (user_id,total_cp,amount,number,consume_cp,profit_cp,activity_cp,get_agc,create_time,update_time)
+        values
+        <foreach collection="userList" item="item" index="index" separator=",">
+            (
+            #{item.userId},
+            #{item.totalCp},
+            #{item.amount},
+            #{item.number},
+            #{item.consumeCp},
+            #{item.profitCp},
+            #{item.activityCp},
+            #{item.getAgc},
+            #{item.createTime},
+            #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateAgcMiningUser" parameterType="AgcMiningUser">
+        update agc_mining_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="totalCp != null">total_cp = #{totalCp},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="consumeCp != null">consume_cp = #{consumeCp},</if>
+            <if test="profitCp != null">profit_cp = #{profitCp},</if>
+            <if test="activityCp != null">activity_cp = #{activityCp},</if>
+            <if test="getAgc != null">get_agc = #{getAgc},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcMiningUserById" parameterType="Long">
+        delete from agc_mining_user where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcMiningUserByIds" parameterType="String">
+        delete from agc_mining_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectMiningUserListByUserId" resultMap="AgcMiningUserResult">
+        <include refid="selectAgcMiningUserVo"/>
+        where user_id = #{userId}
+        order by id DESC
+    </select>
+    
+    <!-- 今日收益 -->
+    <select id="selectDayIncomeByNowAndUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(get_agc),0) get_agc FROM agc_mining_user
+        WHERE TO_DAYS(create_time) = TO_DAYS(#{now}) and user_id = #{userId}
+        ]]>
+    </select>
+    
+    <!-- 累计收益 -->
+    <select id="selectDayIncomeByUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(get_agc),0) get_agc FROM agc_mining_user
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+    
+</mapper>

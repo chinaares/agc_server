@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.ShopcatMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.Shopcat">
+    <!--@mbg.generated-->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="shop_code" jdbcType="BIGINT" property="shopCode" />
+    <result column="goodsId" jdbcType="INTEGER" property="goodsid" />
+    <result column="goodsskuId" jdbcType="INTEGER" property="goodsskuid" />
+    <result column="num" property="num" jdbcType="INTEGER"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+
+
+    Id, userId, shop_code, goodsId, goodsskuId,
+num
+</sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from shopcat
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from shopcat
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Id" keyProperty="id" parameterType="com.lanjing.goods.model.Shopcat" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+
+        INSERT INTO shopcat (
+            Id,
+            userId,
+            shop_code,
+            goodsId,
+            goodsskuId,
+            num
+        ) VALUES (
+            #{id,jdbcType=INTEGER},
+            #{userid,jdbcType=INTEGER},
+            #{shopCode,jdbcType=BIGINT},
+            #{goodsid,jdbcType=INTEGER},
+            #{goodsskuid,jdbcType=INTEGER},
+            #{num,jdbcType=INTEGER}
+        )
+</insert>
+  <insert id="insertSelective" keyColumn="Id" keyProperty="id" parameterType="com.lanjing.goods.model.Shopcat" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+
+        INSERT INTO shopcat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> Id,</if>
+            <if test="userid!=null"> userId,</if>
+            <if test="shopCode!=null"> shop_code,</if>
+            <if test="goodsid!=null"> goodsId,</if>
+            <if test="goodsskuid!=null"> goodsskuId,</if>
+            <if test="num!=null"> num</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> #{id,jdbcType=INTEGER},</if>
+            <if test="userid!=null"> #{userid,jdbcType=INTEGER},</if>
+            <if test="shopCode!=null"> #{shopCode,jdbcType=BIGINT},</if>
+            <if test="goodsid!=null"> #{goodsid,jdbcType=INTEGER},</if>
+            <if test="goodsskuid!=null"> #{goodsskuid,jdbcType=INTEGER},</if>
+            <if test="num!=null"> #{num,jdbcType=INTEGER}</if>
+        </trim>
+</insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.Shopcat">
+    <!--@mbg.generated-->
+
+        UPDATE shopcat
+        <set>
+                <if test="id != null"> Id = #{id,jdbcType=INTEGER},</if>
+                <if test="userid != null"> userId = #{userid,jdbcType=INTEGER},</if>
+                <if test="shopCode != null"> shop_code = #{shopCode,jdbcType=BIGINT},</if>
+                <if test="goodsid != null"> goodsId = #{goodsid,jdbcType=INTEGER},</if>
+                <if test="goodsskuid != null"> goodsskuId = #{goodsskuid,jdbcType=INTEGER},</if>
+                <if test="num != null"> num = #{num,jdbcType=INTEGER}</if>
+        </set>
+		where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.Shopcat">
+    <!--@mbg.generated-->
+
+        UPDATE shopcat
+        set
+                Id = #{id,jdbcType=INTEGER},
+                userId = #{userid,jdbcType=INTEGER},
+                shop_code = #{shopCode,jdbcType=BIGINT},
+                goodsId = #{goodsid,jdbcType=INTEGER},
+                goodsskuId = #{goodsskuid,jdbcType=INTEGER},
+                num = #{num,jdbcType=INTEGER}
+		where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUserid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shopcat
+    where userId = #{userid,jdbcType=INTEGER}
+  </select>
+  <select id="selectByGoodsidAndGoodsskuid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from shopcat
+    where userId = #{userid,jdbcType=INTEGER} and goodsId = #{goodsid,jdbcType=INTEGER} and goodsskuId = #{goodsskuid,jdbcType=INTEGER}
+  </select>
+</mapper>

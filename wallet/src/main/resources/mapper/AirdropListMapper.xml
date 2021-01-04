@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.dao.AirdropListMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.AirdropList">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="a_id" jdbcType="INTEGER" property="aId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="days" jdbcType="INTEGER" property="days" />
+    <result column="cycle" jdbcType="INTEGER" property="cycle" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="freeze_btc" jdbcType="DECIMAL" property="freezeBtc" />
+    <result column="freeze_yyb" jdbcType="DECIMAL" property="freezeYyb" />
+    <result column="free_btc" jdbcType="DECIMAL" property="freeBtc" />
+    <result column="free_yyb" jdbcType="DECIMAL" property="freeYyb" />
+    <result column="freed_btc" jdbcType="DECIMAL" property="freedBtc" />
+    <result column="freed_yyb" jdbcType="DECIMAL" property="freedYyb" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="BaseResultMapFinancialRecord" type="com.lanjing.wallet.model.po.FinancialRecord">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="days" jdbcType="INTEGER" property="days" />
+    <result column="cycle" jdbcType="INTEGER" property="cycle" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="freeze_btc" jdbcType="DECIMAL" property="freezeBtc" />
+    <result column="freeze_yyb" jdbcType="DECIMAL" property="freezeYyb" />
+    <result column="free_btc" jdbcType="DECIMAL" property="freeBtc" />
+    <result column="free_yyb" jdbcType="DECIMAL" property="freeYyb" />
+    <result column="freed_btc" jdbcType="DECIMAL" property="freedBtc" />
+    <result column="freed_yyb" jdbcType="DECIMAL" property="freedYyb" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, a_id, user_id, `status`, `days`, `cycle`, amount, freeze_btc, freeze_yyb, free_btc, 
+    free_yyb, freed_btc, freed_yyb, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.wallet.model.AirdropListExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from airdrop_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from airdrop_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from airdrop_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.wallet.model.AirdropListExample">
+    <!--@mbg.generated-->
+    delete from airdrop_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.wallet.model.AirdropList" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into airdrop_list (a_id, user_id, `status`, 
+      `days`, `cycle`, amount, 
+      freeze_btc, freeze_yyb, free_btc, 
+      free_yyb, freed_btc, freed_yyb, 
+      create_time, update_time)
+    values (#{aId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{days,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, 
+      #{freezeBtc,jdbcType=DECIMAL}, #{freezeYyb,jdbcType=DECIMAL}, #{freeBtc,jdbcType=DECIMAL}, 
+      #{freeYyb,jdbcType=DECIMAL}, #{freedBtc,jdbcType=DECIMAL}, #{freedYyb,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.wallet.model.AirdropList" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into airdrop_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aId != null">
+        a_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="days != null">
+        `days`,
+      </if>
+      <if test="cycle != null">
+        `cycle`,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="freezeBtc != null">
+        freeze_btc,
+      </if>
+      <if test="freezeYyb != null">
+        freeze_yyb,
+      </if>
+      <if test="freeBtc != null">
+        free_btc,
+      </if>
+      <if test="freeYyb != null">
+        free_yyb,
+      </if>
+      <if test="freedBtc != null">
+        freed_btc,
+      </if>
+      <if test="freedYyb != null">
+        freed_yyb,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aId != null">
+        #{aId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="days != null">
+        #{days,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null">
+        #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeBtc != null">
+        #{freezeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeYyb != null">
+        #{freezeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="freeBtc != null">
+        #{freeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freeYyb != null">
+        #{freeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="freedBtc != null">
+        #{freedBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freedYyb != null">
+        #{freedYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.wallet.model.AirdropListExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from airdrop_list
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update airdrop_list
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.aId != null">
+        a_id = #{record.aId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.days != null">
+        `days` = #{record.days,jdbcType=INTEGER},
+      </if>
+      <if test="record.cycle != null">
+        `cycle` = #{record.cycle,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freezeBtc != null">
+        freeze_btc = #{record.freezeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freezeYyb != null">
+        freeze_yyb = #{record.freezeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freeBtc != null">
+        free_btc = #{record.freeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freeYyb != null">
+        free_yyb = #{record.freeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freedBtc != null">
+        freed_btc = #{record.freedBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="record.freedYyb != null">
+        freed_yyb = #{record.freedYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update airdrop_list
+    set id = #{record.id,jdbcType=INTEGER},
+      a_id = #{record.aId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      `status` = #{record.status,jdbcType=INTEGER},
+      `days` = #{record.days,jdbcType=INTEGER},
+      `cycle` = #{record.cycle,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      freeze_btc = #{record.freezeBtc,jdbcType=DECIMAL},
+      freeze_yyb = #{record.freezeYyb,jdbcType=DECIMAL},
+      free_btc = #{record.freeBtc,jdbcType=DECIMAL},
+      free_yyb = #{record.freeYyb,jdbcType=DECIMAL},
+      freed_btc = #{record.freedBtc,jdbcType=DECIMAL},
+      freed_yyb = #{record.freedYyb,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.AirdropList">
+    <!--@mbg.generated-->
+    update airdrop_list
+    <set>
+      <if test="aId != null">
+        a_id = #{aId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="days != null">
+        `days` = #{days,jdbcType=INTEGER},
+      </if>
+      <if test="cycle != null">
+        `cycle` = #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeBtc != null">
+        freeze_btc = #{freezeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freezeYyb != null">
+        freeze_yyb = #{freezeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="freeBtc != null">
+        free_btc = #{freeBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freeYyb != null">
+        free_yyb = #{freeYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="freedBtc != null">
+        freed_btc = #{freedBtc,jdbcType=DECIMAL},
+      </if>
+      <if test="freedYyb != null">
+        freed_yyb = #{freedYyb,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.AirdropList">
+    <!--@mbg.generated-->
+    update airdrop_list
+    set a_id = #{aId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=INTEGER},
+      `days` = #{days,jdbcType=INTEGER},
+      `cycle` = #{cycle,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      freeze_btc = #{freezeBtc,jdbcType=DECIMAL},
+      freeze_yyb = #{freezeYyb,jdbcType=DECIMAL},
+      free_btc = #{freeBtc,jdbcType=DECIMAL},
+      free_yyb = #{freeYyb,jdbcType=DECIMAL},
+      freed_btc = #{freedBtc,jdbcType=DECIMAL},
+      freed_yyb = #{freedYyb,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from airdrop_list
+        where user_id=#{userId,jdbcType=INTEGER} and a_id=#{id,jdbcType=INTEGER} order by id desc
+  </select>
+
+  <select id="sumFreezeBtc" resultType="java.math.BigDecimal">
+    select ifnull(sum(freeze_btc),0)  from airdrop_list where user_id=#{userId,jdbcType=INTEGER} and a_id=#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="sumFreezeYyb" resultType="java.math.BigDecimal">
+    select ifnull(sum(freeze_yyb),0)  from airdrop_list where user_id=#{userId,jdbcType=INTEGER} and a_id=#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="sumFreeBtc" resultType="java.math.BigDecimal">
+    select ifnull(sum(free_btc),0)  from airdrop_list where user_id=#{userId,jdbcType=INTEGER} and a_id=#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="sumFreeYyb" resultType="java.math.BigDecimal">
+    select ifnull(sum(free_yyb),0)  from airdrop_list where user_id=#{userId,jdbcType=INTEGER} and a_id=#{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="findByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from airdrop_list
+        where `status`=#{status,jdbcType=INTEGER}
+    </select>
+
+
+  <update id="updateDaysAndStatusById">
+    update airdrop_list
+    set days= days+1
+    <if test="freedBtc != null and freedBtc != 0">
+      ,free_btc=free_btc+#{freedBtc,jdbcType=DECIMAL}
+      ,freeze_btc=freeze_btc-#{freedBtc,jdbcType=DECIMAL}
+    </if>
+    <if test="freedYyb != null and freedYyb != 0">
+      ,free_yyb=free_yyb+#{freedYyb,jdbcType=DECIMAL}
+      ,freeze_btc=freeze_btc-#{freedYyb,jdbcType=DECIMAL}
+    </if>
+    <if test="status != null and status ==true ">
+      , status= 2
+    </if>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByKeyAndStatus" resultMap="BaseResultMapFinancialRecord">
+    select i.*, a.name, u.phoneNum phone
+    from airdrop_list i
+    left join users u on i.user_id = u.fId
+    left join airdrop a on a.id = i.a_id
+    where i.status!=-1
+    <if test="key != null and key != ''">
+      and i.user_id=#{key,jdbcType=VARCHAR} or u.userName like concat("%",#{key,jdbcType=VARCHAR},"%")
+    </if>
+    <if test="status != null">
+      and i.status=#{status,jdbcType=INTEGER}
+    </if>
+    order by i.id desc
+  </select>
+  <select id="maturityFinancialRecord" resultMap="BaseResultMapFinancialRecord">
+    select i.*, a.name, u.phoneNum phone
+    from airdrop_list i
+    left join users u on i.user_id = u.fId
+    left join airdrop a on a.id = i.a_id
+    where i.status!=-1 <![CDATA[ and i.cycle-i.days<=#{week,jdbcType=INTEGER} ]]>
+    <if test="key != null and key != ''">
+      and i.user_id=#{key,jdbcType=VARCHAR} or u.userName like concat("%",#{key,jdbcType=VARCHAR},"%")
+    </if>
+    <if test="status != null">
+      and i.status=#{status,jdbcType=INTEGER}
+    </if>
+    order by i.id desc
+  </select>
+
+  <update id="minusFreeBtc">
+    update airdrop_list set free_btc=free_btc-#{amount} where id=#{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="minusFreeYyb">
+    update airdrop_list set free_yyb=free_yyb-#{amount} where id=#{id,jdbcType=INTEGER}
+  </update>
+  <select id="sumTotalCoinNum" resultType="java.math.BigDecimal">
+    select ifnull(sum(amount),0) from airdrop_list
+    <if test="today != null and tomorrow != null">
+      where create_time between #{today,jdbcType=TIMESTAMP} and #{tomorrow,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+  <select id="countMaturity" resultType="java.lang.Integer">
+    select count(0) from airdrop_list <![CDATA[ where cycle-days <= #{days,jdbcType=INTEGER} ]]>
+  </select>
+</mapper>

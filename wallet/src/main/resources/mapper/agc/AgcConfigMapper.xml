@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcConfigMapper">
+    
+    <resultMap type="AgcConfig" id="AgcConfigResult">
+        <result property="id"    column="id"    />
+        <result property="yield"    column="yield"    />
+        <result property="realCp"    column="real_cp"    />
+        <result property="fictitiousCp"    column="fictitious_cp"    />
+        <result property="agcPrice"    column="agc_price"    />
+        <result property="agcChg"    column="agc_chg"    />
+        <result property="agcCnyCp"    column="agc_cny_cp"    />
+        <result property="withdrawRatio"    column="withdraw_ratio"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAgcConfigVo">
+        select id, yield, real_cp, fictitious_cp, agc_price, agc_chg, agc_cny_cp, withdraw_ratio, create_time, update_time from agc_config
+    </sql>
+
+    <select id="selectAgcConfigList" parameterType="AgcConfig" resultMap="AgcConfigResult">
+        <include refid="selectAgcConfigVo"/>
+        <where>  
+            <if test="yield != null "> and yield = #{yield}</if>
+            <if test="realCp != null "> and real_cp = #{realCp}</if>
+            <if test="fictitiousCp != null "> and fictitious_cp = #{fictitiousCp}</if>
+            <if test="agcPrice != null "> and agc_price = #{agcPrice}</if>
+            <if test="agcChg != null "> and agc_chg = #{agcChg}</if>
+            <if test="agcCnyCp != null "> and agc_cny_cp = #{agcCnyCp}</if>
+            <if test="withdrawRatio != null "> and withdraw_ratio = #{withdrawRatio}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcConfigById" parameterType="Long" resultMap="AgcConfigResult">
+        <include refid="selectAgcConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcConfig" parameterType="AgcConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="yield != null">yield,</if>
+            <if test="realCp != null">real_cp,</if>
+            <if test="fictitiousCp != null">fictitious_cp,</if>
+            <if test="agcPrice != null">agc_price,</if>
+            <if test="agcChg != null">agc_chg,</if>
+            <if test="agcCnyCp != null">agc_cny_cp,</if>
+            <if test="withdrawRatio != null">withdraw_ratio,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="yield != null">#{yield},</if>
+            <if test="realCp != null">#{realCp},</if>
+            <if test="fictitiousCp != null">#{fictitiousCp},</if>
+            <if test="agcPrice != null">#{agcPrice},</if>
+            <if test="agcChg != null">#{agcChg},</if>
+            <if test="agcCnyCp != null">#{agcCnyCp},</if>
+            <if test="withdrawRatio != null">#{withdrawRatio},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcConfig" parameterType="AgcConfig">
+        update agc_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="yield != null">yield = #{yield},</if>
+            <if test="realCp != null">real_cp = #{realCp},</if>
+            <if test="fictitiousCp != null">fictitious_cp = #{fictitiousCp},</if>
+            <if test="agcPrice != null">agc_price = #{agcPrice},</if>
+            <if test="agcChg != null">agc_chg = #{agcChg},</if>
+            <if test="agcCnyCp != null">agc_cny_cp = #{agcCnyCp},</if>
+            <if test="withdrawRatio != null">withdraw_ratio = #{withdrawRatio},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcConfigById" parameterType="Long">
+        delete from agc_config where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcConfigByIds" parameterType="String">
+        delete from agc_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

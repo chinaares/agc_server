@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.TrasferTokenlistMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Trasferlist" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="coin" property="coin" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="tId" property="tId" jdbcType="INTEGER" />
+    <result column="txId" property="txid" jdbcType="VARCHAR" />
+    <result column="tradenum" property="tradenum" jdbcType="DOUBLE" />
+    <result column="feenum" property="feenum" jdbcType="DOUBLE" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lanjing.wallet.model.Trasferlist" extends="BaseResultMap" >
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, coin, memo, tId, txId, tradenum, feenum, type
+  </sql>
+  <sql id="Blob_Column_List" >
+    description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from trasferlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultType="Map" >
+    SELECT t.*,u.userName from trasferlist t INNER JOIN users u on t.memo = u.keyes WHERE (memo like '%${likes}%' or memo like '%${likes}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllCount" resultType="Map" >
+    SELECT t.*,u.userName from trasferlist t INNER JOIN users u on t.memo = u.keyes WHERE (memo like '%${likes}%' or memo like '%${likes}%') limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectBymaxId" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
+    select
+    IFNULL(Max(tId),0)
+    from trasferlist where coin = #{coin,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectBystate" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from trasferlist
+    where state = #{state,jdbcType=INTEGER} and type = 1
+  </select>
+
+
+  <select id="selectByTransferState" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from trasferlist
+    where state = #{state,jdbcType=INTEGER} and type = 3
+  </select>
+
+
+  <update id="updateByfId" parameterType="java.lang.Integer">
+    update trasferlist set state = 1 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByfId2" parameterType="java.lang.Integer">
+    update trasferlist set state = -1 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trasferlist
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Trasferlist" >
+    insert into trasferlist (fId, memo, txId,
+      tradenum, feenum, type, 
+      description)
+    values (#{fid,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, #{txid,jdbcType=VARCHAR}, 
+      #{tradenum,jdbcType=DOUBLE}, #{feenum,jdbcType=DOUBLE}, #{type,jdbcType=INTEGER}, 
+      #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Trasferlist" >
+    insert into trasferlist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="txid != null" >
+        txId,
+      </if>
+      <if test="tradenum != null" >
+        tradenum,
+      </if>
+      <if test="feenum != null" >
+        feenum,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="coin != null">
+        coin,
+      </if>
+      <if test="tId != null">
+        tId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="txid != null" >
+        #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null" >
+        #{tradenum,jdbcType=DOUBLE},
+      </if>
+      <if test="feenum != null" >
+        #{feenum,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="coin != null">
+        #{coin,jdbcType=INTEGER},
+      </if>
+      <if test="tId != null">
+        #{tId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Trasferlist" >
+    update trasferlist
+    <set >
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="txid != null" >
+        txId = #{txid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null" >
+        tradenum = #{tradenum,jdbcType=DOUBLE},
+      </if>
+      <if test="feenum != null" >
+        feenum = #{feenum,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lanjing.wallet.model.Trasferlist" >
+    update trasferlist
+    set memo = #{memo,jdbcType=VARCHAR},
+      txId = #{txid,jdbcType=VARCHAR},
+      tradenum = #{tradenum,jdbcType=DOUBLE},
+      feenum = #{feenum,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Trasferlist" >
+    update trasferlist
+    set memo = #{memo,jdbcType=VARCHAR},
+      txId = #{txid,jdbcType=VARCHAR},
+      tradenum = #{tradenum,jdbcType=DOUBLE},
+      feenum = #{feenum,jdbcType=DOUBLE},
+      type = #{type,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByfId3" parameterType="java.lang.Integer">
+    update trasferlist set state = 2 WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

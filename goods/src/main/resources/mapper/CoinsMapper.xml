@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.CoinsMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.Coins">
+    <!--@mbg.generated-->
+    <id column="fId" jdbcType="INTEGER" property="fid" />
+    <result column="coinName" jdbcType="VARCHAR" property="coinname" />
+    <result column="coinShort" jdbcType="VARCHAR" property="coinshort" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    fId, coinName, coinShort, price, img, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.goods.model.CoinsExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coins
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from coins
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from coins
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.goods.model.CoinsExample">
+    <!--@mbg.generated-->
+    delete from coins
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.goods.model.Coins" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into coins (coinName, coinShort, price, 
+      img, remark)
+    values (#{coinname,jdbcType=VARCHAR}, #{coinshort,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
+      #{img,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.goods.model.Coins" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into coins
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coinname != null">
+        coinName,
+      </if>
+      <if test="coinshort != null">
+        coinShort,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="img != null">
+        img,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coinname != null">
+        #{coinname,jdbcType=VARCHAR},
+      </if>
+      <if test="coinshort != null">
+        #{coinshort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="img != null">
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.goods.model.CoinsExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from coins
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update coins
+    <set>
+      <if test="record.fid != null">
+        fId = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.coinname != null">
+        coinName = #{record.coinname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinshort != null">
+        coinShort = #{record.coinshort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.img != null">
+        img = #{record.img,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update coins
+    set fId = #{record.fid,jdbcType=INTEGER},
+      coinName = #{record.coinname,jdbcType=VARCHAR},
+      coinShort = #{record.coinshort,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DOUBLE},
+      img = #{record.img,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.Coins">
+    <!--@mbg.generated-->
+    update coins
+    <set>
+      <if test="coinname != null">
+        coinName = #{coinname,jdbcType=VARCHAR},
+      </if>
+      <if test="coinshort != null">
+        coinShort = #{coinshort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="img != null">
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.Coins">
+    <!--@mbg.generated-->
+    update coins
+    set coinName = #{coinname,jdbcType=VARCHAR},
+      coinShort = #{coinshort,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      img = #{img,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findAllByFid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from coins
+        <if test="fid != null">
+          where fId=#{fid,jdbcType=INTEGER}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcConsumeRecordMapper">
+    
+    <resultMap type="AgcConsumeRecord" id="AgcConsumeRecordResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="number"    column="number"    />
+        <result property="consumeCp"    column="consume_cp"    />
+        <result property="activityCp"    column="activity_cp"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    
+    <resultMap type="com.lanjing.wallet.agc.vo.MiningCpVO" id="MiningCpVOResult">
+        <result property="userId"    column="user_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="number"    column="number"    />
+        <result property="consumeCp"    column="consume_cp"    />
+        <result property="activityCp"    column="activity_cp"    />
+    </resultMap>
+
+    <sql id="selectAgcConsumeRecordVo">
+        select id, user_id, amount, number, consume_cp, activity_cp, create_time, update_time from agc_consume_record
+    </sql>
+
+    <select id="selectAgcConsumeRecordList" parameterType="AgcConsumeRecord" resultMap="AgcConsumeRecordResult">
+        <include refid="selectAgcConsumeRecordVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="consumeCp != null "> and consume_cp = #{consumeCp}</if>
+            <if test="activityCp != null "> and activity_cp = #{activityCp}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcConsumeRecordById" parameterType="Long" resultMap="AgcConsumeRecordResult">
+        <include refid="selectAgcConsumeRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcConsumeRecord" parameterType="AgcConsumeRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_consume_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="amount != null">amount,</if>
+            <if test="number != null">number,</if>
+            <if test="consumeCp != null">consume_cp,</if>
+            <if test="activityCp != null">activity_cp,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="number != null">#{number},</if>
+            <if test="consumeCp != null">#{consumeCp},</if>
+            <if test="activityCp != null">#{activityCp},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcConsumeRecord" parameterType="AgcConsumeRecord">
+        update agc_consume_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="consumeCp != null">consume_cp = #{consumeCp},</if>
+            <if test="activityCp != null">activity_cp = #{activityCp},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcConsumeRecordById" parameterType="Long">
+        delete from agc_consume_record where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcConsumeRecordByIds" parameterType="String">
+        delete from agc_consume_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectAgcConsumeRecordTotalByUserId" resultType="BigDecimal">
+        select IFNULL(SUM(amount),0) amount from agc_consume_record
+        where user_id = #{userId}
+    </select>
+    
+    <select id="selectAgcConsumeRecordCountByUserId" resultType="Integer">
+        select IFNULL(count(id),0) num from agc_consume_record
+        where user_id = #{userId} 
+    </select>
+    
+    <select id="selectMiningCpVOs" resultMap="MiningCpVOResult">
+ 		SELECT user_id,IFNULL(SUM(amount),0) amount,IFNULL(SUM(number),0) number,
+ 		IFNULL(SUM(consume_cp),0) consume_cp,IFNULL(SUM(activity_cp),0) activity_cp 
+ 		FROM agc_consume_record GROUP BY user_id
+    </select>
+    
+    <select id="selectAllCp" resultType="BigDecimal">
+		SELECT IFNULL(SUM(consume_cp+activity_cp),0) cp FROM agc_consume_record
+    </select>
+    
+    <!-- 我的消费算力 -->
+    <select id="selectConsumeCpByUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(consume_cp+activity_cp),0) cp FROM agc_consume_record
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+    
+    <select id="selectConsumeRecordListByUserId" resultMap="AgcConsumeRecordResult">
+        <include refid="selectAgcConsumeRecordVo"/>
+        where user_id = #{userId}
+        order by id DESC
+    </select>
+    
+    <!-- 我和我的团队总消费 -->
+    <select id="getTotalAchievementAll" resultType="BigDecimal">
+        SELECT IFNULL(SUM(amount),0) amount FROM agc_consume_record
+        WHERE user_id IN
+        <foreach item="userId" collection="userIdList" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+    
+</mapper>

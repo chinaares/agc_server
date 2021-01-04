@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.EvaluationMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.Evaluation">
+    <!--@mbg.generated-->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="userId" jdbcType="INTEGER" property="userid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userpicture" jdbcType="VARCHAR" property="userpicture" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderid" />
+    <result column="goodsId" jdbcType="INTEGER" property="goodsid" />
+    <result column="skuId" jdbcType="INTEGER" property="skuid" />
+    <result column="goodsevaluation" jdbcType="DOUBLE" property="goodsevaluation" />
+    <result column="shopevaluation" jdbcType="DOUBLE" property="shopevaluation" />
+    <result column="logisticsevaluation" jdbcType="DOUBLE" property="logisticsevaluation" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="imgs" jdbcType="VARCHAR" property="imgs" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="backcontent" jdbcType="VARCHAR" property="backcontent" />
+    <result column="backimgs" jdbcType="VARCHAR" property="backimgs" />
+    <result column="upttime" jdbcType="TIMESTAMP" property="upttime" />
+      <result column="state" property="state" jdbcType="INTEGER"/>
+      <result column="shopcode" property="shopcode" jdbcType="BIGINT"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+
+
+    Id, userId, username, userpicture, orderId, goodsId, skuId, goodsevaluation, shopevaluation,
+    logisticsevaluation, content, imgs, createtime, backcontent, backimgs, upttime,
+`state`,
+shopcode
+</sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from evaluation
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from evaluation
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="Id" keyProperty="id" parameterType="com.lanjing.goods.model.Evaluation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+
+        INSERT INTO evaluation (
+            Id,
+            userId,
+            username,
+            userpicture,
+            orderId,
+            goodsId,
+            skuId,
+            goodsevaluation,
+            shopevaluation,
+            logisticsevaluation,
+            content,
+            imgs,
+            createtime,
+            backcontent,
+            backimgs,
+            upttime,
+            `state`,
+            shopcode
+        ) VALUES (
+            #{id,jdbcType=INTEGER},
+            #{userid,jdbcType=INTEGER},
+            #{username,jdbcType=VARCHAR},
+            #{userpicture,jdbcType=VARCHAR},
+            #{orderid,jdbcType=VARCHAR},
+            #{goodsid,jdbcType=INTEGER},
+            #{skuid,jdbcType=INTEGER},
+            #{goodsevaluation,jdbcType=DOUBLE},
+            #{shopevaluation,jdbcType=DOUBLE},
+            #{logisticsevaluation,jdbcType=DOUBLE},
+            #{content,jdbcType=VARCHAR},
+            #{imgs,jdbcType=VARCHAR},
+            #{createtime,jdbcType=TIMESTAMP},
+            #{backcontent,jdbcType=VARCHAR},
+            #{backimgs,jdbcType=VARCHAR},
+            #{upttime,jdbcType=TIMESTAMP},
+            #{state,jdbcType=INTEGER},
+            #{shopcode,jdbcType=BIGINT}
+        )
+</insert>
+  <insert id="insertSelective" keyColumn="Id" keyProperty="id" parameterType="com.lanjing.goods.model.Evaluation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+
+        INSERT INTO evaluation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> Id,</if>
+            <if test="userid!=null"> userId,</if>
+            <if test="username!=null"> username,</if>
+            <if test="userpicture!=null"> userpicture,</if>
+            <if test="orderid!=null"> orderId,</if>
+            <if test="goodsid!=null"> goodsId,</if>
+            <if test="skuid!=null"> skuId,</if>
+            <if test="goodsevaluation!=null"> goodsevaluation,</if>
+            <if test="shopevaluation!=null"> shopevaluation,</if>
+            <if test="logisticsevaluation!=null"> logisticsevaluation,</if>
+            <if test="content!=null"> content,</if>
+            <if test="imgs!=null"> imgs,</if>
+            <if test="createtime!=null"> createtime,</if>
+            <if test="backcontent!=null"> backcontent,</if>
+            <if test="backimgs!=null"> backimgs,</if>
+            <if test="upttime!=null"> upttime,</if>
+            <if test="state!=null"> `state`,</if>
+            <if test="shopcode!=null"> shopcode</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> #{id,jdbcType=INTEGER},</if>
+            <if test="userid!=null"> #{userid,jdbcType=INTEGER},</if>
+            <if test="username!=null"> #{username,jdbcType=VARCHAR},</if>
+            <if test="userpicture!=null"> #{userpicture,jdbcType=VARCHAR},</if>
+            <if test="orderid!=null"> #{orderid,jdbcType=VARCHAR},</if>
+            <if test="goodsid!=null"> #{goodsid,jdbcType=INTEGER},</if>
+            <if test="skuid!=null"> #{skuid,jdbcType=INTEGER},</if>
+            <if test="goodsevaluation!=null"> #{goodsevaluation,jdbcType=DOUBLE},</if>
+            <if test="shopevaluation!=null"> #{shopevaluation,jdbcType=DOUBLE},</if>
+            <if test="logisticsevaluation!=null"> #{logisticsevaluation,jdbcType=DOUBLE},</if>
+            <if test="content!=null"> #{content,jdbcType=VARCHAR},</if>
+            <if test="imgs!=null"> #{imgs,jdbcType=VARCHAR},</if>
+            <if test="createtime!=null"> #{createtime,jdbcType=TIMESTAMP},</if>
+            <if test="backcontent!=null"> #{backcontent,jdbcType=VARCHAR},</if>
+            <if test="backimgs!=null"> #{backimgs,jdbcType=VARCHAR},</if>
+            <if test="upttime!=null"> #{upttime,jdbcType=TIMESTAMP},</if>
+            <if test="state!=null"> #{state,jdbcType=INTEGER},</if>
+            <if test="shopcode!=null"> #{shopcode,jdbcType=BIGINT}</if>
+        </trim>
+</insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.Evaluation">
+    <!--@mbg.generated-->
+
+        UPDATE evaluation
+        <set>
+                <if test="id != null"> Id = #{id,jdbcType=INTEGER},</if>
+                <if test="userid != null"> userId = #{userid,jdbcType=INTEGER},</if>
+                <if test="username != null"> username = #{username,jdbcType=VARCHAR},</if>
+                <if test="userpicture != null"> userpicture = #{userpicture,jdbcType=VARCHAR},</if>
+                <if test="orderid != null"> orderId = #{orderid,jdbcType=VARCHAR},</if>
+                <if test="goodsid != null"> goodsId = #{goodsid,jdbcType=INTEGER},</if>
+                <if test="skuid != null"> skuId = #{skuid,jdbcType=INTEGER},</if>
+                <if test="goodsevaluation != null"> goodsevaluation = #{goodsevaluation,jdbcType=DOUBLE},</if>
+                <if test="shopevaluation != null"> shopevaluation = #{shopevaluation,jdbcType=DOUBLE},</if>
+                <if test="logisticsevaluation != null"> logisticsevaluation = #{logisticsevaluation,jdbcType=DOUBLE},</if>
+                <if test="content != null"> content = #{content,jdbcType=VARCHAR},</if>
+                <if test="imgs != null"> imgs = #{imgs,jdbcType=VARCHAR},</if>
+                <if test="createtime != null"> createtime = #{createtime,jdbcType=TIMESTAMP},</if>
+                <if test="backcontent != null"> backcontent = #{backcontent,jdbcType=VARCHAR},</if>
+                <if test="backimgs != null"> backimgs = #{backimgs,jdbcType=VARCHAR},</if>
+                <if test="upttime != null"> upttime = #{upttime,jdbcType=TIMESTAMP},</if>
+                <if test="state != null"> `state` = #{state,jdbcType=INTEGER},</if>
+                <if test="shopcode != null"> shopcode = #{shopcode,jdbcType=BIGINT}</if>
+        </set>
+		where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.Evaluation">
+    <!--@mbg.generated-->
+
+        UPDATE evaluation
+        set
+                Id = #{id,jdbcType=INTEGER},
+                userId = #{userid,jdbcType=INTEGER},
+                username = #{username,jdbcType=VARCHAR},
+                userpicture = #{userpicture,jdbcType=VARCHAR},
+                orderId = #{orderid,jdbcType=VARCHAR},
+                goodsId = #{goodsid,jdbcType=INTEGER},
+                skuId = #{skuid,jdbcType=INTEGER},
+                goodsevaluation = #{goodsevaluation,jdbcType=DOUBLE},
+                shopevaluation = #{shopevaluation,jdbcType=DOUBLE},
+                logisticsevaluation = #{logisticsevaluation,jdbcType=DOUBLE},
+                content = #{content,jdbcType=VARCHAR},
+                imgs = #{imgs,jdbcType=VARCHAR},
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+                backcontent = #{backcontent,jdbcType=VARCHAR},
+                backimgs = #{backimgs,jdbcType=VARCHAR},
+                upttime = #{upttime,jdbcType=TIMESTAMP},
+                `state` = #{state,jdbcType=INTEGER},
+                shopcode = #{shopcode,jdbcType=BIGINT}
+		where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByGoodsid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from evaluation
+    where goodsId = #{goodsId,jdbcType=INTEGER}
+  </select>
+    <select id="queryByGoodsidPage" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from evaluation
+      where goodsId = #{goodsId,jdbcType=INTEGER} order by createtime desc  limit #{page,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+    </select>
+  <select id="selectByGoodsidcount" resultType="int">
+    select
+    count(*)
+    from evaluation
+    where goodsId = #{goodsId,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from evaluation where 1 = 1
+    <if test="state != null">
+        and `state` = #{state,jdbcType=INTEGER}
+    </if>
+    <if test="goodsId != null">
+        and goodsId = #{goodsId,jdbcType=INTEGER}
+    </if> 
+    <if test="shopcode != null">
+        and shopcode = #{shopcode,jdbcType=INTEGER}
+    </if> order by createtime desc
+     limit #{page,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+  </select>
+  <select id="queryAllcount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from evaluation where 1 = 1
+      <if test="state != null">
+          and `state` = #{state,jdbcType=INTEGER}
+      </if>
+      <if test="goodsId != null">
+          and goodsId = #{goodsId,jdbcType=INTEGER}
+      </if>
+      <if test="shopcode != null">
+          and shopcode = #{shopcode,jdbcType=INTEGER}
+      </if>
+  </select>
+</mapper>

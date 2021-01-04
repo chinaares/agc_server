@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.OrdersMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Orders" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="orderId" property="orderid" jdbcType="VARCHAR" />
+    <result column="tradecoinId" property="tradecoinid" jdbcType="INTEGER" />
+    <result column="tradecoin" property="tradecoin" jdbcType="VARCHAR" />
+    <result column="userbuy" property="userbuy" jdbcType="VARCHAR" />
+    <result column="buyadress" property="buyadress" jdbcType="VARCHAR" />
+    <result column="usersell" property="usersell" jdbcType="VARCHAR" />
+    <result column="selladress" property="selladress" jdbcType="VARCHAR" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+    <result column="tradenum" property="tradenum" jdbcType="DECIMAL" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="confirmtime" property="confirmtime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="processtime" property="processtime" jdbcType="TIMESTAMP" />
+    <result column="processstate" property="processstate" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, orderId, tradecoinId, tradecoin, userbuy, buyadress, usersell, selladress, tradenum,
+    createtime, confirmtime, state, fee, processtime, processstate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="rechargelist" resultType="Map">
+    SELECT o.*,u.userName from orders o INNER JOIN users u on o.userbuy = u.keyes WHERE (selladress like concat('%',#{adress,jdbcType=VARCHAR},'%') or selladress is NULL)
+    and (userName like concat('%',#{likes,jdbcType=VARCHAR},'%') or userbuy like concat('%',#{likes,jdbcType=VARCHAR},'%'))
+    and  confirmtime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    and o.tradecoin  like concat('%',#{coinType,jdbcType=VARCHAR},'%')
+    order by confirmtime desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="rechargelistCount" resultType="java.lang.Integer">
+    SELECT count(*) from orders o INNER JOIN users u on o.userbuy = u.keyes
+    WHERE (selladress like '%${adress}%' or selladress is NULL) and (userName like '%${likes}%' or userbuy like '%${likes}%')
+    and  confirmtime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    and o.tradecoin like concat('%',#{coinType,jdbcType=VARCHAR},'%')
+  </select>
+
+  <select id="withdrawlist" resultType="Map">
+    SELECT o.*,u.userName from orders o INNER JOIN users u on o.usersell = u.keyes WHERE buyadress like '%${adress}%' and
+    (userName like '%${likes}%' or usersell like '%${likes}%')
+    and  confirmtime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    and o.tradecoin like concat('%',#{coinType,jdbcType=VARCHAR},'%')
+    order by confirmtime desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+  
+  
+  <select id="queryorderId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from orders
+    where orderId = #{orderid,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryprocess" resultType="Map">
+    SELECT o.fId,o.orderId,o.confirmtime from orders o INNER JOIN users u on o.usersell = u.keyes WHERE o.state = 0 and o.processstate = 1 ORDER BY o.confirmtime ASC LIMIT 1;
+  </select>
+  
+
+  <select id="querytxid" resultType="Map">
+    SELECT o.fId,o.orderId from orders o INNER JOIN users u on o.usersell = u.keyes WHERE o.state = 0 and o.processstate = -1 ORDER BY o.confirmtime ASC LIMIT 1
+  </select>
+
+
+  <!--<select id="querytxid1" resultType="Map">
+    SELECT o.fId,o.orderId from orders o INNER JOIN users u on o.usersell = u.keyes WHERE o.state = 0 and o.processstate = 3 ORDER BY o.confirmtime ASC
+  </select>-->
+
+  <select id="querytxid1" resultType="Map">
+    SELECT o.fId,o.orderId from orders o INNER JOIN users u on o.usersell = u.keyes WHERE o.state = 0 and o.processstate = 3 and o.processtime &lt;= DATE_SUB(NOW(),INTERVAL 5 HOUR) ORDER BY o.confirmtime ASC
+  </select>
+
+
+  <select id="withdrawlistCount" resultType="java.lang.Integer">
+    SELECT count(*) from orders o INNER JOIN users u on o.usersell = u.keyes WHERE buyadress like '%${adress}%' and (userName like '%${likes}%' or usersell like '%${likes}%')
+    and  confirmtime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    and o.tradecoin like concat('%',#{coinType,jdbcType=VARCHAR},'%')
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Orders" >
+    insert into orders (fId, orderId, tradecoinId, 
+      tradecoin, userbuy, buyadress, usersell, selladress,
+      tradenum, createtime, confirmtime, 
+      state)
+    values (#{fid,jdbcType=INTEGER}, #{orderid,jdbcType=VARCHAR}, #{tradecoinid,jdbcType=INTEGER}, 
+      #{tradecoin,jdbcType=VARCHAR}, #{userbuy,jdbcType=VARCHAR}, #{buyadress,jdbcType=VARCHAR}, #{usersell,jdbcType=VARCHAR}, #{selladress,jdbcType=VARCHAR},
+      #{tradenum,jdbcType=DECIMAL}, #{createtime,jdbcType=TIMESTAMP}, #{confirmtime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="orderid != null" >
+        orderId,
+      </if>
+      <if test="tradecoinid != null" >
+        tradecoinId,
+      </if>
+      <if test="tradecoin != null" >
+        tradecoin,
+      </if>
+      <if test="userbuy != null" >
+        userbuy,
+      </if>
+      <if test="buyadress != null" >
+        buyadress,
+      </if>
+      <if test="usersell != null" >
+        usersell,
+      </if>
+      <if test="selladress != null" >
+        selladress,
+      </if>
+      <if test="tradenum != null" >
+        tradenum,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="confirmtime != null" >
+        confirmtime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="fee != null">
+        fee,
+      </if>
+      <if test="processtime != null">
+        processtime,
+      </if>
+      <if test="processstate != null">
+        processstate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="orderid != null" >
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradecoinid != null" >
+        #{tradecoinid,jdbcType=INTEGER},
+      </if>
+      <if test="tradecoin != null" >
+        #{tradecoin,jdbcType=VARCHAR},
+      </if>
+      <if test="userbuy != null" >
+        #{userbuy,jdbcType=VARCHAR},
+      </if>
+      <if test="buyadress != null" >
+        #{buyadress,jdbcType=VARCHAR},
+      </if>
+      <if test="usersell != null" >
+        #{usersell,jdbcType=VARCHAR},
+      </if>
+      <if test="selladress != null" >
+        #{selladress,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null" >
+        #{tradenum,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmtime != null" >
+        #{confirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="fee != null">
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="processtime != null">
+        #{processtime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="processstate != null">
+        #{processstate,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="selectBy" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from orders
+    where 1 = 1
+    <if test="record.fid != null" >
+      and fId = #{record.fid,jdbcType=INTEGER}
+    </if>
+    <if test="record.orderid != null" >
+      and orderId = #{record.orderid,jdbcType=VARCHAR}
+    </if>
+    <if test="record.tradecoinid != null" >
+      and tradecoinId = #{record.tradecoinid,jdbcType=INTEGER}
+    </if>
+    <if test="record.tradecoin != null" >
+      and tradecoin = #{record.tradecoin,jdbcType=VARCHAR}
+    </if>
+    <if test="record.userbuy != null" >
+      and userbuy = #{record.userbuy,jdbcType=VARCHAR}
+    </if>
+    <if test="record.buyadress != null" >
+      and buyadress = #{record.buyadress,jdbcType=VARCHAR}
+    </if>
+    <if test="record.usersell != null" >
+      and usersell = #{record.usersell,jdbcType=VARCHAR}
+    </if>
+    <if test="record.selladress != null" >
+      selladress = #{record.selladress,jdbcType=VARCHAR}
+    </if>
+    <if test="record.tradenum != null" >
+      and tradenum = #{record.tradenum,jdbcType=DECIMAL}
+    </if>
+    <if test="record.createtime != null" >
+      and createtime = #{record.createtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.confirmtime != null" >
+      and confirmtime = #{record.confirmtime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="record.state != null" >
+      and state = #{record.state,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Orders" >
+    update orders
+    <set >
+      <if test="orderid != null" >
+        orderId = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="tradecoinid != null" >
+        tradecoinId = #{tradecoinid,jdbcType=INTEGER},
+      </if>
+      <if test="tradecoin != null" >
+        tradecoin = #{tradecoin,jdbcType=VARCHAR},
+      </if>
+      <if test="userbuy != null" >
+        userbuy = #{userbuy,jdbcType=VARCHAR},
+      </if>
+      <if test="buyadress != null" >
+        buyadress = #{buyadress,jdbcType=VARCHAR},
+      </if>
+      <if test="usersell != null" >
+        usersell = #{usersell,jdbcType=VARCHAR},
+      </if>
+      <if test="selladress != null" >
+        selladress = #{selladress,jdbcType=VARCHAR},
+      </if>
+      <if test="tradenum != null" >
+        tradenum = #{tradenum,jdbcType=DECIMAL},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="confirmtime != null" >
+        confirmtime = #{confirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="fee != null">
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="processtime != null">
+        processtime = #{processtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="processstate != null">
+        processstate = #{processstate,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Orders" >
+    update orders
+    set orderId = #{orderid,jdbcType=VARCHAR},
+      tradecoinId = #{tradecoinid,jdbcType=INTEGER},
+      tradecoin = #{tradecoin,jdbcType=VARCHAR},
+      userbuy = #{userbuy,jdbcType=VARCHAR},
+      usersell = #{usersell,jdbcType=VARCHAR},
+      tradenum = #{tradenum,jdbcType=DECIMAL},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      confirmtime = #{confirmtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="countByStateAndUsersell" resultType="java.lang.Integer">
+        select count(1)
+        from orders
+        where `state` = #{state,jdbcType=INTEGER}
+          and usersell = #{usersell,jdbcType=VARCHAR}
+    </select>
+</mapper>

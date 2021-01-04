@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.otc.dao.OtcOrderMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.otc.model.OtcOrder">
+    <!--@mbg.generated-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ads_id" jdbcType="INTEGER" property="adsId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="ads_user" jdbcType="INTEGER" property="adsUser" />
+    <result column="coin_num" jdbcType="DECIMAL" property="coinNum" />
+    <result column="trade_user" jdbcType="INTEGER" property="tradeUser" />
+    <result column="tradephone" jdbcType="VARCHAR" property="tradePhone" />
+    <result column="paya_way" jdbcType="INTEGER" property="payaWay" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="cny_num" jdbcType="DECIMAL" property="cnyNum" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="adphone" jdbcType="VARCHAR" property="adphone" />
+    <result column="ads_user_name" jdbcType="VARCHAR" property="adsUserName" />
+    <result column="direction" jdbcType="INTEGER" property="direction" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="pay_picture" jdbcType="VARCHAR" property="payPicture" />
+    <result column="reject" jdbcType="LONGVARCHAR" property="reject" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="coin" jdbcType="INTEGER" property="coin" />
+    <result column="appeal_status" jdbcType="INTEGER" property="appealStatus" />
+    <result column="appeal_text" jdbcType="LONGVARCHAR" property="appealText" />
+    <result column="appeal_img" jdbcType="LONGVARCHAR" property="appealImg" />
+    <result column="appeal_time" jdbcType="TIMESTAMP" property="appealTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, ads_id, order_id, ads_user, coin_num, trade_user, tradephone, paya_way, price, 
+    cny_num, remark, adphone, ads_user_name, direction, create_time, pay_picture, appeal_status, 
+    appeal_text, appeal_img, appeal_time, update_time, state, coin, reject
+  </sql>
+  <select id="selectByExample" parameterType="com.lanjing.otc.model.OtcOrderExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from otc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByuser" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT
+    <include refid="Base_Column_List" />
+     from otc_order WHERE 1 = 1
+     <if test="trade_user != null">
+       and (trade_user = #{trade_user,jdbcType=INTEGER} or ads_user = #{trade_user,jdbcType=INTEGER})
+     </if>
+     <if test="state != null">
+        <if test="state == 1">
+          and (state = 1 or state = 0 or state = -2 or state = 3 or state = -3)
+        </if>
+        <if test="state != 1">
+          and state = #{state,jdbcType=INTEGER}
+        </if>
+     </if>
+     ORDER BY update_time desc
+     limit #{begin,jdbcType=INTEGER},#{pagesize,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByuser1" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT
+    <include refid="Base_Column_List" />
+    from otc_order WHERE 1 = 1
+    <if test="trade_user != null">
+      and (trade_user = #{trade_user,jdbcType=INTEGER} or ads_user = #{trade_user,jdbcType=INTEGER})
+    </if>
+    <if test="state != null">
+        and state = #{state,jdbcType=INTEGER}
+    </if>
+    ORDER BY update_time desc
+    limit #{begin,jdbcType=INTEGER},#{pagesize,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByuserCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT
+    count(*)
+    from otc_order WHERE 1 = 1
+    <if test="trade_user != null">
+      and (trade_user = #{trade_user,jdbcType=INTEGER} or ads_user = #{trade_user,jdbcType=INTEGER})
+    </if>
+    <if test="state != null">
+      <if test="state == 1">
+        and (state = 1 or state = 0 or state = -2 or state = 3 or state = -3)
+      </if>
+      <if test="state != 1">
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from otc_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from otc_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.otc.model.OtcOrderExample">
+    <!--@mbg.generated-->
+    delete from otc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.lanjing.otc.model.OtcOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into otc_order (ads_id, order_id, ads_user, 
+      coin_num, trade_user, tradephone, 
+      paya_way, price, cny_num, 
+      remark, adphone, ads_user_name, 
+      direction, create_time, pay_picture, 
+      appeal_status, appeal_text, appeal_img, 
+      appeal_time, update_time)
+    values (#{adsId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{adsUser,jdbcType=INTEGER}, 
+      #{coinNum,jdbcType=DECIMAL}, #{tradeUser,jdbcType=INTEGER}, #{tradePhone,jdbcType=VARCHAR}, 
+      #{payaWay,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{cnyNum,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{adphone,jdbcType=VARCHAR}, #{adsUserName,jdbcType=VARCHAR}, 
+      #{direction,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{payPicture,jdbcType=VARCHAR}, 
+      #{appealStatus,jdbcType=INTEGER}, #{appealText,jdbcType=LONGVARCHAR}, #{appealImg,jdbcType=LONGVARCHAR}, 
+      #{appealTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.lanjing.otc.model.OtcOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into otc_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adsId != null">
+        ads_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="adsUser != null">
+        ads_user,
+      </if>
+      <if test="coinNum != null">
+        coin_num,
+      </if>
+      <if test="tradeUser != null">
+        trade_user,
+      </if>
+      <if test="tradePhone != null">
+        tradephone,
+      </if>
+      <if test="payaWay != null">
+        paya_way,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="cnyNum != null">
+        cny_num,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="adphone != null">
+        adphone,
+      </if>
+      <if test="adsUserName != null">
+        ads_user_name,
+      </if>
+      <if test="direction != null">
+        direction,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="payPicture != null">
+        pay_picture,
+      </if>
+      <if test="appealStatus != null">
+        appeal_status,
+      </if>
+      <if test="appealText != null">
+        appeal_text,
+      </if>
+      <if test="appealImg != null">
+        appeal_img,
+      </if>
+      <if test="appealTime != null">
+        appeal_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="coin != null">
+        coin,
+      </if>
+      <if test="reject != null">
+        reject,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adsId != null">
+        #{adsId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUser != null">
+        #{adsUser,jdbcType=INTEGER},
+      </if>
+      <if test="coinNum != null">
+        #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeUser != null">
+        #{tradeUser,jdbcType=INTEGER},
+      </if>
+      <if test="tradePhone != null">
+        #{tradePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="payaWay != null">
+        #{payaWay,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="cnyNum != null">
+        #{cnyNum,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="adphone != null">
+        #{adphone,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUserName != null">
+        #{adsUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null">
+        #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payPicture != null">
+        #{payPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="appealStatus != null">
+        #{appealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="appealText != null">
+        #{appealText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appealImg != null">
+        #{appealImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appealTime != null">
+        #{appealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="coin != null">
+        #{coin,jdbcType=INTEGER},
+      </if>
+      <if test="reject != null">
+        #{reject,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.otc.model.OtcOrderExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from otc_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update otc_order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.adsId != null">
+        ads_id = #{record.adsId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adsUser != null">
+        ads_user = #{record.adsUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.coinNum != null">
+        coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.tradeUser != null">
+        trade_user = #{record.tradeUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.tradePhone != null">
+        tradephone = #{record.tradePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payaWay != null">
+        paya_way = #{record.payaWay,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cnyNum != null">
+        cny_num = #{record.cnyNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adphone != null">
+        adphone = #{record.adphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adsUserName != null">
+        ads_user_name = #{record.adsUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.direction != null">
+        direction = #{record.direction,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payPicture != null">
+        pay_picture = #{record.payPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appealStatus != null">
+        appeal_status = #{record.appealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.appealText != null">
+        appeal_text = #{record.appealText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.appealImg != null">
+        appeal_img = #{record.appealImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.appealTime != null">
+        appeal_time = #{record.appealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update otc_order
+    set id = #{record.id,jdbcType=INTEGER},
+      ads_id = #{record.adsId,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      ads_user = #{record.adsUser,jdbcType=INTEGER},
+      coin_num = #{record.coinNum,jdbcType=DECIMAL},
+      trade_user = #{record.tradeUser,jdbcType=INTEGER},
+      tradephone = #{record.tradePhone,jdbcType=VARCHAR},
+      paya_way = #{record.payaWay,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      cny_num = #{record.cnyNum,jdbcType=DECIMAL},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      adphone = #{record.adphone,jdbcType=VARCHAR},
+      ads_user_name = #{record.adsUserName,jdbcType=VARCHAR},
+      direction = #{record.direction,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      pay_picture = #{record.payPicture,jdbcType=VARCHAR},
+      appeal_status = #{record.appealStatus,jdbcType=INTEGER},
+      appeal_text = #{record.appealText,jdbcType=LONGVARCHAR},
+      appeal_img = #{record.appealImg,jdbcType=LONGVARCHAR},
+      appeal_time = #{record.appealTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.otc.model.OtcOrder">
+    <!--@mbg.generated-->
+    update otc_order
+    <set>
+      <if test="adsId != null">
+        ads_id = #{adsId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUser != null">
+        ads_user = #{adsUser,jdbcType=INTEGER},
+      </if>
+      <if test="coinNum != null">
+        coin_num = #{coinNum,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeUser != null">
+        trade_user = #{tradeUser,jdbcType=INTEGER},
+      </if>
+      <if test="tradePhone != null">
+        tradephone = #{tradePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="payaWay != null">
+        paya_way = #{payaWay,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="cnyNum != null">
+        cny_num = #{cnyNum,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="adphone != null">
+        adphone = #{adphone,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUserName != null">
+        ads_user_name = #{adsUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="direction != null">
+        direction = #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payPicture != null">
+        pay_picture = #{payPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="appealStatus != null">
+        appeal_status = #{appealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="appealText != null">
+        appeal_text = #{appealText,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appealImg != null">
+        appeal_img = #{appealImg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="appealTime != null">
+        appeal_time = #{appealTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="coin != null">
+        coin = #{coin,jdbcType=INTEGER},
+      </if>
+      <if test="reject != null">
+        reject = #{reject,jdbcType=LONGVARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.otc.model.OtcOrder">
+    <!--@mbg.generated-->
+    update otc_order
+    set ads_id = #{adsId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      ads_user = #{adsUser,jdbcType=INTEGER},
+      coin_num = #{coinNum,jdbcType=DECIMAL},
+      trade_user = #{tradeUser,jdbcType=INTEGER},
+      tradephone = #{tradePhone,jdbcType=VARCHAR},
+      paya_way = #{payaWay,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      cny_num = #{cnyNum,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      adphone = #{adphone,jdbcType=VARCHAR},
+      ads_user_name = #{adsUserName,jdbcType=VARCHAR},
+      direction = #{direction,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_picture = #{payPicture,jdbcType=VARCHAR},
+      appeal_status = #{appealStatus,jdbcType=INTEGER},
+      appeal_text = #{appealText,jdbcType=LONGVARCHAR},
+      appeal_img = #{appealImg,jdbcType=LONGVARCHAR},
+      appeal_time = #{appealTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectUnfinished" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select count(*) from otc_order where (`state` =0 or `state` =1) and trade_user = #{userkey,jdbcType=INTEGER}
+
+
+  </select>
+
+</mapper>

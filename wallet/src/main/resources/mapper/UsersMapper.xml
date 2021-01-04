@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.UsersMapper">
+    <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Users">
+        <id column="fId" property="fid" jdbcType="INTEGER"/>
+        <result column="keyes" property="keyes" jdbcType="VARCHAR"/>
+        <result column="userName" property="username" jdbcType="VARCHAR"/>
+        <result column="loginPassword" property="loginpassword" jdbcType="VARCHAR"/>
+        <result column="transPassword" property="transpassword" jdbcType="VARCHAR"/>
+        <result column="Nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="picture" property="picture" jdbcType="VARCHAR"/>
+        <result column="phoneNum" property="phonenum" jdbcType="VARCHAR"/>
+        <result column="token" property="token" jdbcType="VARCHAR"/>
+        <result column="createtime" property="createtime" jdbcType="TIMESTAMP"/>
+        <result column="device" property="device" jdbcType="VARCHAR"/>
+        <result column="welletname" property="welletname" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="ways" property="ways" jdbcType="INTEGER"/>
+        <result column="IsReal" property="isReal" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="BaseResultMapEx" type="com.lanjing.wallet.model.po.UserTeam">
+        <id column="fId" property="fid" jdbcType="INTEGER"/>
+        <result column="keyes" property="key" jdbcType="VARCHAR"/>
+        <result column="cover_code" property="code" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="BaseResultMapVerified" type="com.lanjing.wallet.model.po.Verified">
+        <id column="fId" property="id" jdbcType="INTEGER"/>
+        <result column="userName" property="name" jdbcType="VARCHAR"/>
+        <result column="phoneNum" property="phone" jdbcType="VARCHAR"/>
+        <result column="IsReal" property="status" jdbcType="INTEGER"/>
+        <result column="Realname" property="realName" jdbcType="VARCHAR"/>
+        <result column="IdentityId" property="identityId" jdbcType="VARCHAR"/>
+        <result column="IdentityImg1" property="identityImg1" jdbcType="VARCHAR"/>
+        <result column="IdentityImg2" property="identityImg2" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <resultMap id="InviteUserVOMap" type="com.lanjing.wallet.agc.vo.InviteUserVO">
+        <result column="userId" property="userId"/>
+        <result column="phone" property="phone"/>
+        <result column="nickName" property="nickName"/>
+        <result column="createTime" property="createTime"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+    fId, keyes, userName, loginPassword, transPassword, Nickname, picture, phoneNum, 
+    token, NodeNum,IsVip, IsNode, createtime, IsNodetime, device, welletname, Isauto, state,IsReal
+  </sql>
+
+    <sql id="Base_Column_List2">
+    fId, userName, Nickname, picture, phoneNum
+  </sql>
+
+    <sql id="Base_Column_List3">
+    fId, IsReal, Realname, IdentityId, IdentityImg1, IdentityImg2
+  </sql>
+
+    <select id="selectIdentityByPrimaryKey" resultType="Map" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List3"/>
+        from users
+        where fId = #{fid,jdbcType=INTEGER}
+    </select>
+
+    <update id="userreal">
+    UPDATE users SET IsReal = 1,Realname = #{realname,jdbcType=VARCHAR},IdentityId = #{identityId,jdbcType=VARCHAR},IdentityImg1 = #{identityImg1,jdbcType=VARCHAR},IdentityImg2 = #{identityImg2,jdbcType=VARCHAR} WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+    <update id="Reviewuserreal">
+    UPDATE users SET IsReal = #{isreal,jdbcType=INTEGER} WHERE fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from users
+        where keyes in (#{fids,jdbcType=VARCHAR})
+    </select>
+
+
+    <select id="selectByUsername" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select
+    count(*)
+    from users
+    where userName = #{username,jdbcType=VARCHAR}
+  </select>
+
+
+    <select id="selectHelpword" resultType="java.lang.String">
+    select helpword from Help_Word
+  </select>
+
+
+    <select id="selectId" resultType="java.lang.Integer">
+    select
+    MAX(fId)
+    from users
+  </select>
+
+
+    <select id="sumTotalUser" resultType="java.math.BigDecimal">
+    select count(fId) from users
+  </select>
+
+
+    <select id="sumEffectiveUser" resultType="java.math.BigDecimal">
+    select count(distinct u.fId) from users u ,wellethistorystate w where u.keyes=w.keyes
+  </select>
+
+
+    <select id="sumTodayUser" resultType="java.math.BigDecimal">
+    select count(fId) from users where createtime between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+  </select>
+
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select * from users where state=1
+  </select>
+
+
+    <select id="selectUserCoverCode" resultMap="BaseResultMapEx">
+    select u.fId,u.keyes,r.cover_code from users u left join recommend r on u.keyes=r.userkey_1 where state=1
+  </select>
+
+
+    <select id="selectByStatusAndKey" resultMap="BaseResultMapVerified">
+        select fId,phoneNum,userName,IsReal,Realname,IdentityId,IdentityImg1,IdentityImg2 from users where 1=1
+        <if test="key != null and key != ''">
+            and (fId=#{key} or phoneNum like concat("%",#{key} ,"%") or userName like concat("%",#{key} ,"%") or
+            Realname like concat("%",#{key} ,"%"))
+        </if>
+        <if test="status != null">
+            and IsReal=#{status}
+        </if>
+        and IsReal != 0
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where fId = #{fid,jdbcType=INTEGER}
+    </select>
+
+
+    <update id="updateByfids">
+        update users set state = #{state,jdbcType=INTEGER} where fId in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="Resetloginpassword">
+        update users set loginPassword = '8EA98BF1150A5076D408C50F116901AB' where fId in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="Resettradepassword">
+        update users set transPassword = '8EA98BF1150A5076D408C50F116901AB' where fId in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+    <update id="uptphone">
+        update users set phoneNum = #{phonenum,jdbcType=VARCHAR} where fId in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="selectByLogin" resultMap="BaseResultMap" parameterType="com.lanjing.wallet.model.Users">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where userName = #{username,jdbcType=VARCHAR} and loginPassword = #{loginpassword,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="selectByUserKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where keyes = #{keyes,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByTodayCount" resultType="java.lang.Integer">
+    select count(*) from users where to_days(createtime) = to_days(now()) and ways = 1
+  </select>
+
+    <select id="selectByPhone" resultMap="BaseResultMap">
+    select * from users where phoneNum = #{phone,jdbcType=VARCHAR}
+  </select>
+
+
+    <select id="selectBy" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where 1 = 1
+        <if test="record.keyes != null">
+            and keyes = #{record.keyes,jdbcType=VARCHAR}
+        </if>
+        <if test="record.username != null">
+            and userName = #{record.username,jdbcType=VARCHAR}
+        </if>
+        <if test="record.loginpassword != null">
+            and loginPassword = #{record.loginpassword,jdbcType=VARCHAR}
+        </if>
+        <if test="record.transpassword != null">
+            and transPassword = #{record.transpassword,jdbcType=VARCHAR}
+        </if>
+        <if test="record.nickname != null">
+            and Nickname = #{record.nickname,jdbcType=VARCHAR}
+        </if>
+        <if test="record.picture != null">
+            and picture = #{record.picture,jdbcType=VARCHAR}
+        </if>
+        <if test="record.phonenum != null">
+            and phoneNum = #{record.phonenum,jdbcType=VARCHAR}
+        </if>
+        <if test="record.token != null">
+            and token = #{record.token,jdbcType=VARCHAR}
+        </if>
+        <if test="record.createtime != null">
+            and createtime = #{record.createtime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="record.device != null">
+            and device = #{record.device,jdbcType=VARCHAR}
+        </if>
+        <if test="record.welletname != null">
+            and welletname = #{record.welletname,jdbcType=VARCHAR}
+        </if>
+        <if test="record.state != null">
+            and state = #{record.state,jdbcType=INTEGER}
+        </if>
+        <if test="begin != null and end != null">
+            limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+        </if>
+    </select>
+
+
+    <select id="selectByNameorId" resultType="com.lanjing.wallet.model.Users">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where fId like '%${username}%' or userName like '%${username}%' limit
+        #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectByNameorId1" resultType="Map">
+    SELECT u.fId,u.userName,u.Nickname,u.state,u.createtime,a.Adress from users u left JOIN addree_user a on u.keyes = a.userkey
+    where u.state!=-1 and u.fId like '%${username}%' or userName like '%${username}%' order by u.fId desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectByNameorId2" resultType="Map">
+    SELECT u.fId,u.userName,u.Nickname,u.state,u.createtime,a.Adress from users u left JOIN addree_user a on u.keyes = a.userkey
+    where a.Adress like '%0x%' and u.state!=-1 and u.fId like '%${username}%' or userName like '%${username}%' and createtime BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}  order by u.fId desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select
+    count(*)
+    from users
+    where state!=-1 and fId like '%${username}%' or userName like '%${username}%'
+  </select>
+
+    <select id="selectCount2" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select
+    count(*)
+    from users
+    where state!=-1 and fId like '%${username}%' or userName like '%${username}%'
+    and createtime BETWEEN #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+  </select>
+    <select id="selectALLCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from users where state!=-1
+  </select>
+
+
+    <select id="selectBystateCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from users
+    where state = 1
+  </select>
+
+    <select id="selectBytodayCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from users
+    where to_days(createtime) = to_days(now()) and ways = 1
+  </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from users
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.lanjing.wallet.model.Users">
+    insert into users (fId, keyes, userName, 
+      loginPassword, transPassword, Nickname, 
+      picture, phoneNum, token, 
+      IsNode, createtime)
+    values (#{fid,jdbcType=INTEGER}, #{keyes,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+      #{loginpassword,jdbcType=VARCHAR}, #{transpassword,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+      #{picture,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR},#{createtime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Users">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fid != null">
+                fId,
+            </if>
+            <if test="keyes != null">
+                keyes,
+            </if>
+            <if test="username != null">
+                userName,
+            </if>
+            <if test="loginpassword != null">
+                loginPassword,
+            </if>
+            <if test="transpassword != null">
+                transPassword,
+            </if>
+            <if test="nickname != null">
+                Nickname,
+            </if>
+            <if test="picture != null">
+                picture,
+            </if>
+            <if test="phonenum != null">
+                phoneNum,
+            </if>
+            <if test="token != null">
+                token,
+            </if>
+            <if test="createtime != null">
+                createtime,
+            </if>
+            <if test="device != null">
+                device,
+            </if>
+            <if test="welletname != null">
+                welletname,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="ways != null">
+                ways,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fid != null">
+                #{fid,jdbcType=INTEGER},
+            </if>
+            <if test="keyes != null">
+                #{keyes,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="loginpassword != null">
+                #{loginpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="transpassword != null">
+                #{transpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="picture != null">
+                #{picture,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenum != null">
+                #{phonenum,jdbcType=VARCHAR},
+            </if>
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="device != null">
+                #{device,jdbcType=VARCHAR},
+            </if>
+            <if test="welletname != null">
+                #{welletname,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="ways != null">
+                #{ways,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Users">
+        update users
+        <set>
+            <if test="keyes != null">
+                keyes = #{keyes,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                userName = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="loginpassword != null">
+                loginPassword = #{loginpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="transpassword != null">
+                transPassword = #{transpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null">
+                Nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="picture != null">
+                picture = #{picture,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenum != null">
+                phoneNum = #{phonenum,jdbcType=VARCHAR},
+            </if>
+            <if test="token != null">
+                token = #{token,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="device != null">
+                device = #{device,jdbcType=VARCHAR},
+            </if>
+            <if test="welletname != null">
+                welletname = #{welletname,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="isReal != null">
+                IsReal=#{isReal,jdbcType=INTEGER},
+            </if>
+            <if test="realname != null">
+                Realname = #{realname,jdbcType=VARCHAR},
+            </if>
+
+            <if test="identityId != null">
+                IdentityId = #{identityId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="identityImg1 != null">
+                IdentityImg1 = #{identityImg1,jdbcType=VARCHAR},
+            </if>
+
+            <if test="identityImg2 != null">
+                IdentityImg2 = #{identityImg2,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where fId = #{fid,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateByPrimaryKeySelective1">
+        update users
+        <set>
+            <if test="record.username != null">
+                userName = #{record.username,jdbcType=VARCHAR},
+            </if>
+            <if test="record.loginpassword != null">
+                loginPassword = #{record.loginpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transpassword != null">
+                transPassword = #{record.transpassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.nickname != null">
+                Nickname = #{record.nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.picture != null">
+                picture = #{record.picture,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phonenum != null">
+                phoneNum = #{record.phonenum,jdbcType=VARCHAR},
+            </if>
+            <if test="record.token != null">
+                token = #{record.token,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createtime != null">
+                createtime = #{record.createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.device != null">
+                device = #{record.device,jdbcType=VARCHAR},
+            </if>
+            <if test="record.welletname != null">
+                welletname = #{record.welletname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.state != null">
+                state = #{record.state,jdbcType=INTEGER},
+            </if>
+            <if test="admin != null">
+                Nodeadmin = #{admin,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where keyes = #{record.keyes,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectByNode" resultType="java.util.Map">
+        select u.*,r.num from users u LEFT JOIN recommend r on u.keyes = r.userkey_1 where
+        (userName like '%${likes}%' or keyes like '%${likes}%')
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        and u.IsNode = 1 or u.IsNode = 2 limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByNodeCount" resultType="java.lang.Integer">
+        select count(*) from users where
+        (userName like '%${likes}%' or keyes like '%${likes}%')
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        and IsNode = 1 or IsNode = 2
+    </select>
+
+    <select id="selectByNodeOpen" resultType="java.lang.Integer">
+    select count(*) from users where IsNode = 1
+  </select>
+
+    <select id="selectByNodeClose" resultType="java.lang.Integer">
+    select count(*) from users where IsNode = 2
+  </select>
+
+
+    <update id="updateByUserkey" parameterType="com.lanjing.wallet.model.Users">
+    update users
+    set IsNode = #{isnode,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where keyes = #{keyes,jdbcType=VARCHAR}
+  </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Users">
+    update users
+    set keyes = #{keyes,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      loginPassword = #{loginpassword,jdbcType=VARCHAR},
+      transPassword = #{transpassword,jdbcType=VARCHAR},
+      Nickname = #{nickname,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      phoneNum = #{phonenum,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      IsNode = #{isnode,jdbcType=INTEGER},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+    <select id="selectUserCount" resultType="java.lang.Integer">
+    select count(*) from users
+  </select>
+    <select id="selectTodayUserCount" resultType="java.lang.Integer">
+    select count(*) from users where DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+
+    <select id="queryYesterdayNewUserList" resultType="java.lang.Long">
+         SELECT count(*) FROM users WHERE TO_DAYS(NOW( ) ) - TO_DAYS( users.`createtime`) &lt;= 1
+    </select>
+
+    <select id="queryYesterdayLoginList" resultType="java.lang.Long">
+         SELECT count(*) FROM users WHERE TO_DAYS(NOW( ) ) - TO_DAYS( users.`updatetime`) &lt;= 1  AND users.`updatetime` != NULL
+    </select>
+    
+    <select id="getUserInviteDirectList" resultMap="InviteUserVOMap">
+		SELECT u.keyes userId,u.phoneNum phone,u.Nickname nickName,r.create_time createTime
+		FROM recommend r JOIN users u ON r.userkey_1 = u.keyes WHERE r.userkey_2 =#{userId}
+        <if test="startTime != null and startTime != ''">
+            AND date_format(r.create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(r.create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+    <select id="getUserInviteIndirectList" resultMap="InviteUserVOMap">
+		SELECT u.keyes userId,u.phoneNum phone,u.Nickname nickName,r.create_time createTime
+		FROM recommend r JOIN users u ON r.userkey_1 = u.keyes WHERE r.userkey_1 IN
+		<foreach item="userId" collection="userIdList" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+        <if test="startTime != null and startTime != ''">
+            AND date_format(r.create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(r.create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+
+</mapper>

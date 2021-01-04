@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcMiningTotalMapper">
+    
+    <resultMap type="AgcMiningTotal" id="AgcMiningTotalResult">
+        <result property="id"    column="id"    />
+        <result property="userCount"    column="user_count"    />
+        <result property="miningCp"    column="mining_cp"    />
+        <result property="totalCp"    column="total_cp"    />
+        <result property="fictitiousCp"    column="fictitious_cp"    />
+        <result property="amount"    column="amount"    />
+        <result property="number"    column="number"    />
+        <result property="consumeCp"    column="consume_cp"    />
+        <result property="profitCp"    column="profit_cp"    />
+        <result property="activityCp"    column="activity_cp"    />
+        <result property="produceAgc"    column="produce_agc"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAgcMiningTotalVo">
+        select id, user_count, mining_cp, total_cp, fictitious_cp, amount, number, consume_cp, profit_cp, activity_cp, produce_agc, create_time, update_time from agc_mining_total
+    </sql>
+
+    <select id="selectAgcMiningTotalList" parameterType="AgcMiningTotal" resultMap="AgcMiningTotalResult">
+        <include refid="selectAgcMiningTotalVo"/>
+        <where>  
+            <if test="userCount != null "> and user_count = #{userCount}</if>
+			<if test="totalCp != null "> and mining_cp = #{miningCp}</if>            
+            <if test="totalCp != null "> and total_cp = #{totalCp}</if>
+            <if test="fictitiousCp != null "> and fictitious_cp = #{fictitiousCp}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="consumeCp != null "> and consume_cp = #{consumeCp}</if>
+            <if test="profitCp != null "> and profit_cp = #{profitCp}</if>
+            <if test="activityCp != null "> and activity_cp = #{activityCp}</if>
+            <if test="produceAgc != null "> and produce_agc = #{produceAgc}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcMiningTotalById" parameterType="Long" resultMap="AgcMiningTotalResult">
+        <include refid="selectAgcMiningTotalVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcMiningTotal" parameterType="AgcMiningTotal" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_mining_total
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userCount != null">user_count,</if>
+            <if test="miningCp != null">mining_cp,</if>
+            <if test="totalCp != null">total_cp,</if>
+            <if test="fictitiousCp != null">fictitious_cp,</if>
+            <if test="amount != null">amount,</if>
+            <if test="number != null">number,</if>
+            <if test="consumeCp != null">consume_cp,</if>
+            <if test="profitCp != null">profit_cp,</if>
+            <if test="activityCp != null">activity_cp,</if>
+            <if test="produceAgc != null">produce_agc,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userCount != null">#{userCount},</if>
+            <if test="miningCp != null">#{miningCp},</if>
+            <if test="totalCp != null">#{totalCp},</if>
+            <if test="fictitiousCp != null">#{fictitiousCp},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="number != null">#{number},</if>
+            <if test="consumeCp != null">#{consumeCp},</if>
+            <if test="profitCp != null">#{profitCp},</if>
+            <if test="activityCp != null">#{activityCp},</if>
+            <if test="produceAgc != null">#{produceAgc},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcMiningTotal" parameterType="AgcMiningTotal">
+        update agc_mining_total
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userCount != null">user_count = #{userCount},</if>
+            <if test="miningCp != null">mining_cp = #{miningCp},</if>
+            <if test="totalCp != null">total_cp = #{totalCp},</if>
+            <if test="fictitiousCp != null">fictitious_cp = #{fictitiousCp},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="consumeCp != null">consume_cp = #{consumeCp},</if>
+            <if test="profitCp != null">profit_cp = #{profitCp},</if>
+            <if test="activityCp != null">activity_cp = #{activityCp},</if>
+            <if test="produceAgc != null">produce_agc = #{produceAgc},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcMiningTotalById" parameterType="Long">
+        delete from agc_mining_total where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcMiningTotalByIds" parameterType="String">
+        delete from agc_mining_total where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectDigOut" resultType="BigDecimal">
+		SELECT IFNULL(SUM(produce_agc),0) produce_agc FROM agc_mining_total
+    </select>
+    
+    <select id="selectAgcMiningTotalByDate" resultMap="AgcMiningTotalResult">
+        <include refid="selectAgcMiningTotalVo"/>
+        WHERE TO_DAYS(create_time) = TO_DAYS(#{date}) limit 1
+    </select>
+    
+</mapper>

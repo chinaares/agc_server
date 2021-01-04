@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.ShopOrderMapper">
+    <!--  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.ShopOrder">
+        <result column="fId" jdbcType="INTEGER" property="fid" />
+        <result column="userkey" jdbcType="INTEGER" property="userkey" />
+        <result column="userphone" jdbcType="VARCHAR" property="userphone" />
+        <result column="orderId" jdbcType="VARCHAR" property="orderid" />
+        <result column="goodsId" jdbcType="INTEGER" property="goodsid" />
+        <result column="phone" jdbcType="VARCHAR" property="phone" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="standard" jdbcType="VARCHAR" property="standard" />
+        <result column="num" jdbcType="INTEGER" property="num" />
+        <result column="cnyprice" jdbcType="DECIMAL" property="cnyprice" />
+        <result column="coin" jdbcType="VARCHAR" property="coin" />
+        <result column="coinprive" jdbcType="DECIMAL" property="coinprive" />
+        <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
+        <result column="Logistics" jdbcType="VARCHAR" property="logistics" />
+        <result column="state" jdbcType="INTEGER" property="state" />
+          <result column="create_time" jdbcType="TIMESTAMP" property="createtime" />
+          <result column="shop_code" property="shop_code" jdbcType="BIGINT"/>
+          <result column="goodsskuId" property="goodsskuId" jdbcType="INTEGER"/>
+          <result column="integralnum" property="integralnum" jdbcType="DECIMAL"/>
+      </resultMap>-->
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    fId, userkey, userphone, orderId, phone, username, address, standard, num, cnyprice, 
+    coin, coinprive, paytime, Logistics, state, create_time,
+shop_code,
+goodsskuId,
+integralnum, goodsId
+</sql>
+
+    <select id="selectByPrimaryKey" resultType="com.lanjing.goods.model.ShopOrder" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from shop_order
+        where orderid = #{fid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="queryorderBystate" resultType="Map">
+        SELECT o.*,g.title,g.thumbnail from shop_order o INNER JOIN goods g on o.goodsId = g.id
+        WHERE 1 = 1
+        <if test="userkey != null ">
+            and o.userkey = #{userkey,jdbcType=INTEGER}
+        </if>
+        <if test="state != null">
+            and o.state = #{state,jdbcType=INTEGER}
+        </if>
+        order by fId desc
+        limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryorderBystateCount" resultType="java.lang.Integer">
+        SELECT count(*) from shop_order
+        WHERE 1 = 1
+        <if test="userkey != null ">
+            and userkey = #{userkey,jdbcType=INTEGER}
+        </if>
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="queryorderById" resultType="Map" parameterType="java.lang.String">
+    SELECT o.*,g.title,g.thumbnail from shop_order o INNER JOIN goods g on o.goodsId = g.id
+    WHERE o.fId = #{fId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectByExample" parameterType="com.lanjing.goods.model.OrderExample"
+            resultType="com.lanjing.goods.model.ShopOrder">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from shop_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <delete id="deleteByExample" parameterType="com.lanjing.goods.model.OrderExample">
+        delete from shop_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.lanjing.goods.model.ShopOrder">
+        INSERT INTO shop_order (
+            fId,
+            userkey,
+            userphone,
+            orderId,
+            goodsId,
+            phone,
+            username,
+            address,
+            `standard`,
+            num,
+            cnyprice,
+            coin,
+            coinprive,
+            paytime,
+            Logistics,
+            `state`,
+            shop_code,
+            goodsskuId,
+            integralnum
+        ) VALUES (
+            #{fid,jdbcType=VARCHAR},
+            #{userkey,jdbcType=INTEGER},
+            #{userphone,jdbcType=VARCHAR},
+            #{orderid,jdbcType=VARCHAR},
+            #{goodsid,jdbcType=INTEGER},
+            #{phone,jdbcType=VARCHAR},
+            #{username,jdbcType=VARCHAR},
+            #{address,jdbcType=VARCHAR},
+            #{standard,jdbcType=VARCHAR},
+            #{num,jdbcType=INTEGER},
+            #{cnyprice,jdbcType=DECIMAL},
+            #{coin,jdbcType=VARCHAR},
+            #{coinprive,jdbcType=DECIMAL},
+            #{paytime,jdbcType=TIMESTAMP},
+            #{logistics,jdbcType=VARCHAR},
+            #{state,jdbcType=INTEGER},
+            #{shop_code,jdbcType=BIGINT},
+            #{goodsskuId,jdbcType=INTEGER},
+            #{integralnum,jdbcType=DECIMAL}
+        )
+</insert>
+    <insert id="insertSelective" parameterType="com.lanjing.goods.model.ShopOrder">
+        INSERT INTO shop_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fid!=null">fId,</if>
+            <if test="userkey!=null">userkey,</if>
+            <if test="userphone!=null">userphone,</if>
+            <if test="orderid!=null">orderId,</if>
+            <if test="goodsid!=null">goodsId,</if>
+            <if test="phone!=null">phone,</if>
+            <if test="username!=null">username,</if>
+            <if test="address!=null">address,</if>
+            <if test="standard!=null">`standard`,</if>
+            <if test="num!=null">num,</if>
+            <if test="cnyprice!=null">cnyprice,</if>
+            <if test="coin!=null">coin,</if>
+            <if test="coinprive!=null">coinprive,</if>
+            <if test="paytime!=null">paytime,</if>
+            <if test="logistics!=null">Logistics,</if>
+            <if test="state!=null">`state`,</if>
+            <if test="shop_code!=null">shop_code,</if>
+            <if test="goodsskuId!=null">goodsskuId,</if>
+            <if test="createtime!=null">create_time,</if>
+            <if test="integralnum!=null">integralnum</if>
+            <if test="remark!=null">remark</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fid!=null">#{fid,jdbcType=VARCHAR},</if>
+            <if test="userkey!=null">#{userkey,jdbcType=INTEGER},</if>
+            <if test="userphone!=null">#{userphone,jdbcType=VARCHAR},</if>
+            <if test="orderid!=null">#{orderid,jdbcType=VARCHAR},</if>
+            <if test="goodsid!=null">#{goodsid,jdbcType=INTEGER},</if>
+            <if test="phone!=null">#{phone,jdbcType=VARCHAR},</if>
+            <if test="username!=null">#{username,jdbcType=VARCHAR},</if>
+            <if test="address!=null">#{address,jdbcType=VARCHAR},</if>
+            <if test="standard!=null">#{standard,jdbcType=VARCHAR},</if>
+            <if test="num!=null">#{num,jdbcType=INTEGER},</if>
+            <if test="cnyprice!=null">#{cnyprice,jdbcType=DECIMAL},</if>
+            <if test="coin!=null">#{coin,jdbcType=VARCHAR},</if>
+            <if test="coinprive!=null">#{coinprive,jdbcType=DECIMAL},</if>
+            <if test="paytime!=null">#{paytime,jdbcType=TIMESTAMP},</if>
+            <if test="logistics!=null">#{logistics,jdbcType=VARCHAR},</if>
+            <if test="state!=null">#{state,jdbcType=INTEGER},</if>
+            <if test="shop_code!=null">#{shop_code,jdbcType=BIGINT},</if>
+            <if test="goodsskuId!=null">#{goodsskuId,jdbcType=INTEGER},</if>
+            <if test="createtime!=null">#{createtime,jdbcType=TIMESTAMP},</if>
+            <if test="integralnum!=null">#{integralnum,jdbcType=DECIMAL},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR}</if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.lanjing.goods.model.OrderExample" resultType="java.lang.Long">
+        select count(*) from shop_order
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update shop_order
+        <set>
+            <if test="record.fid != null">
+                fId = #{record.fid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userkey != null">
+                userkey = #{record.userkey,jdbcType=INTEGER},
+            </if>
+            <if test="record.userphone != null">
+                userphone = #{record.userphone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.orderid != null">
+                orderId = #{record.orderid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phone != null">
+                phone = #{record.phone,jdbcType=VARCHAR},
+            </if>
+            <if test="record.username != null">
+                username = #{record.username,jdbcType=VARCHAR},
+            </if>
+            <if test="record.address != null">
+                address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.standard != null">
+                standard = #{record.standard,jdbcType=VARCHAR},
+            </if>
+            <if test="record.num != null">
+                num = #{record.num,jdbcType=INTEGER},
+            </if>
+            <if test="record.cnyprice != null">
+                cnyprice = #{record.cnyprice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.coin != null">
+                coin = #{record.coin,jdbcType=VARCHAR},
+            </if>
+            <if test="record.coinprive != null">
+                coinprive = #{record.coinprive,jdbcType=DECIMAL},
+            </if>
+            <if test="record.paytime != null">
+                paytime = #{record.paytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.logistics != null">
+                Logistics = #{record.logistics,jdbcType=VARCHAR},
+            </if>
+            <if test="record.state != null">
+                state = #{record.state,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.ShopOrder">
+        UPDATE shop_order
+        <set>
+            <if test="fid != null">fId = #{fid,jdbcType=VARCHAR},</if>
+            <if test="userkey != null">userkey = #{userkey,jdbcType=INTEGER},</if>
+            <if test="userphone != null">userphone = #{userphone,jdbcType=VARCHAR},</if>
+            <if test="orderid != null">orderId = #{orderid,jdbcType=VARCHAR},</if>
+            <if test="goodsid != null">goodsId = #{goodsid,jdbcType=INTEGER},</if>
+            <if test="phone != null">phone = #{phone,jdbcType=VARCHAR},</if>
+            <if test="username != null">username = #{username,jdbcType=VARCHAR},</if>
+            <if test="address != null">address = #{address,jdbcType=VARCHAR},</if>
+            <if test="standard != null">`standard` = #{standard,jdbcType=VARCHAR},</if>
+            <if test="num != null">num = #{num,jdbcType=INTEGER},</if>
+            <if test="cnyprice != null">cnyprice = #{cnyprice,jdbcType=DECIMAL},</if>
+            <if test="coin != null">coin = #{coin,jdbcType=VARCHAR},</if>
+            <if test="coinprive != null">coinprive = #{coinprive,jdbcType=DECIMAL},</if>
+            <if test="paytime != null">paytime = #{paytime,jdbcType=TIMESTAMP},</if>
+            <if test="logistics != null">Logistics = #{logistics,jdbcType=VARCHAR},</if>
+            <if test="state != null">`state` = #{state,jdbcType=INTEGER},</if>
+            <if test="shop_code != null">shop_code = #{shop_code,jdbcType=BIGINT},</if>
+            <if test="goodsskuId != null">goodsskuId = #{goodsskuId,jdbcType=INTEGER},</if>
+            <if test="integralnum != null">integralnum = #{integralnum,jdbcType=DECIMAL}</if>
+        </set>
+        where fId = #{fid,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update shop_order
+        set fId = #{record.fid,jdbcType=VARCHAR},
+        userkey = #{record.userkey,jdbcType=INTEGER},
+        userphone = #{record.userphone,jdbcType=VARCHAR},
+        orderId = #{record.orderid,jdbcType=VARCHAR},
+        phone = #{record.phone,jdbcType=VARCHAR},
+        username = #{record.username,jdbcType=VARCHAR},
+        address = #{record.address,jdbcType=VARCHAR},
+        standard = #{record.standard,jdbcType=VARCHAR},
+        num = #{record.num,jdbcType=INTEGER},
+        cnyprice = #{record.cnyprice,jdbcType=DECIMAL},
+        coin = #{record.coin,jdbcType=VARCHAR},
+        coinprive = #{record.coinprive,jdbcType=DECIMAL},
+        paytime = #{record.paytime,jdbcType=TIMESTAMP},
+        Logistics = #{record.logistics,jdbcType=VARCHAR},
+        state = #{record.state,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <select id="queryByOrderid" resultType="com.lanjing.goods.model.ShopOrder">
+        select
+        *
+        from shop_order
+        where orderId = #{orderId,jdbcType=VARCHAR}
+    </select>
+    <update id="updateByOrderid">
+        update shop_order set state = #{state,jdbcType=INTEGER}
+        <if test="state == 0">
+            ,paytime = NOW()
+        </if>
+        where orderId = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateLogisticsByOrderid">
+        update shop_order set Logistics = #{logistics,jdbcType=VARCHAR},state = 1 where orderId = #{orderId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectOrderBypage" parameterType="java.lang.Integer" resultType="Map">
+        SELECT orderId,create_time from shop_order WHERE 1=1
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="userkey != null">
+            and userkey = #{userkey,jdbcType=INTEGER}
+        </if>
+        GROUP BY orderId,create_time ORDER BY create_time desc LIMIT #{begin,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOrderBypage1" resultType="Map">
+        SELECT orderId,any_value(create_time) from shop_order WHERE 1=1
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="shop_code != null">
+            and shop_code = #{shop_code,jdbcType=BIGINT}
+        </if>
+        <if test="orderid != null">
+            and orderId = #{orderid,jdbcType=VARCHAR}
+        </if>
+        <if test="userphone != null">
+            and userphone = #{userphone,jdbcType=VARCHAR}
+        </if>
+        <if test="username != null and username != ''">
+            and username like concat('%',#{username},'%')
+        </if>
+        GROUP BY orderId ORDER BY any_value(create_time) desc LIMIT #{begin,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOrderBypageCount1" resultType="java.lang.Integer">
+        SELECT COUNT(*) from (SELECT orderId,any_value(create_time) from shop_order WHERE 1 = 1
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="shop_code != null">
+            and shop_code = #{shop_code,jdbcType=BIGINT}
+        </if>
+        <if test="orderid != null">
+            and orderId = #{orderid,jdbcType=VARCHAR}
+        </if>
+        <if test="userphone != null">
+            and userphone = #{userphone,jdbcType=VARCHAR}
+        </if>
+        <if test="username != null and username != ''">
+            and username like concat('%',#{username},'%')
+        </if>
+        GROUP BY orderId) t
+    </select>
+
+    <select id="selectOrderBypageCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*) from (SELECT orderId,create_time from shop_order WHERE 1 = 1
+        <if test="state != null">
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="userkey != null">
+            and userkey = #{userkey,jdbcType=INTEGER}
+        </if>
+        GROUP BY orderId,create_time) t
+    </select>
+    <select id="queryByOrderidAndGoodsskuId" resultType="com.lanjing.goods.model.ShopOrder">
+        select
+        <include refid="Base_Column_List"/>
+        from shop_order
+        where orderId = #{orderId,jdbcType=VARCHAR} and goodsskuId = #{goodsskuId,jdbcType=INTEGER}
+    </select>
+</mapper>

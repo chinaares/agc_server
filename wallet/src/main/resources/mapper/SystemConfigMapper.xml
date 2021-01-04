@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.SystemConfigMapper">
+
+	<sql id="Base_Column_List">
+		`key` ,`remarks` ,`value` ,`createTime` ,`modifyTime`
+	</sql>
+
+	<select id="findById"
+		resultType="com.lanjing.wallet.model.SystemConfig">
+		select * from systemConfig where `key` = #{0}
+	</select>
+
+
+	<select id="findAll" resultType="com.lanjing.wallet.model.SystemConfig">
+		select * from systemConfig
+	</select>
+	
+	<update id="updateValueById">
+	update systemConfig set `value`= #{value} where `key` = #{id}
+	</update>
+</mapper>

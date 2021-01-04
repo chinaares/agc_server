@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.goods.dao.ParametersMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.goods.model.Parameters" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <id column="type" property="type" jdbcType="INTEGER" />
+    <result column="keyname" property="keyname" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lanjing.goods.model.ParametersWithBLOBs" extends="BaseResultMap" >
+    <result column="keyvalue" property="keyvalue" jdbcType="LONGVARCHAR" />
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, keyname,type
+  </sql>
+  <select id="selectByType" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from parameters
+    <if test="type != null">
+      where type = #{type,jdbcType=INTEGER}
+    </if>
+  </select>
+  <sql id="Blob_Column_List" >
+    keyvalue, remark
+  </sql>
+
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from parameters
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from parameters
+    where keyname = #{keyname,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parameters
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.goods.model.ParametersWithBLOBs" >
+    insert into parameters (fId, keyname, keyvalue, 
+      remark)
+    values (#{fid,jdbcType=INTEGER}, #{keyname,jdbcType=VARCHAR}, #{keyvalue,jdbcType=LONGVARCHAR}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.goods.model.ParametersWithBLOBs" >
+    insert into parameters
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="keyname != null" >
+        keyname,
+      </if>
+      <if test="keyvalue != null" >
+        keyvalue,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="keyname != null" >
+        #{keyname,jdbcType=VARCHAR},
+      </if>
+      <if test="keyvalue != null" >
+        #{keyvalue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.goods.model.ParametersWithBLOBs" >
+    update parameters
+    <set >
+      <if test="keyname != null" >
+        keyname = #{keyname,jdbcType=VARCHAR},
+      </if>
+      <if test="keyvalue != null" >
+        keyvalue = #{keyvalue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lanjing.goods.model.ParametersWithBLOBs" >
+    update parameters
+    set keyname = #{keyname,jdbcType=VARCHAR},
+      keyvalue = #{keyvalue,jdbcType=LONGVARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.goods.model.Parameters" >
+    update parameters
+    set keyname = #{keyname,jdbcType=VARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByKeyName">
+    update parameters
+    set keyvalue = #{filePath,jdbcType=VARCHAR}
+    where keyname = #{bannerKey,jdbcType=INTEGER}
+  </update>
+</mapper>

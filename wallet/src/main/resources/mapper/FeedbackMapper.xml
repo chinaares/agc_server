@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.FeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Feedback" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="userkey" property="userkey" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="reply" property="reply" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lanjing.wallet.model.Feedback" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, userName, userkey, createtime, state ,title,reply,modifytime,content
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from feedback
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUserKey" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from feedback
+    where userkey = #{userkey,jdbcType=VARCHAR}
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="ResultMapWithBLOBs" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from feedback
+    where 1 = 1
+    <if test="likes !=null ">
+      and (username like '%${likes}%' or userkey like '%${likes}%')
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAllCount" resultType="java.lang.Integer" >
+    select
+    count(*)
+    from feedback
+    where 1 = 1
+    <if test="likes !=null ">
+      and (username like '%${likes}%' or userkey like '%${likes}%')
+    </if>
+    <if test="state != null">
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from feedback
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Feedback" >
+    insert into feedback (fId, userName, userkey, 
+      createtime, state, content
+      )
+    values (#{fid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{userkey,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Feedback" >
+    insert into feedback
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="userkey != null" >
+        userkey,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey != null" >
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Feedback" >
+    update feedback
+    <set >
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="userkey != null" >
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lanjing.wallet.model.Feedback" >
+    update feedback
+    set userName = #{username,jdbcType=VARCHAR},
+      userkey = #{userkey,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Feedback" >
+    update feedback
+    set userName = #{username,jdbcType=VARCHAR},
+      userkey = #{userkey,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <select id="findFeedbackByPage" resultType="com.lanjing.wallet.model.Feedback">
+  select <include refid="Base_Column_List" /> from feedback where 
+  userName like concat('%',#{username},'%') order by createtime desc limit #{page},#{pagesize}
+  </select>
+  
+  <select id="findFeedbackByPageCount" resultType="int">
+  select count(*) from feedback where 
+  userName like concat('%',#{username},'%') 
+  </select>
+  <update id="updateReplyById">
+  update feedback set reply =#{reply},modifytime = now() where fId = #{id} 
+  </update>
+  
+</mapper>

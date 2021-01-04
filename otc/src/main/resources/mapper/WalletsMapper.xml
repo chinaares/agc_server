@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.otc.dao.WalletsMapper">
+  <resultMap id="BaseResultMap" type="com.lanjing.otc.model.Wallets">
+    <!--@mbg.generated-->
+    <id column="fId" jdbcType="INTEGER" property="fid" />
+    <result column="userkey" jdbcType="VARCHAR" property="userkey" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="coinId" jdbcType="INTEGER" property="coinid" />
+    <result column="cointype" jdbcType="VARCHAR" property="cointype" />
+    <result column="coinNum" jdbcType="DOUBLE" property="coinnum" />
+    <result column="frozenNum" jdbcType="DOUBLE" property="frozennum" />
+    <result column="lockNum" jdbcType="DOUBLE" property="locknum" />
+    <result column="shiftNum" jdbcType="DOUBLE" property="shiftnum" />
+    <result column="releaseNum" jdbcType="DOUBLE" property="releasenum" />
+    <result column="quotaNum" jdbcType="DOUBLE" property="quotanum" />
+    <result column="lockfinances" jdbcType="DOUBLE" property="lockfinances" />
+    <result column="releasefinances" jdbcType="DOUBLE" property="releasefinances" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+  </resultMap>
+  <resultMap id="BaseResultMapWallet" type="com.lanjing.otc.model.po.Wallet">
+    <id column="fId" jdbcType="INTEGER" property="id" />
+    <result column="coinId" jdbcType="INTEGER" property="coinId" />
+    <result column="cointype" jdbcType="VARCHAR" property="coinName" />
+    <result column="coinNum" jdbcType="DOUBLE" property="coinNum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--@mbg.generated-->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    fId, userkey, address, coinId, cointype, coinNum, frozenNum, lockNum, shiftNum, releaseNum, 
+    quotaNum, lockfinances, releasefinances, version
+  </sql>
+
+  <select id="selectByUserandcoin" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wellets
+    where userkey = #{userkey,jdbcType=VARCHAR} and coinId = #{coinid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByExample" parameterType="com.lanjing.otc.model.WalletsExample" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from wellets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from wellets
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from wellets
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lanjing.otc.model.WalletsExample">
+    <!--@mbg.generated-->
+    delete from wellets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.otc.model.Wallets" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into wellets (userkey, address, coinId, 
+      cointype, coinNum, frozenNum, 
+      lockNum, shiftNum, releaseNum, 
+      quotaNum, lockfinances, releasefinances, 
+      version)
+    values (#{userkey,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{coinid,jdbcType=INTEGER}, 
+      #{cointype,jdbcType=VARCHAR}, #{coinnum,jdbcType=DOUBLE}, #{frozennum,jdbcType=DOUBLE}, 
+      #{locknum,jdbcType=DOUBLE}, #{shiftnum,jdbcType=DOUBLE}, #{releasenum,jdbcType=DOUBLE}, 
+      #{quotanum,jdbcType=DOUBLE}, #{lockfinances,jdbcType=DOUBLE}, #{releasefinances,jdbcType=DOUBLE}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="fId" keyProperty="fid" parameterType="com.lanjing.otc.model.Wallets" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into wellets
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userkey != null">
+        userkey,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="coinid != null">
+        coinId,
+      </if>
+      <if test="cointype != null">
+        cointype,
+      </if>
+      <if test="coinnum != null">
+        coinNum,
+      </if>
+      <if test="frozennum != null">
+        frozenNum,
+      </if>
+      <if test="locknum != null">
+        lockNum,
+      </if>
+      <if test="shiftnum != null">
+        shiftNum,
+      </if>
+      <if test="releasenum != null">
+        releaseNum,
+      </if>
+      <if test="quotanum != null">
+        quotaNum,
+      </if>
+      <if test="lockfinances != null">
+        lockfinances,
+      </if>
+      <if test="releasefinances != null">
+        releasefinances,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userkey != null">
+        #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinid != null">
+        #{coinid,jdbcType=INTEGER},
+      </if>
+      <if test="cointype != null">
+        #{cointype,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum != null">
+        #{coinnum,jdbcType=DOUBLE},
+      </if>
+      <if test="frozennum != null">
+        #{frozennum,jdbcType=DOUBLE},
+      </if>
+      <if test="locknum != null">
+        #{locknum,jdbcType=DOUBLE},
+      </if>
+      <if test="shiftnum != null">
+        #{shiftnum,jdbcType=DOUBLE},
+      </if>
+      <if test="releasenum != null">
+        #{releasenum,jdbcType=DOUBLE},
+      </if>
+      <if test="quotanum != null">
+        #{quotanum,jdbcType=DOUBLE},
+      </if>
+      <if test="lockfinances != null">
+        #{lockfinances,jdbcType=DOUBLE},
+      </if>
+      <if test="releasefinances != null">
+        #{releasefinances,jdbcType=DOUBLE},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lanjing.otc.model.WalletsExample" resultType="java.lang.Long">
+    <!--@mbg.generated-->
+    select count(*) from wellets
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    <!--@mbg.generated-->
+    update wellets
+    <set>
+      <if test="record.fid != null">
+        fId = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userkey != null">
+        userkey = #{record.userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinid != null">
+        coinId = #{record.coinid,jdbcType=INTEGER},
+      </if>
+      <if test="record.cointype != null">
+        cointype = #{record.cointype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinnum != null">
+        coinNum = #{record.coinnum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.frozennum != null">
+        frozenNum = #{record.frozennum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.locknum != null">
+        lockNum = #{record.locknum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.shiftnum != null">
+        shiftNum = #{record.shiftnum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.releasenum != null">
+        releaseNum = #{record.releasenum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.quotanum != null">
+        quotaNum = #{record.quotanum,jdbcType=DOUBLE},
+      </if>
+      <if test="record.lockfinances != null">
+        lockfinances = #{record.lockfinances,jdbcType=DOUBLE},
+      </if>
+      <if test="record.releasefinances != null">
+        releasefinances = #{record.releasefinances,jdbcType=DOUBLE},
+      </if>
+      <if test="record.version != null">
+        version = #{record.version,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    <!--@mbg.generated-->
+    update wellets
+    set fId = #{record.fid,jdbcType=INTEGER},
+      userkey = #{record.userkey,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      coinId = #{record.coinid,jdbcType=INTEGER},
+      cointype = #{record.cointype,jdbcType=VARCHAR},
+      coinNum = #{record.coinnum,jdbcType=DOUBLE},
+      frozenNum = #{record.frozennum,jdbcType=DOUBLE},
+      lockNum = #{record.locknum,jdbcType=DOUBLE},
+      shiftNum = #{record.shiftnum,jdbcType=DOUBLE},
+      releaseNum = #{record.releasenum,jdbcType=DOUBLE},
+      quotaNum = #{record.quotanum,jdbcType=DOUBLE},
+      lockfinances = #{record.lockfinances,jdbcType=DOUBLE},
+      releasefinances = #{record.releasefinances,jdbcType=DOUBLE},
+      version = #{record.version,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.otc.model.Wallets">
+    <!--@mbg.generated-->
+    update wellets
+    <set>
+      <if test="userkey != null">
+        userkey = #{userkey,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="coinid != null">
+        coinId = #{coinid,jdbcType=INTEGER},
+      </if>
+      <if test="cointype != null">
+        cointype = #{cointype,jdbcType=VARCHAR},
+      </if>
+      <if test="coinnum != null">
+        coinNum = #{coinnum,jdbcType=DOUBLE},
+      </if>
+      <if test="frozennum != null">
+        frozenNum = #{frozennum,jdbcType=DOUBLE},
+      </if>
+      <if test="locknum != null">
+        lockNum = #{locknum,jdbcType=DOUBLE},
+      </if>
+      <if test="shiftnum != null">
+        shiftNum = #{shiftnum,jdbcType=DOUBLE},
+      </if>
+      <if test="releasenum != null">
+        releaseNum = #{releasenum,jdbcType=DOUBLE},
+      </if>
+      <if test="quotanum != null">
+        quotaNum = #{quotanum,jdbcType=DOUBLE},
+      </if>
+      <if test="lockfinances != null">
+        lockfinances = #{lockfinances,jdbcType=DOUBLE},
+      </if>
+      <if test="releasefinances != null">
+        releasefinances = #{releasefinances,jdbcType=DOUBLE},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.otc.model.Wallets">
+    <!--@mbg.generated-->
+    update wellets
+    set userkey = #{userkey,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      coinId = #{coinid,jdbcType=INTEGER},
+      cointype = #{cointype,jdbcType=VARCHAR},
+      coinNum = #{coinnum,jdbcType=DOUBLE},
+      frozenNum = #{frozennum,jdbcType=DOUBLE},
+      lockNum = #{locknum,jdbcType=DOUBLE},
+      shiftNum = #{shiftnum,jdbcType=DOUBLE},
+      releaseNum = #{releasenum,jdbcType=DOUBLE},
+      quotaNum = #{quotanum,jdbcType=DOUBLE},
+      lockfinances = #{lockfinances,jdbcType=DOUBLE},
+      releasefinances = #{releasefinances,jdbcType=DOUBLE},
+      version = #{version,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUserKeyAndCoinId" resultMap="BaseResultMap">
+    select * from wellets where userkey=#{userKey,jdbcType=VARCHAR} and coinId=#{coinId,jdbcType=INTEGER}
+  </select>
+  <update id="updateByVersionAndFreeze">
+    update wellets
+    set coinNum  = coinNum - #{num,jdbcType=DECIMAL},
+        frozenNum = frozenNum + #{num,jdbcType=DECIMAL},
+        version = version + 1
+    where fId = #{id,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+  </update>
+  <update id="updateByVersionAndCoinNum">
+    update wellets
+    set  frozenNum = frozenNum - #{num,jdbcType=DECIMAL},
+         coinNum = coinNum + #{num,jdbcType=DECIMAL},
+        version = version + 1
+    where fId = #{id,jdbcType=INTEGER}
+      and version = #{version,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUserId" resultMap="BaseResultMapWallet">
+    select fId,coinNum,coinId,cointype from wellets where userkey=#{userKey}
+  </select>
+</mapper>

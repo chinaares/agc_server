@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.CoinsMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Coins" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="coinName" property="coinname" jdbcType="VARCHAR" />
+    <result column="coinShort" property="coinshort" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, coinName, coinShort, price, img, remark
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from coins where fId != 3
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coins
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coins
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Coins" >
+    insert into coins (fId, coinName, coinShort,
+      price, img, remark)
+    values (#{fid,jdbcType=INTEGER}, #{coinname,jdbcType=VARCHAR}, #{coinshort,jdbcType=VARCHAR},
+      #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Coins" >
+    insert into coins
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="coinname != null" >
+        coinName,
+      </if>
+      <if test="coinshort != null" >
+        coinShort,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="coinname != null" >
+        #{coinname,jdbcType=VARCHAR},
+      </if>
+      <if test="coinshort != null" >
+        #{coinshort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Coins" >
+    update coins
+    <set >
+      <if test="coinname != null" >
+        coinName = #{coinname,jdbcType=VARCHAR},
+      </if>
+      <if test="coinshort != null" >
+        coinShort = #{coinshort,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Coins" >
+    update coins
+    set coinName = #{coinname,jdbcType=VARCHAR},
+      coinShort = #{coinshort,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      img = #{img,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <select id="selectRate"  parameterType="java.lang.String" resultType="java.lang.Double">
+    select ifnull(sum(price),1) from coins where coinName = #{coinName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="findByCoinname" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from coins
+        where coinName=#{coinname,jdbcType=VARCHAR}
+    </select>
+</mapper>

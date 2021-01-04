@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.InformationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.lanjing.wallet.model.Information">
+		<id column="fId" property="fid" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="titleimg" property="titleimg"
+			jdbcType="VARCHAR" />
+		<result column="createtime" property="createtime"
+			jdbcType="TIMESTAMP" />
+		<result column="updatetime" property="updatetime"
+			jdbcType="TIMESTAMP" />
+		<result column="uname" property="uname" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="edition" property="edition" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BaseResultMapEx" type="com.lanjing.wallet.model.po.AdminReward">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="regGift" jdbcType="DOUBLE" property="regGift" />
+		<result column="principal" jdbcType="DOUBLE" property="principal" />
+		<result column="income" jdbcType="DOUBLE" property="income" />
+		<result column="spreads" jdbcType="INTEGER" property="spreads" />
+		<result column="bonus" jdbcType="DOUBLE" property="bonus" />
+		<result column="teams" jdbcType="INTEGER" property="teams" />
+		<result column="prize" jdbcType="DOUBLE" property="prize" />
+		<result column="total" jdbcType="DOUBLE" property="total" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+               type="com.lanjing.wallet.model.Information" extends="BaseResultMap">
+		<result column="comtent" property="comtent"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		fId, title, titleimg, createtime, updatetime, uname, type,
+		edition
+	</sql>
+	<sql id="Blob_Column_List">
+		comtent
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from information
+		where fId = #{fid,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectBy" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from information
+		where 1 = 1
+		<if test="record.title != null">
+			and title = #{record.title,jdbcType=VARCHAR}
+		</if>
+		<if test="record.createtime != null">
+			and createtime = #{record.createtime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="record.titleimg != null">
+			and titleimg = #{record.titleimg,jdbcType=VARCHAR}
+		</if>
+		<if test="record.updatetime != null">
+			and updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="record.uname != null">
+			and uname = #{record.uname,jdbcType=VARCHAR}
+		</if>
+		<if test="record.type != null">
+			and type = #{record.type,jdbcType=INTEGER}
+		</if>
+		<if test="record.edition != null">
+			and edition = #{record.edition,jdbcType=VARCHAR}
+		</if>
+		<if test="record.comtent != null">
+			and comtent = #{record.comtent,jdbcType=LONGVARCHAR}
+		</if>
+		limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectByEdition" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from information
+		where type=1 and edition=#{edition,jdbcType=INTEGER} order by fId desc
+	</select>
+
+	<select id="selectByTypeOrTitle" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from information
+		where 1=1
+		<if test="id != null">
+		 	and fId=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="type != null">
+		 	and type=#{type,jdbcType=INTEGER}
+		</if>
+		<if test="title != null and title != ''">
+		 	and title like '%${title}%'
+		</if>
+		order by fId desc
+	</select>
+
+	<select id="getRewardList"  resultMap="BaseResultMapEx">
+		select u.fId id,u.phoneNum phone,(select a.total from airdrop_reward a where a.user_id=u.fId and a.type=4 limit 1) regGift,
+			(select i.principal from invest i where i.user_id=u.fId limit 1) principal,
+			(select i.income from invest i where i.user_id=u.fId limit 1) income,
+			(select count(0) from recommend r where r.userkey_2 = u.fId and r.IsNode=1) spreads,
+			(select t.bonus from team t where t.user_id=u.fId) bonus,
+			(select count(0) from recommend where cover_code like concat(r.cover_code,'%') ) teams,
+			(select t.bonus from spread t where t.user_id=u.fId) prize,
+			(select sum(total) from airdrop_reward a where a.user_id=u.fId) total
+		from users u left join recommend r on u.keyes=r.userkey_1
+		where u.state=1
+		<if test="phone != null and phone != ''">
+			and u.phoneNum=#{phone,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from information
+		where fId =
+		#{fid,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.lanjing.wallet.model.Information">
+		insert into information (fId, title, createtime,
+		updatetime, uname, type,
+		edition, comtent)
+		values
+		(#{fid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+		#{createtime,jdbcType=TIMESTAMP},
+		#{updatetime,jdbcType=TIMESTAMP},
+		#{uname,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+		#{edition,jdbcType=VARCHAR}, #{comtent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.lanjing.wallet.model.Information">
+		insert into information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fid != null">
+				fId,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="titleimg != null">
+				titleimg,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="updatetime != null">
+				updatetime,
+			</if>
+			<if test="uname != null">
+				uname,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="edition != null">
+				edition,
+			</if>
+			<if test="comtent != null">
+				comtent,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fid != null">
+				#{fid,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="titleimg != null">
+				#{titleimg,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="uname != null">
+				#{uname,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="edition != null">
+				#{edition,jdbcType=VARCHAR},
+			</if>
+			<if test="comtent != null">
+				#{comtent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.lanjing.wallet.model.Information">
+		update information
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="titleimg != null">
+				titleimg = #{titleimg,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				updatetime = #{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="uname != null">
+				uname = #{uname,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="edition != null">
+				edition = #{edition,jdbcType=VARCHAR},
+			</if>
+			<if test="comtent != null">
+				comtent = #{comtent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where fId = #{fid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs"
+		parameterType="com.lanjing.wallet.model.Information">
+		update information
+		set title = #{title,jdbcType=VARCHAR},
+		createtime = #{createtime,jdbcType=TIMESTAMP},
+		updatetime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		uname = #{uname,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		edition = #{edition,jdbcType=VARCHAR},
+		comtent = #{comtent,jdbcType=LONGVARCHAR}
+		where fId =
+		#{fid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.lanjing.wallet.model.Information">
+		update information
+		set title = #{title,jdbcType=VARCHAR},
+		createtime = #{createtime,jdbcType=TIMESTAMP},
+		updatetime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		uname = #{uname,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		edition = #{edition,jdbcType=VARCHAR}
+		where fId = #{fid,jdbcType=INTEGER}
+	</update>
+
+	<select id="findInformationByPage"
+		resultType="com.lanjing.wallet.model.Information">
+		select * from information where title like
+		concat('%',#{title},'%') and
+		`type` = #{type} order by createtime limit
+		#{page},#{pagesize}
+	</select>
+
+
+	<select id="findInformationByPageCount" resultType="int">
+		select
+		count(*) from information where title like concat('%',#{title},'%')
+		and `type` = #{type}
+	</select>
+
+	<delete id="deleteByIds">
+		delete from information where fId in
+		<foreach collection="array" close=")" item="i" open="("
+			separator=",">
+			#{i}
+		</foreach>
+	</delete>
+
+
+	<select id="findByTypeAndEdition" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List"/>
+		from information
+		where `type`=#{type,jdbcType=INTEGER} and edition=#{edition}
+	</select>
+
+</mapper>

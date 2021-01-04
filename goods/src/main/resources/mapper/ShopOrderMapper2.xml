@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.goods.dao.ShopOrderMapper2">
+
+
+    <select id="queryByOrderidAndGoodsskuId" resultType="com.lanjing.goods.model.ShopOrder">
+        select
+        *
+        from shop_order
+        where orderId = #{orderId,jdbcType=VARCHAR} and goodsskuId = #{goodsskuId,jdbcType=INTEGER}
+    </select>
+</mapper>

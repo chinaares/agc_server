@@ -1,0 +1,90 @@
+#secret:
+#  encrypt:
+#    enabled: true
+#  decrypt:
+#    enabled: true
+
+encrypt:
+  isopen: true
+
+
+wallet:
+  url: http://127.0.0.1:8080/
+
+logging:
+  #file: wallet.log
+  level.*: debug
+  #level.com.lanjing.wallet.dao: debug
+
+mybatis:
+  mapperlocations: classpath:mapper/*.xml,classpath:mapper/agc/*.xml
+  typealiasespackage: com.lanjing.wallet.model,com.lanjing.wallet.agc.domain
+
+pagehelper:
+  helper-dialect: mysql
+  params:
+    count: countSql
+  reasonable: false
+  support-methods-arguments: true
+
+server:
+  port: 8080
+
+push:
+  key: 3766b67cae9d3c377b1dd0da
+  secret: 3e98c5e34c7ec523796b4377
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  profiles:
+    active: master
+
+---
+spring:
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      #验证该连接是否是有效
+      connection-test-query: SELECT 1
+      #数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      #空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      #连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      #最小空闲连接数量
+      minimum-idle: 5
+      #连接池名称
+      pool-name: HikariCP
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1m
+---
+spring:
+  profiles: master
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://154.83.13.43:3306/car_token?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: dbadmin
+    password: dC0@hJ2cC5$oE2&oC0!cT0#bF0cB
+  redis:
+    database: 0
+    host: 154.83.13.43
+    password: GckSVcLF2gb2opVz
+    port: 6379
+    timeout: 1000

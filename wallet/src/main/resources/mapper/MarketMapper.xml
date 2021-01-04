@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.wallet.dao.MarketMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.wallet.model.Market" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="symbol" property="symbol" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="open" property="open" jdbcType="DECIMAL" />
+    <result column="close" property="close" jdbcType="DECIMAL" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="CNYprice" property="cnyprice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, symbol, amount, open, close, price, CNYprice
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from market
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="selectBy" resultMap="BaseResultMap" parameterType="com.lanjing.wallet.model.Market" >
+    select
+    <include refid="Base_Column_List" />
+    from market
+    where 1 = 1
+    <if test="symbol != null" >
+      and symbol = #{symbol,jdbcType=VARCHAR}
+    </if>
+    <if test="amount != null" >
+      and amount = #{amount,jdbcType=DECIMAL}
+    </if>
+    <if test="open != null" >
+      and open = #{open,jdbcType=DECIMAL}
+    </if>
+    <if test="close != null" >
+      and close = #{close,jdbcType=DECIMAL}
+    </if>
+    <if test="price != null" >
+      and price = #{price,jdbcType=DECIMAL}
+    </if>
+    <if test="cnyprice != null" >
+      and CNYprice = #{cnyprice,jdbcType=DECIMAL}
+    </if>
+  </select>
+
+
+  <select id="selectNew" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from market ORDER BY price DESC limit 15
+--     from market  GROUP BY symbol ORDER BY price DESC limit 15
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from market
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.wallet.model.Market" >
+    insert into market (fId, symbol, amount, 
+      open, close, price, 
+      CNYprice)
+    values (#{fid,jdbcType=INTEGER}, #{symbol,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{open,jdbcType=DECIMAL}, #{close,jdbcType=DECIMAL}, #{price,jdbcType=DECIMAL}, 
+      #{cnyprice,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.wallet.model.Market" >
+    insert into market
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="symbol != null" >
+        symbol,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="open != null" >
+        open,
+      </if>
+      <if test="close != null" >
+        close,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="cnyprice != null" >
+        CNYprice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="symbol != null" >
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="open != null" >
+        #{open,jdbcType=DECIMAL},
+      </if>
+      <if test="close != null" >
+        #{close,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="cnyprice != null" >
+        #{cnyprice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.wallet.model.Market" >
+    update market
+    <set >
+      <if test="symbol != null" >
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="open != null" >
+        open = #{open,jdbcType=DECIMAL},
+      </if>
+      <if test="close != null" >
+        close = #{close,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="cnyprice != null" >
+        CNYprice = #{cnyprice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.wallet.model.Market" >
+    update market
+    set symbol = #{symbol,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      open = #{open,jdbcType=DECIMAL},
+      close = #{close,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      CNYprice = #{cnyprice,jdbcType=DECIMAL}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

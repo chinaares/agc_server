@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanjing.wallet.agc.mapper.AgcConsumeProfitMapper">
+    
+    <resultMap type="AgcConsumeProfit" id="AgcConsumeProfitResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="fromId"    column="from_id"    />
+        <result property="era"    column="era"    />
+        <result property="number"    column="number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectAgcConsumeProfitVo">
+        select id, user_id, from_id, era, number, create_time, update_time from agc_consume_profit
+    </sql>
+
+    <select id="selectAgcConsumeProfitList" parameterType="AgcConsumeProfit" resultMap="AgcConsumeProfitResult">
+        <include refid="selectAgcConsumeProfitVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="fromId != null  and fromId != ''"> and from_id = #{fromId}</if>
+            <if test="era != null "> and era = #{era}</if>
+            <if test="number != null "> and number = #{number}</if>
+        </where>
+    </select>
+    
+    <select id="selectAgcConsumeProfitById" parameterType="Long" resultMap="AgcConsumeProfitResult">
+        <include refid="selectAgcConsumeProfitVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAgcConsumeProfit" parameterType="AgcConsumeProfit" useGeneratedKeys="true" keyProperty="id">
+        insert into agc_consume_profit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="fromId != null">from_id,</if>
+            <if test="era != null">era,</if>
+            <if test="number != null">number,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="fromId != null">#{fromId},</if>
+            <if test="era != null">#{era},</if>
+            <if test="number != null">#{number},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAgcConsumeProfit" parameterType="AgcConsumeProfit">
+        update agc_consume_profit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="fromId != null">from_id = #{fromId},</if>
+            <if test="era != null">era = #{era},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAgcConsumeProfitById" parameterType="Long">
+        delete from agc_consume_profit where id = #{id}
+    </delete>
+
+    <delete id="deleteAgcConsumeProfitByIds" parameterType="String">
+        delete from agc_consume_profit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 今日收益 -->
+    <select id="selectDayIncomeByNowAndUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(number),0) number FROM agc_consume_profit
+        WHERE TO_DAYS(create_time) = TO_DAYS(#{now}) and user_id = #{userId}
+        ]]>
+    </select>
+    
+    <!-- 累计收益 -->
+    <select id="selectDayIncomeByUserId" resultType="BigDecimal">
+        <![CDATA[
+        SELECT IFNULL(SUM(number),0) number FROM agc_consume_profit
+        WHERE user_id = #{userId}
+        ]]>
+    </select>
+    
+    <!-- 我的推广分佣-直推(已激活的) -->
+    <select id="selectInviteAgcByUserIdAndTime1" resultType="BigDecimal">
+        SELECT IFNULL(SUM(number),0) number FROM agc_consume_profit
+        WHERE user_id = #{userId} and era = 1
+        <!-- 开始时间检索 -->
+   	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+	    <!-- 结束时间检索 -->
+	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </select>
+    
+    <!-- 我的推广分佣-间推(已激活的) -->
+    <select id="selectInviteAgcByUserIdAndTime2" resultType="BigDecimal">
+        SELECT IFNULL(SUM(number),0) number FROM agc_consume_profit
+        WHERE user_id = #{userId} and era > 1
+        <!-- 开始时间检索 -->
+   	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+	    <!-- 结束时间检索 -->
+	    AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </select>
+    
+    <!-- 我的推广分佣-直推 -->
+    <select id="getUserInviteAgcDirectList" resultMap="AgcConsumeProfitResult">
+        SELECT * FROM agc_consume_profit
+        WHERE user_id = #{userId} and era = 1
+        <if test="startTime != null and startTime != ''">
+            AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+    <!-- 我的推广分佣-间推 -->
+    <select id="getUserInviteAgcIndirectList" resultMap="AgcConsumeProfitResult">
+        SELECT * FROM agc_consume_profit
+        WHERE user_id = #{userId} and era > 1
+        <if test="startTime != null and startTime != ''">
+            AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &gt;= date_format(#{startTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND date_format(create_time,'%Y-%m-%d %H:%i:%s') &lt;= date_format(#{endTime},'%Y-%m-%d %H:%i:%s')
+		</if>
+    </select>
+    
+</mapper>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanjing.otc.dao.WellethistoryStateMapper" >
+  <resultMap id="BaseResultMap" type="com.lanjing.otc.model.WellethistoryState" >
+    <id column="fId" property="fid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="welletId" property="welletid" jdbcType="INTEGER" />
+    <result column="cointype" property="cointype" jdbcType="INTEGER" />
+    <result column="withdraw" property="withdraw" jdbcType="VARCHAR" />
+    <result column="recharge" property="recharge" jdbcType="VARCHAR" />
+    <result column="changeNum" property="changenum" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
+    <result column="keyes" property="keyes" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fId, userId, welletId, cointype, withdraw, recharge, changeNum, type, remark, createtime,
+    updatetime, keyes, state, balance
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from wellethistorystate
+    where fId = #{fid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wellethistorystate
+    where keyes =#{keyes,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByKey2" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wellethistorystate
+    where keyes =#{keyes,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="querywithdraw" resultType="java.lang.Integer" >
+    SELECT count(*) from wellethistorystate WHERE userId = #{userid,jdbcType=INTEGER} and cointype = #{coinid,jdbcType=INTEGER} and type = 2 and state = 0
+  </select>
+
+  <select id="gettodaybuyNum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    SELECT count(*) from wellethistorystate WHERE welletId = #{welletId,jdbcType=INTEGER} and TO_DAYS(updatetime) = TO_DAYS(NOW());
+  </select>
+
+
+  <select id="queryByKeyes" resultType="Map" parameterType="java.lang.String">
+    SELECT type from wellethistorystate WHERE keyes =#{keyes,jdbcType=VARCHAR};
+  </select>
+
+
+  <update id="uptByKeyes">
+    update wellethistorystate set state = #{state,jdbcType=INTEGER} where keyes =#{keyes,jdbcType=VARCHAR};
+  </update>
+
+
+  <select id="selectByWelletId" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wellethistorystate
+    where welletId = #{welletid,jdbcType=INTEGER} and state >= 0
+    <if test="type != null" >
+      and type = #{type,jdbcType=INTEGER}
+    </if>
+    order by updatetime desc
+     limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBycztx" resultMap="BaseResultMap">
+    SELECT * from wellethistorystate WHERE welletId = #{welletId,jdbcType=INTEGER} and state = 1 and (type = 1 or type = 2) order by createtime desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectBytransfer" resultMap="BaseResultMap">
+    SELECT * from wellethistorystate WHERE welletId = #{welletId,jdbcType=INTEGER} and state = 1 and (type = 3 or type = 4) order by createtime desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryAlltransfer" resultMap="BaseResultMap">
+    SELECT * from wellethistorystate WHERE 1 = 1
+    <if test="state != null">
+      and state = #{state,jdbcType=INTEGER}
+    </if>
+    and type = 3 order by createtime desc limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="reward" resultMap="BaseResultMap">
+    SELECT * from wellethistorystate WHERE welletId in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and state = 1 and (type = 2 or type = 3) limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wellethistorystate
+    where fId = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lanjing.otc.model.WellethistoryState" >
+    insert into wellethistorystate (fId, welletId, changeNum,
+      type, remark, createtime,
+      updatetime, keyes, state
+      )
+    values (#{fid,jdbcType=INTEGER}, #{welletid,jdbcType=INTEGER}, #{changenum,jdbcType=DECIMAL},
+      #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP},
+      #{updatetime,jdbcType=TIMESTAMP}, #{keyes,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lanjing.otc.model.WellethistoryState" >
+    insert into wellethistorystate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        fId,
+      </if>
+      <if test="welletid != null" >
+        welletId,
+      </if>
+      <if test="changenum != null" >
+        changeNum,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
+      <if test="keyes != null" >
+        keyes,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="cointype != null">
+        cointype,
+      </if>
+      <if test="userid != null">
+        userId,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fid != null" >
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="welletid != null" >
+        #{welletid,jdbcType=INTEGER},
+      </if>
+      <if test="changenum != null" >
+        #{changenum,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="keyes != null" >
+        #{keyes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="cointype != null">
+        #{cointype,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lanjing.otc.model.WellethistoryState" >
+    update wellethistorystate
+    <set >
+      <if test="welletid != null" >
+        welletId = #{welletid,jdbcType=INTEGER},
+      </if>
+      <if test="changenum != null" >
+        changeNum = #{changenum,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="keyes != null" >
+        keyes = #{keyes,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lanjing.otc.model.WellethistoryState" >
+    update wellethistorystate
+    set welletId = #{welletid,jdbcType=INTEGER},
+      changeNum = #{changenum,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      keyes = #{keyes,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER}
+    where fId = #{fid,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectAllETHIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 1
+  </select>
+
+  <select id="selectAllBTCIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 3
+  </select>
+  <select id="selectAllYYBIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 2
+  </select>
+
+
+
+  <select id="selectTodayETHIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 1 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+
+  <select id="selectTodayBTCIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 3 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+  <select id="selectTodayYYBIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =1 and cointype = 2 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+
+
+
+
+  <select id="selectAllETHOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 1
+  </select>
+
+  <select id="selectAllBTCOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 3
+  </select>
+  <select id="selectAllYYBOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 2
+  </select>
+
+  <select id="selectAllIntegralOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =6 and cointype = 4
+  </select>
+
+  <select id="selectAllIntegralIn" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =11 and cointype = 4
+  </select>
+
+  <select id="selectTodayETHOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 1 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+
+  <select id="selectTodayBTCOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 3 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+  <select id="selectTodayYYBOut" resultType="java.lang.Double">
+    select IFNULL(sum(changeNum),0) from wellethistorystate where `type` =2 and cointype = 2 and DATE_FORMAT(createtime, '%Y%m%d') = DATE_FORMAT(now(), '%Y%m%d')
+  </select>
+
+
+
+
+
+
+</mapper>
